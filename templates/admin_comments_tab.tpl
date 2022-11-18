@@ -44,9 +44,32 @@ jQuery(document).ready(function($) {
 /*]]> */
 </script>
 {/literal}
+{assign var='lbl_edit' value=$mod->Lang('edit')}
 
+<div class="pageoverflow">
+  <div style="float: left;">
+	<a href="{cms_action_url action=admin_editcomment}">{admin_icon icon='newobject.gif'}
+	 {$mod->Lang('lbl_add_comment')}
+	 </a>
+	<a id="toggle_filter" href="">{admin_icon icon='reorder.gif'}
+	{if $have_filter}{$mod->Lang('view_filter_applied')}{else}{$mod->Lang('view_filter')}{/if}
+	</a>
+	</div>
+  <div style="float: right;">
+	{if isset($firstpage_url)}
+      <a href="{$firstpage_url}" title="{$mod->Lang('lbl_goto_first_page')}">&lt;&lt;</a>&nbsp;
+      <a href="{$prevpage_url}" title="{$mod->Lang('lbl_goto_prev_page')}">&lt;</a>
+    {/if}
+    {$mod->Lang('lbl_page')}&nbsp;{$curpage}&nbsp;{$mod->Lang('lbl_of')}&nbsp;{$numpages}&nbsp;--&nbsp;<em>({$recordcount}&nbsp;{$mod->Lang('lbl_matching_records')})</em>
+    {if isset($nextpage_url)}
+      <a href="{$nextpage_url}" title="{$mod->Lang('lbl_goto_next_page')}">&gt;</a>&nbsp;
+      <a href="{$lastpage_url}" title="{$mod->Lang('lbl_goto_last_page')}">&gt;&gt;</a>
+    {/if}
+  </div>
+</div>
 {$formstart}
 <fieldset id="filterbox" style="display: none;">
+<div class="pageoptions">
 <legend>{$mod->Lang('lbl_filter')}:</legend>
 <table class="pageoverflow">
 <tr>
@@ -137,55 +160,36 @@ jQuery(document).ready(function($) {
   {* column3 *}</td>
   </tr>
 </table>
-
 <div class="pageoverflow">
   <p class="pageinput"><input type="submit" name="{$actionid}filter_submit" value="{$mod->Lang('submit')}"/></p>
 </div>
-</fieldset>
 <br/>
-
-<div class="c_full">
-  <div class="grid_6">
-    <a id="toggle_filter" href="">
-    {if $have_filter}{$mod->Lang('view_filter_applied')}{else}{$mod->Lang('view_filter')}{/if}
-    </a>
-  </div>
-  <div class="grid_6 text-right" style="text-align: right">
-    {if isset($firstpage_url)}
-      <a href="{$firstpage_url}" title="{$mod->Lang('lbl_goto_first_page')}">&lt;&lt;</a>&nbsp;
-      <a href="{$prevpage_url}" title="{$mod->Lang('lbl_goto_prev_page')}">&lt;</a>
-    {/if}
-    {$mod->Lang('lbl_page')}&nbsp;{$curpage}&nbsp;{$mod->Lang('lbl_of')}&nbsp;{$numpages}&nbsp;--&nbsp;<em>({$recordcount}&nbsp;{$mod->Lang('lbl_matching_records')})</em>
-    {if isset($nextpage_url)}
-      <a href="{$nextpage_url}" title="{$mod->Lang('lbl_goto_next_page')}">&gt;</a>&nbsp;
-      <a href="{$lastpage_url}" title="{$mod->Lang('lbl_goto_last_page')}">&gt;&gt;</a>
-    {/if}
-  </div>
 </div>
-<div class="clearb"></div>
+</fieldset>
 
-{assign var='lbl_edit' value=$mod->Lang('edit')}
-{if isset($comments)}
-<table class="pagetable cms_sortable tablesorter" cellspacing="0">
-  <thead>
-   {* {cycle values="row1,row2" assign='rowclass'}
-   <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';"> *}
-   <tr>
-   <th width="2%">{$mod->Lang('lbl_id')}</th>
-   <th width="2%">{$mod->Lang('lbl_key1')}</th>
-   <th width="2%">{$mod->Lang('lbl_key2')}</th>
-   <th width="2%">{$mod->Lang('lbl_key3')}</th>
-   <th>{$mod->Lang('lbl_title')}</th>
-   <th>{$mod->Lang('lbl_author_name')}</th>
-   <th>{$mod->Lang('lbl_status')}</th>
-   <th>{$mod->Lang('lbl_created')}</th>
-   <th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* edit *}
-   <th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* delete *}
-   <th class="pageicon {literal}{sorter: false}{/literal}"><input type="checkbox" id="selectall" onclick="select_all();"/></th>{* bulk *}
-   </tr>
-  </thead>
-  <tbody>
-  {foreach from=$comments item='onecomment'}
+
+{if !empty($comments)}
+<table class="pagetable cms_sortable tablesorter">
+ <thead>
+ <tr>
+	<th width="2%">{$mod->Lang('lbl_id')}</th>
+	<th width="2%">{$mod->Lang('lbl_key1')}</th>
+	<th width="2%">{$mod->Lang('lbl_key2')}</th>
+	<th width="2%">{$mod->Lang('lbl_key3')}</th>
+	<th>{$mod->Lang('lbl_title')}</th>
+	<th>{$mod->Lang('lbl_author_name')}</th>
+	<th>{$mod->Lang('lbl_status')}</th>
+	<th>{$mod->Lang('lbl_created')}</th>
+	<th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* edit *}
+	<th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* delete *}
+	<th class="pageicon {literal}{sorter: false}{/literal}"><input type="checkbox" id="selectall" onclick="select_all();"/></th>
+ </tr>
+ </thead>
+ <tbody>
+	 {foreach from=$comments item='onecomment'}
+	 {cms_action_url action=admin_editcomment cid=$onecomment.id assign='edit_url'}
+	 {cms_action_url action=admin_deletecomment cid=$onecomment.id assign='delete_url'}
+
     {capture assign='tooltipid'}tooltip-comment-{$onecomment.id}{/capture}
 
     {* this is for the tooltip *}
@@ -203,16 +207,16 @@ jQuery(document).ready(function($) {
       {assign var='status_style' value='style="color: red;"'}
     {/if}
     <tr>
-      <td><a href="{$onecomment.edit_url}" title="{$mod->Lang('edit')}">{$onecomment.id}</a></td>
+      <td><a href="{$edit_url}" title="{$mod->Lang('edit')}">{$onecomment.id}</a></td>
       <td>{if $onecomment.key1 == '__page__'}{$mod->Lang('lbl_page')}{else}{$onecomment.key1}{/if}</td>
       <td>{$onecomment.key2}</td>
       <td>{$onecomment.key3}</td>
-      <td><a href="{$onecomment.edit_url}" title="{$onecomment.title}" class="tooltip" rel="#{$tooltipid}" >{$onecomment.title|truncate:50}</a></td>
+      <td><a href="{$edit_url}" title="{$onecomment.title}" class="tooltip" rel="#{$tooltipid}" >{$onecomment.title|truncate:50}</a></td>
       <td>{$onecomment.author_name}</td>
       <td><span {$status_style}>{$mod->Lang($onecomment.status)}</span></td>
       <td>{$onecomment.created|cms_date_format}</td>
-      <td><a href="{$onecomment.edit_url}" title="{$mod->Lang('edit')}">{cgimage image='icons/system/edit.gif' alt=$mod->Lang('edit')}</a></td>
-      <td><a href="{$onecomment.delete_url}" title="{$mod->Lang('delete')}" onclick="return confirm('{$mod->Lang('confirm_delete_comment')}');">{cgimage image='icons/system/delete.gif' alt=$mod->Lang('delete')}</a></td>
+      <td><a href="{$edit_url}" title="{$mod->Lang('edit')}">{admin_icon icon='edit.gif'}</a></td>
+      <td><a href="{$delete_url}" title="{$mod->Lang('delete')}" onclick="return confirm('{$mod->Lang('confirm_delete_comment')}');">{admin_icon icon='delete.gif'}</a></td>
       <td><input type="checkbox" name="{$actionid}selected[]" value="{$onecomment.id}"/></td>
     </tr>
   {/foreach}

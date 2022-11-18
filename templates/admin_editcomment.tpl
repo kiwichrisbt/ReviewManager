@@ -1,69 +1,74 @@
-<h3>{$mod->Lang('lbl_edit_comment')}</h3>
+<h3>{if $comment->id}{$mod->Lang('lbl_edit_comment')}{else}{$mod->Lang('lbl_add_comment')}{/if}</h3>
 
-{$formstart}
-<div class="c_full cf">
-  <p class="grid_2"></p>
-  <p class="grid_9">
+{form_start cid=$comment->id}
+<div class="pageoverflow">
+  <p class="pageinput">
     <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
     <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
-    <input type="submit" name="{$actionid}delete" value="{$mod->Lang('delete')}"/>
+    {if $comment->id}<input type="submit" name="{$actionid}delete" value="{$mod->Lang('delete')}"/>{/if}
   </p>
 </div>
 
-<div class="c_full cf">
-    <label class="grid_2">{$mod->Lang('prompt_origurl')}:</label>
-    <input class="grid_8" type="text" name="{$actionid}origurl" maxlength="255" value="{$comment->origurl}"/></p>
-</div>
-<div class="c_full cf">
-    <label class="grid_2">{$mod->Lang('prompt_status')}:</label>
-    <select class="grid_6" name="{$actionid}status">
-         {html_options options=$status_options selected=$comment->status}
-    </select>
+<div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('prompt_status')}:</p>
+	<p class="pageinput">
+		<select name="{$actionid}status">
+			 {html_options options=$status_options selected=$comment->status}
+		</select>
+	</p>
  </div>
 
-<div class="c_full cf">
-  <label class="grid_2">{$mod->Lang('prompt_title')}:</label>
-  <p class="grid_9"><input type="text" name="{$actionid}title" size="80" maxlength="255" value="{$comment->title}"/></p>
-</div>
-
-<div class="c_full cf">
-  <label class="grid_2">{$mod->Lang('prompt_author_name')}:</label>
-  <p class="grid_9"><input type="text" name="{$actionid}author_name" size="80" maxlength="255" value="{$comment->author_name}"/></p>
-</div>
-
-<div class="c_full cf">
-  <p class="grid_2">{$mod->Lang('prompt_author_email')}:</p>
-  <p class="grid_9"><input type="text" name="{$actionid}author_email" size="80" maxlength="255" value="{$comment->author_email}"/></p>
-</div>
-
-<div class="c_full cf">
-  <p class="grid_2">{$mod->Lang('prompt_rating')}:</p>
-  <p class="grid_9">
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('prompt_rating')}:</p>
+  <p class="pageinput">
     <select name="{$actionid}rating">
        {html_options options=$rating_options selected=$comment->rating}
     </select>
   </p>
 </div>
 
-<div class="c_full cf">
-  <p class="grid_2">{$mod->Lang('prompt_comment')}:</p>
-  <p class="grid_9">{cge_textarea wysiwyg=$allow_wysiwyg prefix=$actionid name=data value=$comment->data rows=5 cols="82"}</p>
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('prompt_title')}:</p>
+  <p class="pageinput"><input type="text" name="{$actionid}title" size="80" maxlength="255" value="{$comment->title}"/></p>
 </div>
 
-<div class="c_full cf">
-  <p class="grid_2">&nbsp;</p>
-  <p class="grid_9"><input type="checkbox" name="{$actionid}author_notify" value="1" {if $comment->author_notify == 1}checked="checked"{/if}/>
+{if $comment->id}
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('prompt_author_name')}:</p>
+  <p class="pageinput"><input type="text" name="{$actionid}author_name" size="80" maxlength="255" value="{$comment->author_name}"/></p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('prompt_author_email')}:</p>
+  <p class="pageinput"><input type="text" name="{$actionid}author_email" size="80" maxlength="255" value="{$comment->author_email}"/></p>
+</div>
+<div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('prompt_origurl')}:</p>
+	<p class="pageinput">
+    <input type="text" name="{$actionid}origurl" size="80" maxlength="255" value="{$comment->origurl}"/>
+	</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput"><input type="checkbox" name="{$actionid}author_notify" value="1" {if $comment->author_notify == 1}checked="checked"{/if}/>
   {$mod->Lang('prompt_author_notify')}</p>
 </div>
+{/if}
 
+
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('prompt_comment')}:</p>
+  <p class="pageinput">
+	  {cms_textarea prefix=$actionid name=data value=$comment->data enablewysiwyg=true}
+	</p>
+</div>
 {* custom fields *}
 {if isset($fields)}
 {foreach from=$fields key='fieldid' item='field'}
-<div class="c_full cf">
-  <div class="grid_2">
+<div class="pageoverflow">
+  <div class="pagetext">
     {$field.name}:
   </div>
-  <div class="grid_9">
+  <div class="pageinput">
   {if isset($field.input)}
     {$field.input}
   {elseif $field.type == 0 or $field.type == 1 }
@@ -85,4 +90,4 @@
 {/foreach}
 {/if}
 
-{$formend}
+{form_end}

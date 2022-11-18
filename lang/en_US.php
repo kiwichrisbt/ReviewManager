@@ -138,6 +138,7 @@ $lang['lbl_created'] = 'Created';
 $lang['lbl_defaulttemplates'] = 'Prototype Templates';
 $lang['lbl_delete_spam'] = 'Delete this Spam';
 $lang['lbl_detailtemplates'] = 'Detail Templates';
+$lang['lbl_add_comment'] = 'Add new Comment';
 $lang['lbl_edit_comment'] = 'Edit Comment';
 $lang['lbl_filter'] = 'Filter';
 $lang['lbl_fields'] = 'Fields';
