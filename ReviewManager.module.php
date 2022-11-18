@@ -5,7 +5,7 @@
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
-#          see /ReviewManager/lang/LICENCE.txt or <http://www.gnu.org/licenses/>
+#          see /ReviewManager/lang/LICENCE.txt or <http://www.gnu.org/licenses/>   
 #---------------------------------------------------------------------------------------------------
 # CMS Made Simple(TM) is (c) CMS Made Simple Foundation 2004-2020 (info@cmsmadesimple.org)
 # Project's homepage is: http://www.cmsmadesimple.org
