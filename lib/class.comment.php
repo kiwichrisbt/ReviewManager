@@ -38,7 +38,7 @@ class comment
         if( !isset($this->_data['status']) ) {
             $text = $this->data .' '.$this->title.' '.$this->author_name;
             if( is_array($this->_fields) ) {
-                $tfields = cgfb_comment_ops::get_fielddefs();
+                $tfields = comment_ops::get_fielddefs();
                 foreach( $this->_fields as $fid => $value ) {
                     if( !isset($tfields[$fid]) ) continue;
                     if( $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXT && $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXTAREA )
@@ -47,7 +47,7 @@ class comment
                     $text .= ' '.$value;
                 }
             }
-            $this->status = (cgfb_comment_ops::text_needs_moderation($text)) ? REVIEWMANAGER_STATUS_DRAFT : REVIEWMANAGER_STATUS_PUBLISHED;
+            $this->status = (comment_ops::text_needs_moderation($text)) ? REVIEWMANAGER_STATUS_DRAFT : REVIEWMANAGER_STATUS_PUBLISHED;
         }
 
         return TRUE;
@@ -90,7 +90,7 @@ class comment
                 $r = $data[$a];
                 if( is_array($r) && isset($r['value']) && isset($r['field_id']) && isset($r['comment_id']) && $r['comment_id'] == $this->id ) {
                     $v = $r['value'];
-                    if( cgfb_comment_ops::get_fielddef_type($r['field_id']) == 4 ) $v = explode(',',$v);
+                    if( comment_ops::get_fielddef_type($r['field_id']) == 4 ) $v = explode(',',$v);
                     $this->set_field_by_id($r['field_id'],$v);
                 }
             }
@@ -106,7 +106,7 @@ class comment
     {
         if( !is_array($this->_fields) ) return;
 
-        $fielddefs = cgfb_comment_ops::get_fielddefs();
+        $fielddefs = comment_ops::get_fielddefs();
         $out = [];
         foreach( $fielddefs as $fid => $rec ) {
             $name = $rec['name'];

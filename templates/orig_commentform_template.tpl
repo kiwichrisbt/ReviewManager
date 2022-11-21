@@ -1,14 +1,16 @@
 {* comment form template *}
-{if isset($message)}
-  <div class="pagemessage">{$message}</div>
-{else}
+{if isset($message) && $message ne ''}
+  {if isset($error)}
+  <div class="danger">{$message}</div>
+  {else}
+  <div class="message">{$message}</div>
+  {/if}
+{/if}
   {* no message... display the form *}
   <div class="cgfeedback_addcomment">
-  {if isset($error)}
-     <div class="error">{$error}</div>
-  {/if}
 
   {form_start action=default inline=$inline extraparms=$extraparms}
+  {cge_form_csrf}
   {*
    * A simple honeypot captcha field.  This field needs to be a text field, but hidden with CSS
    * deleting this field from the template will have no effect on form behavior, but if this
@@ -117,11 +119,10 @@
   <div class="row">
     <div class="col-md-4 text-right"></div>
     <div class="col-md-8">
-      <button class="btn btn-active" name="{$actionid}cgfb_submit">{$mod->Lang('submit')}</button>
+      <button class="btn btn-active" name="{$actionid}rm_submit">{$mod->Lang('submit')}</button>
     </div>
   </div>
 
   </fieldset>
   {form_end}
   </div>
-{/if}{* message *}

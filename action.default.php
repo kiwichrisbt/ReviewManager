@@ -35,12 +35,13 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-use \CGFeedback\utils;
-use \CGFeedback\comment;
-use \CGFeedback\comment_ops AS cgfb_comment_ops;
-use \CGFeedback\comment_notifier;
-use \CGFeedback\param_cleaner;
+if( !defined('CMS_VERSION') ) exit;
+
+use \ReviewManager\utils;
+use \ReviewManager\comment;
+use \ReviewManager\comment_ops;
+use \ReviewManager\comment_notifier;
+use \ReviewManager\param_cleaner;
 
 ###################################
 # Display the create comment form #
@@ -51,13 +52,13 @@ use \CGFeedback\param_cleaner;
 //
 $error = $message = null;
 $permalink = cge_url::current_url(); // todo - ability to change this?
-$inline = $voteonce = false;
+$inline = $voteonce = true;
 $voteinterval = -1;
 $titlerequired = (int) $this->GetPreference('titlerequired',1);
 $commentrequired = (int) $this->GetPreference('commentrequired',1);
 $emailrequired = (int) $this->GetPreference('emailrequired',1);
 $namerequired = (int) $this->GetPreference('namerequired',1);
-$rating_options_str = "1\n2\n3\n4\n5\n";
+$rating_options_str = "1,2,3,4,5";
 $feu = \cms_utils::get_module('FrontEndUsers');
 $feu_uid = null;
 if( $feu ) $feu_uid = $feu->LoggedInId();
@@ -66,6 +67,7 @@ if( $feu ) $feu_uid = $feu->LoggedInId();
 // setup
 //
 $comment = new comment();
+$comment->title = "Test";
 $comment->rating = 5;
 $comment->key1 = '__page__';
 $comment->key2 = $returnid;
@@ -76,10 +78,9 @@ if( \cge_param::exists($params,'key1') ) {
     $comment->key2 = cge_param::get_string($params,'key2');
     $comment->key3 = cge_param::get_string($params,'key3');
 }
-if( $feu_uid ) {
-    $comment->author_email = $feu->LoggedInEmail();
-    $comment->author_name = $feu->LoggedInName();
-}
+
+    $comment->author_email = "magal@pixelsolutions.biz";
+    $comment->author_name = "magal";
 
 
 //
@@ -98,16 +99,19 @@ if( $this->GetPreference('use_cookies',0) == 1 && isset($_COOKIE[REVIEWMANAGER_C
 //
 // Process parameters
 //
-$origparms = \cge_param::get_string($params,'cgfb_origparms');
+$origparms = \cge_param::get_string($params,'rm_origparms');
 if( $origparms ) {
     // we have some origparams... prolly means we're submitting the form
     // they're encoded, so lets get them back to normal.
     $tmp = [ '_d'=>$origparms ];
     $params = array_merge($params,\cge_utils::decrypt_params($tmp));
-    unset($params['cgfb_origparms']);
+    unset($params['rm_origparms']);
 }
+
+
+
 $rating_options_str = cge_param::get_string($params,'ratingoptions',$rating_options_str);
-$rating_options = cgfb_comment_ops::text_to_options($rating_options_str);
+$rating_options = comment_ops::text_to_options($rating_options_str);
 $inline = cge_param::get_bool($params,'inline',$inline);
 $voteonce = cge_param::get_bool($params,'voteonce',$voteonce);
 $voteinterval = cge_param::get_int($params,'voteinterval',$voteinterval);
@@ -117,24 +121,28 @@ $emailrequired = cge_param::get_bool($params,'emailrequired',$emailrequired);
 $namerequired = cge_param::get_bool($params,'namerequired',$namerequired);
 
 // try to get some info from the session...
-$tmp = $this->session_get('cgfb_comment');
+$tmp = $this->session_get('rm_comment');
 if( $tmp ) $comment = unserialize($tmp);
 
 //
 // Get custom field definitions
 //
-$tfields = cgfb_comment_ops::get_fielddefs();
+$tfields = comment_ops::get_fielddefs();
 if( is_array($tfields) && count($tfields) ) {
     foreach( $tfields as $fid => &$tfield ) {
         $tfield['attrib'] = $tfield['attribs'];
     }
 }
-
 //
 // Process form data
 //
-if( isset($params['cgfb_submit']) ) {
+if( isset($params['rm_submit']) ) {
+
+    $error = null;
+	$message = null;
+
     try {
+
         // Get data from the form
         $disable_html = ($this->GetPreference('allow_comment_html',0) == 0);
         $cleaner = new param_cleaner();
@@ -172,11 +180,11 @@ if( isset($params['cgfb_submit']) ) {
         //
         if( !\cge_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \RuntimeException($this->Lang('error_invalidrating'));
-        if( $comment->data == '' && $commentrequired ) throw new \RuntimeException($this->Lang('error_emptycomment'));
+
         if( $comment->title == '' && $titlerequired  ) throw new \RuntimeException($this->Lang('error_emptytitle'));
         if( $comment->author_name == '' && $namerequired ) throw new \RuntimeException($this->Lang('error_emptyname'));
         if( $comment->author_email == '' && $emailrequired ) throw new \RuntimeException($this->Lang('error_emptyemail'));
-
+        if( $comment->data == '' && $commentrequired ) throw new \RuntimeException($this->Lang('error_emptycomment'));
         // check honeypot captcha
         if( isset($params['feedback__data']) && $params['feedback__data'] !== '' ) throw new \RuntimeException($this->Lang('error_captchafailed'));
 
@@ -241,17 +249,7 @@ if( isset($params['cgfb_submit']) ) {
             setcookie(REVIEWMANAGER_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
         }
 
-        // done... now handle success or failure.
-        $orig_comment = $comment;
-        $comment = \CMSMS\HookManager::do_hook('CGFeedback::BeforeSaveComment',$comment);
-        if( !$comment || !is_object($comment) ) $comment = $orig_comment;
 
-        // if we get here, and the comment status is spam
-        // throw a runtime exception
-        if( $comment->status == REVIEWMANAGER_STATUS_SPAM ) {
-            audit('',$this->GetName(),'SPAM Detected from '.$comment->author_ip);
-            throw new \RuntimeException($this->Lang('error_spam_detected'));
-        }
 
         if( $this->GetPreference('use_cookies',0) == 1 ) {
             // Set cookie information
@@ -271,11 +269,13 @@ if( isset($params['cgfb_submit']) ) {
         if( $comment->status == REVIEWMANAGER_STATUS_PUBLISHED ) {
             // user notifications
             $this->_commentops->save( $comment );
-            \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);
+            \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
         }
 
         // success
-        $tpl = $this->CreateSmartyTemplate('success_msg');
+
+        $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Success Message');
+        $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
         $tpl->assign('author_name',$comment->author_name);
         $tpl->assign('author_ip',$comment->author_ip);
         $tpl->assign('author_notify',$comment->author_notify);
@@ -287,45 +287,46 @@ if( isset($params['cgfb_submit']) ) {
         // store information in the session
         // redirect back to originating url
         // and display messages.
-        $this->session_put('message',$message);
+  
+        // redirect out of here.
+        /*
+        if( ! \cge_param::get_bool($params,'noredirect') ) {
+            // we are allowed to redirect.
+            if( !$error && isset($params['destpage']) ) {
+                $this->session_clear();
+                $page = $this->resolve_alias_or_id($params['destpage']);
+                if( $page ) $this->RedirectContent($page);
+            }
+            else if( isset($params['feedback_origurl']) ) {
+                // we can go back to the original url
+                $url = html_entity_decode($params['feedback_origurl']);
+                if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
+                redirect($url);
+            }
+
+            // or just back to the original content page.
+            $this->RedirectContent($returnid);
+        }
+*/
     }
-    catch( \Exception $e ) {
-        $error = $e->GetMessage();
-        $this->session_put('error',$error);
-        $this->session_put('cgfb_comment',serialize($comment));
+    catch( \RuntimeException $e ) {
+        $error = 1;	
+		$message = $e->getMessage();
     }
 
-    // redirect out of here.
-    if( ! \cge_param::get_bool($params,'noredirect') ) {
-        // we are allowed to redirect.
-        if( !$error && isset($params['destpage']) ) {
-            $this->session_clear();
-            $page = $this->resolve_alias_or_id($params['destpage']);
-            if( $page ) $this->RedirectContent($page);
-        }
-        else if( isset($params['feedback_origurl']) ) {
-            // we can go back to the original url
-            $url = html_entity_decode($params['feedback_origurl']);
-            if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
-            redirect($url);
-        }
-
-        // or just back to the original content page.
-        $this->RedirectContent($returnid);
-    }
+    
 } // submit
 
 
 //
 // Give everything to smarty, and get ready to render.
 //
-$error = $this->session_get('error',$error);
-$message = $this->session_get('message',$message);
 $this->session_clear();
-$this->session_put('cgfb_comment',serialize($comment));
+$this->session_put('rm_comment',serialize($comment));
 
-$thetemplate = utils::find_layout_template($params,'commenttemplate','CGFeedback::Comment Form');
-$tpl = $this->CreateSmartyTemplate($thetemplate);
+$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
+
 $get_extraparms = function(array $inparms) {
     $list = 'key1,key2,key3,policy,inline,commenttemplate,noredirect,ratingoptions,voteonce,voteinterval,titlerequired,commentrequired,emailrequired,namerequired,redirectextra';
     $list = explode(',',$list);
@@ -339,17 +340,18 @@ $get_extraparms = function(array $inparms) {
     }
     $out = \cge_utils::encrypt_params($out);
 
-    $out = ['cgfb_origparms' => $out['_d'] ];
+    $out = ['rm_origparms' => $out['_d'] ];
     return $out;
 };
 
 if( !isset($params['destpage']) && !isset($params['feedback_origurl']) ) $params['feedback_origurl'] = cge_url::current_url();
 $extraparms = $get_extraparms($params);
 
+
 if( !empty($error) ) {
     $tpl->assign('error',$error);
 }
-else if( !empty($message) ) {
+if( !empty($message) ) {
     $tpl->assign('message',$message);
 }
 if( count($tfields) ) {

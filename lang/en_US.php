@@ -65,16 +65,16 @@ $lang['friendlyname'] = 'Review Manager';
 #I
 $lang['id'] = 'Id';
 $lang['import_all_from_cgfeedback'] = 'Import All from CGFeedback';
-$lang['import_cgfeedback_alert'] =  <<<EOT
-CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback. Make sure you have a site backup first!
+$lang['import_ReviewManager_alert'] =  <<<EOT
+ReviewManager module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace ReviewManager. Make sure you have a site backup first!
 EOT;
-$lang['import_cgfeedback_text'] =  <<<EOT
-CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback.
+$lang['import_ReviewManager_text'] =  <<<EOT
+ReviewManager module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace ReviewManager.
 EOT;
 $lang['import_step_1'] = 'import all feedback, fields, templates and settings';
-$lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{CGFeedback\' tags and replace with \'{ReviewManager\'. All templates imported from CGFeedback have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
-$lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall CGFeedback.';
-$lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from CGFeedback module.';
+$lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{ReviewManager\' tags and replace with \'{ReviewManager\'. All templates imported from ReviewManager have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
+$lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall ReviewManager.';
+$lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from ReviewManager module.';
 
 $lang['info_allow_comment_html'] = '<strong>Note:</strong> Do not use this with the above wysiwyg setting';
 $lang['info_captcha_module'] = 'Select a module from the list to use for providing functionality to ensure that there is a human entering data into the form.';
@@ -143,7 +143,7 @@ $lang['lbl_edit_comment'] = 'Edit Comment';
 $lang['lbl_filter'] = 'Filter';
 $lang['lbl_fields'] = 'Fields';
 $lang['lbl_id'] = 'ID';
-$lang['lbl_importer'] = 'CGFeedback Importer';
+$lang['lbl_importer'] = 'ReviewManager Importer';
 $lang['lbl_key1'] = 'Key 1';
 $lang['lbl_key2'] = 'Key 2';
 $lang['lbl_key3'] = 'Key 3';
@@ -296,7 +296,7 @@ $lang['prompt_field_name'] = 'Field Name';
 $lang['prompt_field_type'] = 'Field Type';
 $lang['prompt_friendlyname'] = 'Module Friendlyname';
 $lang['prompt_general_settings'] = 'General Settings';
-$lang['prompt_import_cgfeedback'] = 'Import CGFeedback Content';
+$lang['prompt_import_ReviewManager'] = 'Import ReviewManager Content';
 $lang['prompt_is_email_html'] = 'Send message in HTML format?';
 $lang['prompt_message_template'] = 'Message Template';
 $lang['prompt_moderate_comments'] = 'Moderate all comments';
@@ -432,9 +432,9 @@ $lang['help_general'] = <<<EOT
 EOT;
 
 
-$lang['help_tab_import'] = 'CGFeedback Import';
+$lang['help_tab_import'] = 'ReviewManager Import';
 $lang['help_import'] = <<<EOT
-<p>Is CGFeedback is installed you will see an option to import all CGFeedback items, fields, settings and templates into ReviewManager.</p><br>
+<p>Is ReviewManager is installed you will see an option to import all ReviewManager items, fields, settings and templates into ReviewManager.</p><br>
 EOT;
 
 
@@ -443,12 +443,12 @@ $lang['help_usage'] = <<<EOT
 
 <h3>How do I use it</h3>
 
-<h4>Calling CGFeedback from a page</h4>
-<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}CGFeedback{rdelim}</code>.  This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}CGFeedback action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
+<h4>Calling ReviewManager from a page</h4>
+<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}ReviewManager{rdelim}</code>.  This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}ReviewManager action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
 
-<h4>Calling CGFeedback from news, or other modules</h4>
-<p>CGFeedback can be utilized within the news module to allow site visitors to enter comments on particular items in News or any module.  To do this, you would enter a tag such as: <code>{ldelim}CGFeedback key1=&quot;News&quot; key2=\$entry->id{rdelim}</code> into the appropriate news detail template.   Similarly to display those comments, you would use a tag such as <code>{ldelim}CGFeedback key1=&quot;News&quot; key2=\$entry->id action='summary'{rdelim}</code></p>
-<p>Similar techniques can be used to allow CGFeedback to interact with almost any other module in limitless ways.</p>
+<h4>Calling ReviewManager from news, or other modules</h4>
+<p>ReviewManager can be utilized within the news module to allow site visitors to enter comments on particular items in News or any module.  To do this, you would enter a tag such as: <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id{rdelim}</code> into the appropriate news detail template.   Similarly to display those comments, you would use a tag such as <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id action='summary'{rdelim}</code></p>
+<p>Similar techniques can be used to allow ReviewManager to interact with almost any other module in limitless ways.</p>
 <p>Additional parameters can be used to further customize the behaviour and output of the module.  You are encouraged to explore the parameters as described below, and try them.</p>
 <br>
 EOT;
@@ -470,7 +470,7 @@ The module author is not obligated to provide support for this code. However you
 
 <h3>Copyright &amp; Licence</h3>
 <p>Copyright © 2020, Chris Taylor {mailto address='chris@binnovative.co.uk' encode=javascript}. All Rights Are Reserved.<br>
-This module is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)</p><br>
+This module is a fork of: ReviewManager (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)</p><br>
 
 <p>This module has been released under the GNU Public License v3. However, as a special exception to the GPL, this software is distributed as an addon module to CMS Made Simple. You may only use this software when there is a clear and obvious indication in the admin section that the site was built with CMS Made Simple!</p><br>
 

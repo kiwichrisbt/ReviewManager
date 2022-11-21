@@ -128,7 +128,7 @@
 	<ul>
 	<li>Numerous bug fixes.</li>
 	<li>Now use smarty scopes for most frontend displays.
-          <p><strong>Note:</strong> These changes may introduce compatibility problems.  Particularly where variables from CGFeedback templates are used outside of the template call.  You may need to explicitly assign these variables to the global scope.</p>
+          <p><strong>Note:</strong> These changes may introduce compatibility problems.  Particularly where variables from ReviewManager templates are used outside of the template call.  You may need to explicitly assign these variables to the global scope.</p>
         </li>
 	</ul>
 	</li>
@@ -159,8 +159,8 @@
 	</li>
 
 <li>Version 2.0
-	<p class="warning"><strong>Note:</strong> This is a significant refactoring of the CGFeedback module.  Much has changed.  Though there should be no data loss, those doing upgrades
-	will need to edit re-generate and re-style your templates, and to adjust the options and various calls to CGFeedback.</p>
+	<p class="warning"><strong>Note:</strong> This is a significant refactoring of the ReviewManager module.  Much has changed.  Though there should be no data loss, those doing upgrades
+	will need to edit re-generate and re-style your templates, and to adjust the options and various calls to ReviewManager.</p>
 	<ul>
 	<li>Now require at least CMSMS 2.2-beta3</li>
 	<li>Now uses DesignManager for most templates.

@@ -5,9 +5,9 @@ final class comment_notifier
 {
     private function __construct() {}
 
-    private static function prepare_smarty_vars(comment& $comment,$user = 1,&$smarty)
+    private static function prepare_smarty_vars($comment,$user = 1,&$smarty)
     {
-        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
+        $mod = \cms_utils::get_module('ReviewManager');
         $smarty->assign('key1',$comment->key1);
         $smarty->assign('key2',$comment->key2);
         $smarty->assign('key3',$comment->key3);
@@ -33,8 +33,9 @@ final class comment_notifier
 
     public static function notify_admins(comment& $comment)
     {
-        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
-        $smarty = $mod->CreateSmartyTemplate(REVIEWMANAGER_PREF_NOTIFICATION_TEMPLATE);
+        $mod = \cms_utils::get_module('ReviewManager');
+        $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Admin Notification');
+        $smarty = $mod->CreateSmartyTemplate($thetemplate);
         self::prepare_smarty_vars($comment,0,$smarty);
         $gid = $mod->GetPreference('notification_group',-1);
         if( $gid == -1 ) return TRUE;
@@ -70,8 +71,10 @@ final class comment_notifier
 
     public static function email_notify_users(comment $comment)
     {
-        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
-        $smarty = $mod->CreateSmartyTemplate(REVIEWMANAGER_PREF_USERNOTIFICATION_TEMPLATE);
+
+        $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::User Notification');
+        $mod = \cms_utils::get_module('ReviewManager');
+        $smarty = $mod->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
         self::prepare_smarty_vars($comment,1,$smarty);
 
         $db = cmsms()->GetDb();

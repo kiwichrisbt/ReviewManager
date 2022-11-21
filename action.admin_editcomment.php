@@ -39,7 +39,7 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) exit;
 use \ReviewManager\comment;
 use \ReviewManager\comment_notifier;
-use \ReviewManager\comment_ops AS cgfb_comment_ops;
+use \ReviewManager\comment_ops;
 
 #
 # Initialization
@@ -61,7 +61,7 @@ if( isset($cid) && $cid > 1) {
 # Get the data
 #
 
-$tfields = cgfb_comment_ops::get_fielddefs();
+$tfields = comment_ops::get_fielddefs();
 $allow_wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
 foreach( $tfields as $fid => &$tfield ) {
     $tfield['value'] = $comment->get_field_by_id($tfield['id']);

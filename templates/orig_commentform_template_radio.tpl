@@ -118,7 +118,7 @@
   <div class="row">
     <div class="col-md-4 text-right"></div>
     <div class="col-md-8">
-      <button class="btn btn-active" name="{$actionid}cgfb_submit">{$mod->Lang('submit')}</button>
+      <button class="btn btn-active" name="{$actionid}rm_submit">{$mod->Lang('submit')}</button>
     </div>
   </div>
 

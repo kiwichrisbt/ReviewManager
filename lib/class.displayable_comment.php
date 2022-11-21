@@ -1,6 +1,6 @@
 <?php
 namespace ReviewManager;
-use \CGFeedback\comment_ops AS cgfb_comment_ops;
+use \CGFeedback\comment_ops;
 
 class displayable_comment extends comment
 {

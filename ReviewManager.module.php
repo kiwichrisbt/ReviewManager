@@ -120,7 +120,7 @@ final class ReviewManager extends CMSModule
         $this->CreateParameter('commentrequired',1,$this->Lang('param_commentrequired'));
         $this->CreateParameter('emailrequired',1,$this->Lang('param_emailrequired'));
         $this->CreateParameter('namerequired',1,$this->Lang('param_namerequired'));
-        $this->CreateParameter('rationgoptions','1,2,3,4,5',$this->Lang('param_ratingoptions'));
+        $this->CreateParameter('ratingoptions','1,2,3,4,5',$this->Lang('param_ratingoptions'));
         $this->CreateParameter('redirectextra','',$this->Lang('param_redirectextra'));
         $this->CreateParameter('pagelimit',10000,$this->Lang('param_pagelimit'));
         $this->CreateParameter('since','',$this->Lang('param_since'));
