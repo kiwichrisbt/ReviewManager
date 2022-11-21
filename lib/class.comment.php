@@ -41,7 +41,7 @@ class comment
                 $tfields = cgfb_comment_ops::get_fielddefs();
                 foreach( $this->_fields as $fid => $value ) {
                     if( !isset($tfields[$fid]) ) continue;
-                    if( $tfields[$fid]['type'] != CGFEEDBACK_TYPE_TEXT && $tfields[$fid]['type'] != CGFEEDBACK_TYPE_TEXTAREA )
+                    if( $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXT && $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXTAREA )
                         continue;
 
                     $text .= ' '.$value;

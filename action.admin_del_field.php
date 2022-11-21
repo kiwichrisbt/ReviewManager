@@ -37,29 +37,27 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
-
-
 #
 # Setup
 #
 $this->SetCurrentTab('fields');
 if( !isset($params['fid']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
-$query = 'SELECT iorder FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE id = ?';
+$query = 'SELECT iorder FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE id = ?';
 $iorder = $db->GetOne($query,array((int)$params['fid']));
 if( $iorder ) {
-    $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE id = ?';
+    $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE id = ?';
     $db->Execute($query,array((int)$params['fid']));
 
-    $query = 'UPDATE '.CGFEEDBACK_TABLE_FIELDDEFS.' SET iorder=iorder-1 WHERE iorder > ?';
+    $query = 'UPDATE '.REVIEWMANAGER_TABLE_FIELDDEFS.' SET iorder=iorder-1 WHERE iorder > ?';
     $db->Execute($query,array($iorder));
 }
 
 $this->SetMessage($this->Lang('msg_field_deleted'));
-$this->RedirectToTab($id);
+$this->RedirectToAdminTab();
 
 #
 # EOF
