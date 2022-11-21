@@ -49,7 +49,7 @@ class CreateAlertsTask implements \CmsRegularTask
     {
         debug_to_log(__METHOD__);
         if( !$time ) $time = time();
-        $mod = \cms_utils::get_module('CGFeedback');
+        $mod = \cms_utils::get_module('ReviewManager');
         $lastrun = (int) $mod->GetPreference('task1_lastrun');
         if( $lastrun >= ($time - 900) ) return FALSE; // hardcoded to 15 minutes
         return TRUE;
@@ -58,7 +58,7 @@ class CreateAlertsTask implements \CmsRegularTask
     public function on_success($time = '')
     {
         IF( !$time ) $time = time();
-        $mod = \cms_utils::get_module('CGFeedback');
+        $mod = \cms_utils::get_module('ReviewManager');
         $mod->SetPreference('task1_lastrun',$time);
     }
 
@@ -69,7 +69,7 @@ class CreateAlertsTask implements \CmsRegularTask
         $db = \CmsApp::get_instance()->GetDb();
         if( !$time ) $time = time();
 
-        $query = 'SELECT count(id) FROM '.CGFEEDBACK_TABLE_COMMENTS.' C WHERE C.status = \'draft\'';
+        $query = 'SELECT count(id) FROM '.REVIEWMANAGER_TABLE_COMMENTS.' C WHERE C.status = \'draft\'';
         $count = $db->GetOne($query);
         $alert = new DraftMessageAlert($count);
         if( $count > 0 ) {

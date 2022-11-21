@@ -46,7 +46,7 @@ $key1 = '__page__';
 $key2 = $returnid;
 $key3 = '';
 $query = 'SELECT COUNT(rating) as count, MIN(rating) as min, MAX(rating) as max, AVG(rating) as avg
-             FROM '.CGFEEDBACK_TABLE_COMMENTS;
+             FROM '.REVIEWMANAGER_TABLE_COMMENTS;
 $where = array();
 $qparms = array();
 //s where key1 = '__page__' and key2 = '135';
@@ -64,7 +64,7 @@ $key3 = \cge_param::get_string($params,'key3');
 #
 if( !$showall ) {
   $where[] = 'status = ?';
-  $qparms[] = CGFEEDBACK_STATUS_PUBLISHED;
+  $qparms[] = REVIEWMANAGER_STATUS_PUBLISHED;
 }
 if( !empty($key1) ) {
   $where[] = 'key1 = ?';

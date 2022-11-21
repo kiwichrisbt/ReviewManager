@@ -47,7 +47,7 @@ class comment
                     $text .= ' '.$value;
                 }
             }
-            $this->status = (cgfb_comment_ops::text_needs_moderation($text)) ? CGFEEDBACK_STATUS_DRAFT : CGFEEDBACK_STATUS_PUBLISHED;
+            $this->status = (cgfb_comment_ops::text_needs_moderation($text)) ? REVIEWMANAGER_STATUS_DRAFT : REVIEWMANAGER_STATUS_PUBLISHED;
         }
 
         return TRUE;

@@ -36,7 +36,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission(CGFEEDBACK_PERM_FEEDBACK) ) return false;
+if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) return false;
 
 #
 # Initialization

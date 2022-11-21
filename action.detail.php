@@ -42,7 +42,7 @@ use \CGFeedback\utils;
 # Initialization
 #
 $cid = -1;
-$query = 'SELECT * FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ? AND status = ? LIMIT 1';
+$query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ? AND status = ? LIMIT 1';
 
 #
 # Setup

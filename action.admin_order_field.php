@@ -53,10 +53,10 @@ $curorder = (int)$params['cur'];
 switch($dir) {
 case 'up':
     // swap order id with previous one
-    $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE iorder = ?';
+    $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE iorder = ?';
     $prev_id = $db->GetOne($query,array($curorder - 1));
     if( $prev_id ) {
-        $query = 'UPDATE '.CGFEEDBACK_TABLE_FIELDDEFS.' SET iorder = ? WHERE id = ?';
+        $query = 'UPDATE '.REVIEWMANAGER_TABLE_FIELDDEFS.' SET iorder = ? WHERE id = ?';
         $db->Execute($query,array($curorder,$prev_id));
         $db->Execute($query,array($curorder - 1,$fid));
     }
@@ -64,10 +64,10 @@ case 'up':
 
 case 'down':
     // swap order id with next one
-    $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE iorder = ?';
+    $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE iorder = ?';
     $prev_id = $db->GetOne($query,array($curorder + 1));
     if( $prev_id ) {
-        $query = 'UPDATE '.CGFEEDBACK_TABLE_FIELDDEFS.' SET iorder = ? WHERE id = ?';
+        $query = 'UPDATE '.REVIEWMANAGER_TABLE_FIELDDEFS.' SET iorder = ? WHERE id = ?';
         $db->Execute($query,array($curorder,$prev_id));
         $db->Execute($query,array($curorder + 1,$fid));
 	}

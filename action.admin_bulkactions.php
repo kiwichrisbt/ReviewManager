@@ -36,7 +36,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission(CGFEEDBACK_PERM_FEEDBACK) ) return false;
+if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) return false;
 
 #
 # Initialization
@@ -70,9 +70,9 @@ foreach( $selected as $one ) {
 
   case 'published':
       $comment = $this->_commentops->load($one);
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_PUBLISHED);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_PUBLISHED);
       if( $ret == TRUE ) {
-          if( $comment->status != CGFEEDBACK_STATUS_PUBLISHED ) {
+          if( $comment->status != REVIEWMANAGER_STATUS_PUBLISHED ) {
               // previous status was not published, so we can notify users.
               \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);
           }
@@ -81,12 +81,12 @@ foreach( $selected as $one ) {
       break;
 
     case 'draft':
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_DRAFT);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_DRAFT);
       if( $ret == TRUE ) $count++;
       break;
 
     case 'spam':
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_SPAM);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_SPAM);
       if( $ret == TRUE ) {
           $count++;
       }

@@ -8,7 +8,7 @@ class comment_ops
         if( \cge_tmpdata::exists('cgfb_fielddefs') ) return \cge_tmpdata::get('cgfb_fielddefs');
 
         $db = cmsms()->GetDb();
-        $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' ORDER BY iorder';
+        $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' ORDER BY iorder';
         $tmp = $db->GetArray($query);
         if( is_array($tmp) ) {
             for( $i = 0; $i < count($tmp); $i++ ) {

@@ -7,7 +7,7 @@ final class comment_notifier
 
     private static function prepare_smarty_vars(comment& $comment,$user = 1,&$smarty)
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
         $smarty->assign('key1',$comment->key1);
         $smarty->assign('key2',$comment->key2);
         $smarty->assign('key3',$comment->key3);
@@ -24,17 +24,17 @@ final class comment_notifier
         $smarty->assign('comment_obj',$comment);
 
         if( !$user ) {
-            $smarty->assign('subject',$mod->GetPreference(CGFEEDBACK_PREF_NOTIFICATION_SUBJECT));
+            $smarty->assign('subject',$mod->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT));
         }
         else {
-            $smarty->assign('subject',$mod->GetPreference(CGFEEDBACK_PREF_USERNOTIFICATION_SUBJECT));
+            $smarty->assign('subject',$mod->GetPreference(REVIEWMANAGER_PREF_USERNOTIFICATION_SUBJECT));
         }
     }
 
     public static function notify_admins(comment& $comment)
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
-        $smarty = $mod->CreateSmartyTemplate(CGFEEDBACK_PREF_NOTIFICATION_TEMPLATE);
+        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
+        $smarty = $mod->CreateSmartyTemplate(REVIEWMANAGER_PREF_NOTIFICATION_TEMPLATE);
         self::prepare_smarty_vars($comment,0,$smarty);
         $gid = $mod->GetPreference('notification_group',-1);
         if( $gid == -1 ) return TRUE;
@@ -58,7 +58,7 @@ final class comment_notifier
         if( !$count ) return TRUE;
 
         $mailer->IsHTML(TRUE);
-        $subj = $mod->GetPreference(CGFEEDBACK_PREF_NOTIFICATION_SUBJECT);
+        $subj = $mod->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT);
         $mailer->SetSubject($subj);
 
         $body = $smarty->fetch();
@@ -70,22 +70,22 @@ final class comment_notifier
 
     public static function email_notify_users(comment $comment)
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
-        $smarty = $mod->CreateSmartyTemplate(CGFEEDBACK_PREF_USERNOTIFICATION_TEMPLATE);
+        $mod = \cms_utils::get_module(MOD_REVIEWMANAGER);
+        $smarty = $mod->CreateSmartyTemplate(REVIEWMANAGER_PREF_USERNOTIFICATION_TEMPLATE);
         self::prepare_smarty_vars($comment,1,$smarty);
 
         $db = cmsms()->GetDb();
-        $query = 'SELECT DISTINCT author_email,author_name FROM '.CGFEEDBACK_TABLE_COMMENTS.'
+        $query = 'SELECT DISTINCT author_email,author_name FROM '.REVIEWMANAGER_TABLE_COMMENTS.'
                   WHERE key1 = ? AND key2 = ? AND key3 = ? AND status = ?
                   AND author_notify = 1 AND author_email != ?';
-        $users = $db->GetArray($query,array($comment->key1,$comment->key2,$comment->key3,CGFEEDBACK_STATUS_PUBLISHED,$comment->author_email));
+        $users = $db->GetArray($query,array($comment->key1,$comment->key2,$comment->key3,REVIEWMANAGER_STATUS_PUBLISHED,$comment->author_email));
         if( !is_array($users) ) return TRUE;
 
         $mailer = new \cms_mailer();
         $mailer->reset();
 
         $mailer->IsHTML(TRUE);
-        $subj = $mod->GetPreference(CGFEEDBACK_PREF_USERNOTIFICATION_SUBJECT);
+        $subj = $mod->GetPreference(REVIEWMANAGER_PREF_USERNOTIFICATION_SUBJECT);
         $mailer->SetSubject($subj);
 
         $body = $smarty->fetch();

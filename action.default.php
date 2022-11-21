@@ -85,9 +85,9 @@ if( $feu_uid ) {
 //
 // Setup
 //
-if( $this->GetPreference('use_cookies',0) == 1 && isset($_COOKIE[CGFEEDBACK_COOKIE]) ) {
+if( $this->GetPreference('use_cookies',0) == 1 && isset($_COOKIE[REVIEWMANAGER_COOKIE]) ) {
     // get data from the cookie
-    $cookie = unserialize($_COOKIE[CGFEEDBACK_COOKIE]);
+    $cookie = unserialize($_COOKIE[REVIEWMANAGER_COOKIE]);
     if( is_array($cookie) ) {
         if( isset($cookie['author_name']) ) $comment->author_name = $cookie['author_name'];
         if( isset($cookie['author_email']) ) $comment->author_email = $cookie['author_email'];
@@ -203,7 +203,7 @@ if( isset($params['cgfb_submit']) ) {
         // check for repeated voting
         if( $voteonce ) {
             // a bit of magic that controls the level at which users can vote only once.
-            $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_COMMENTS;
+            $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_COMMENTS;
             $qparms = array($comment->author_ip);
             $where = array('author_ip = ?');
             $where[] = 'key1 = ?';
@@ -238,7 +238,7 @@ if( isset($params['cgfb_submit']) ) {
             if( !empty($comment->author_name) ) $cookie['author_name'] = $comment->author_name;
             if( !empty($comment->author_email) ) $cookie['author_email'] = $comment->author_email;
             if( !empty($comment->author_notify) ) $cookie['author_notify'] = $comment->author_notify;
-            setcookie(CGFEEDBACK_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
+            setcookie(REVIEWMANAGER_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
         }
 
         // done... now handle success or failure.
@@ -248,7 +248,7 @@ if( isset($params['cgfb_submit']) ) {
 
         // if we get here, and the comment status is spam
         // throw a runtime exception
-        if( $comment->status == CGFEEDBACK_STATUS_SPAM ) {
+        if( $comment->status == REVIEWMANAGER_STATUS_SPAM ) {
             audit('',$this->GetName(),'SPAM Detected from '.$comment->author_ip);
             throw new \RuntimeException($this->Lang('error_spam_detected'));
         }
@@ -259,7 +259,7 @@ if( isset($params['cgfb_submit']) ) {
             if( !empty($comment->author_name) ) $cookie['author_name'] = $comment->author_name;
             if( !empty($comment->author_email) ) $cookie['author_email'] = $comment->author_email;
             if( !empty($comment->author_notify) ) $cookie['author_notify'] = $comment->author_notify;
-            setcookie(CGFEEDBACK_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
+            setcookie(REVIEWMANAGER_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
         }
 
         $res = $this->_commentops->save( $comment );
@@ -268,7 +268,7 @@ if( isset($params['cgfb_submit']) ) {
         // admin notifications
         comment_notifier::notify_admins($comment);
 
-        if( $comment->status == CGFEEDBACK_STATUS_PUBLISHED ) {
+        if( $comment->status == REVIEWMANAGER_STATUS_PUBLISHED ) {
             // user notifications
             $this->_commentops->save( $comment );
             \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);

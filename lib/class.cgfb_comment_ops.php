@@ -7,14 +7,14 @@ class cgfb_comment_ops
     {
         $db = cmsms()->GetDb();
 
-        $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ?';
+        $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ?';
         $row = $db->GetRow($query,array((int)$comment_id));
 
         if( is_array($row) ) {
             $obj = new cgfb_comment;
             $obj->from_array($row);
 
-            $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+            $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
             $tmp = $db->GetArray($query,array((int)$comment_id));
 
             if( is_array($tmp) ) $obj->load_fields_from_array($tmp);
@@ -29,7 +29,7 @@ class cgfb_comment_ops
         if( \cge_tmpdata::exists('cgfb_fielddefs') ) return \cge_tmpdata::get('cgfb_fielddefs');
 
         $db = cmsms()->GetDb();
-        $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' ORDER BY iorder';
+        $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' ORDER BY iorder';
         $tmp = $db->GetArray($query);
         if( is_array($tmp) ) {
             for( $i = 0; $i < count($tmp); $i++ ) {
@@ -62,10 +62,10 @@ class cgfb_comment_ops
     public static function delete_by_id($comment_id)
     {
         $db = cmsms()->GetDb();
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
         $dbr = $db->Execute($query,array((int)$comment_id));
 
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ?';
         $dbr = $db->Execute($query,array((int)$comment_id));
 
         return TRUE;
@@ -78,7 +78,7 @@ class cgfb_comment_ops
 
         $db = cmsms()->GetDb();
         $now = $db->DbTimeStamp(time());
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_COMMENTS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_COMMENTS."
               (key1,key2,key3,rating,title,data,status,author_name,author_email,author_ip,author_notify,admin_notes,notified,origurl,created,modified)
               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$now,$now)";
         $dbr = $db->Execute($query,array($obj->key1,$obj->key2,$obj->key3,$obj->rating,$obj->title,$obj->data,$obj->status,
@@ -93,7 +93,7 @@ class cgfb_comment_ops
         $obj->modified = $now;
 
         // insert fields.
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_FIELDVALS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_FIELDVALS."
               (comment_id,field_id,value) VALUES (?,?,?)";
         $flds = $obj->get_fields();
         if( is_array($flds) ) {
@@ -122,7 +122,7 @@ class cgfb_comment_ops
 
         $db = cmsms()->GetDb();
         $now = $db->DbTimeStamp(time());
-        $query = 'UPDATE '.CGFEEDBACK_TABLE_COMMENTS." set key1 = ?, key2 = ?, key3 = ?, rating = ?, 
+        $query = 'UPDATE '.REVIEWMANAGER_TABLE_COMMENTS." set key1 = ?, key2 = ?, key3 = ?, rating = ?, 
             title = ?, data = ?, status = ?, author_name = ?, author_email = ?, author_ip = ?, author_notify = ?, admin_notes = ?, notified = ?, origurl = ?, modified = $now 
             WHERE id = ?";
         $dbr = $db->Execute($query,
@@ -136,11 +136,11 @@ class cgfb_comment_ops
         $obj->modifed = $now;
 
         // DELETE ANY FIELDS FOR THIS RECORD
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
         $dbr = $db->Execute($query,array($obj->id));
 
         // INSERT NEW FIELDS FOR THIS RECORD
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_FIELDVALS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_FIELDVALS."
               (comment_id,field_id,value) VALUES (?,?,?)";
         $flds = $obj->get_fields();
         if( is_array($flds) ) {
