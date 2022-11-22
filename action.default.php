@@ -67,7 +67,6 @@ if( $feu ) $feu_uid = $feu->LoggedInId();
 // setup
 //
 $comment = new comment();
-$comment->title = "Test";
 $comment->rating = 5;
 $comment->key1 = '__page__';
 $comment->key2 = $returnid;
@@ -78,10 +77,10 @@ if( \cge_param::exists($params,'key1') ) {
     $comment->key2 = cge_param::get_string($params,'key2');
     $comment->key3 = cge_param::get_string($params,'key3');
 }
-
-    $comment->author_email = "magal@pixelsolutions.biz";
-    $comment->author_name = "magal";
-
+if( $feu_uid ) {
+    $comment->author_email = $feu->LoggedInEmail();
+    $comment->author_name = $feu->LoggedInName();
+}
 
 //
 // Setup
