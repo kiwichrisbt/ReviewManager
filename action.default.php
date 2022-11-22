@@ -264,7 +264,7 @@ if( isset($params['rm_submit']) ) {
         if( !$res ) throw new \RuntimeException($this->Lang('error_dberror'));
 
         // admin notifications
-        comment_notifier::notify_admins($comment);
+        comment_notifier::notify_admins($comment,$smarty);
 
         if( $comment->status == REVIEWMANAGER_STATUS_PUBLISHED ) {
             // user notifications
@@ -287,31 +287,30 @@ if( isset($params['rm_submit']) ) {
         // store information in the session
         // redirect back to originating url
         // and display messages.
-  
-        // redirect out of here.
-        /*
-        if( ! \cge_param::get_bool($params,'noredirect') ) {
-            // we are allowed to redirect.
-            if( !$error && isset($params['destpage']) ) {
-                $this->session_clear();
-                $page = $this->resolve_alias_or_id($params['destpage']);
-                if( $page ) $this->RedirectContent($page);
-            }
-            else if( isset($params['feedback_origurl']) ) {
-                // we can go back to the original url
-                $url = html_entity_decode($params['feedback_origurl']);
-                if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
-                redirect($url);
-            }
 
-            // or just back to the original content page.
-            $this->RedirectContent($returnid);
-        }
-*/
     }
     catch( \RuntimeException $e ) {
         $error = 1;	
 		$message = $e->getMessage();
+    }
+
+    // redirect out of here.
+    if( ! \cge_param::get_bool($params,'noredirect') ) {
+        // we are allowed to redirect.
+        if( !$error && isset($params['destpage']) ) {
+            $this->session_clear();
+            $page = $this->resolve_alias_or_id($params['destpage']);
+            if( $page ) $this->RedirectContent($page);
+        }
+        else if( isset($params['feedback_origurl']) ) {
+            // we can go back to the original url
+            $url = html_entity_decode($params['feedback_origurl']);
+            if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
+            redirect($url);
+        }
+
+        // or just back to the original content page.
+        $this->RedirectContent($returnid);
     }
 
     
@@ -321,11 +320,10 @@ if( isset($params['rm_submit']) ) {
 //
 // Give everything to smarty, and get ready to render.
 //
-$this->session_clear();
-$this->session_put('rm_comment',serialize($comment));
 
-$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
+//$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('orig_commentform_template_radio.tpl'));
+$tpl->assign('mod',$this);
 
 $get_extraparms = function(array $inparms) {
     $list = 'key1,key2,key3,policy,inline,commenttemplate,noredirect,ratingoptions,voteonce,voteinterval,titlerequired,commentrequired,emailrequired,namerequired,redirectextra';

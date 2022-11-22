@@ -1,7 +1,7 @@
 <?php
 namespace ReviewManager;
 
-final class comment_notifier
+class comment_notifier
 {
     private function __construct() {}
 
@@ -22,6 +22,7 @@ final class comment_notifier
         $smarty->assign('comment',$comment->data);
         $smarty->assign('orig_url',$comment->origurl);
         $smarty->assign('comment_obj',$comment);
+        $smarty->assign('mod',$mod);
 
         if( !$user ) {
             $smarty->assign('subject',$mod->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT));
@@ -31,29 +32,25 @@ final class comment_notifier
         }
     }
 
-    public static function notify_admins(comment& $comment)
+    public function notify_admins(comment& $comment,$smarty)
     {
+
         $mod = \cms_utils::get_module('ReviewManager');
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Admin Notification');
-        $smarty = $mod->CreateSmartyTemplate($thetemplate);
+        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate));
         self::prepare_smarty_vars($comment,0,$smarty);
-        $gid = $mod->GetPreference('notification_group',-1);
+        $gid = $mod->GetPreference('notification_emails',-1);
         if( $gid == -1 ) return TRUE;
+
+        $admins = explode(",", $gid);
 
         $mailer = new \cms_mailer();
         $count = 0;
-        $userops = cmsms()->GetUserOperations();
-        $users = $userops->LoadUsersInGroup($gid);
-        if( !is_array($users) || count($users) == 0 ) return TRUE;
-        for( $i = 0; $i < count($users); $i++ ) {
-            if( !isset($users[$i]->email) || $users[$i]->email == '' ) continue;
-            if( !is_email($users[$i]->email) ) continue;
 
-            $name = $users[$i]->username;
-            if( !empty($users[$i]->firstname) && !empty($users[$i]->lastname) ) {
-                $name = "{$users[$i]->lastname}, {$users[$i]->firstname}";
-            }
-            $mailer->AddAddress($users[$i]->email,$name);
+        if( !is_array($admins) || count($admins) == 0 ) return TRUE;
+        for( $i = 0; $i < count($admins); $i++ ) {
+            if( !is_email($admins[$i]) ) continue;
+            $mailer->AddAddress($admins[$i]);
             $count++;
         }
         if( !$count ) return TRUE;
@@ -63,18 +60,20 @@ final class comment_notifier
         $mailer->SetSubject($subj);
 
         $body = $smarty->fetch();
+
         $mailer->SetBody($body);
         $mailer->Send();
         if( $mailer->IsError() )  @trigger_error('Problem sending email: '.$mailer->GetErrorInfo());
         $mailer->reset();
+
     }
 
-    public static function email_notify_users(comment $comment)
+    public function email_notify_users(comment $comment,$smarty)
     {
 
-        $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::User Notification');
         $mod = \cms_utils::get_module('ReviewManager');
-        $smarty = $mod->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
+        $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::User Notification');
+        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate));
         self::prepare_smarty_vars($comment,1,$smarty);
 
         $db = cmsms()->GetDb();
