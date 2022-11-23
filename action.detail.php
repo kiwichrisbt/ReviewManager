@@ -35,47 +35,52 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-use \CGFeedback\utils;
+if( !defined('CMS_VERSION') ) exit;
+use \ReviewManager\utils;
 
 #
 # Initialization
 #
+$error = null;
+$message = null;
 $cid = -1;
 $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ? AND status = ? LIMIT 1';
-
 #
 # Setup
 #
-$cid = \cge_param::get_int($params,'cid');
-if( $cid <= 0 ) {
-    @trigger_error($this->GetName().' detail view: invalid comment id');
-    return;
+try {
+    $cid = intval($params['cid']);
+    if( $cid <= 0 ) {
+        throw new \LogicException($this->GetName().' '. $this->Lang('error_invalidcomment'));
+    }
+    $comment = $this->_commentops->load_displayable( $cid );
+    if( !$comment->is_published() ) {
+        throw new \LogicException($this->GetName().' '. $this->Lang('error_comment_uknown',$cid));
+    }
 }
-
-#
-# Get the data
-#
-$comment = $this->_commentops->load_displayable( $cid );
-if( !$comment->is_published() ) throw new CmsError404Exception("CGFeedback Comment $cid not found, or otherwise unavailable");
+catch (LogicException $e) {
+    $error = 1;	
+    $message = $e->getMessage();
+}
 
 #
 # Give everything to smarty
 #
-$thetemplate = utils::find_layout_template($params,'detailtemplate','CGFeedback::Detail View');
-$tpl = $this->CreateSmartyTemplate($thetemplate);
+$thetemplate = utils::find_layout_template($params,'detailtemplate','ReviewManager::Detail View');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate));
+
 $config = $gCms->GetConfig();
 $path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
 $tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
 $tpl->assign('rating_imgs',$tmp);
 $tpl->assign('onecomment',$comment);
-
+$tpl->assign('message',$message);
+$tpl->assign('error',$error);
+$tpl->assign('mod',$this);
 #
 # Display the template
 #
 $tpl->display();
-
-
 #
 # EOF
 #

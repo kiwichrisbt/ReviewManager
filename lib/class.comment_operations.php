@@ -79,7 +79,7 @@ final class comment_operations
         $row = $db->GetRow($query,array((int)$comment_id));
 
         if( is_array($row) ) {
-            $mod = \cge_utils::get_module(MOD_REVIEWMANAGER);
+            $mod = \cms_utils::get_module('ReviewManager');
             $obj = new displayable_comment($mod);
             $obj->from_array($row);
 

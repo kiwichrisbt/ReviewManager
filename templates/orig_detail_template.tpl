@@ -1,3 +1,10 @@
+{if isset($message) && $message ne ''}
+  {if isset($error)}
+  <div class="danger">{$message}</div>
+  {else}
+  <div class="message">{$message}</div>
+  {/if}
+{else}
 {* detail template *}
   <div class="feedback_summary_item">
     <div class="feedback_item_title">
@@ -49,3 +56,4 @@
 
     <br/><br/>
   </div>
+{/if}
