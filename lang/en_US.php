@@ -446,13 +446,40 @@ $lang['help_usage'] = <<<EOT
 <h3>How do I use it</h3>
 
 <h4>Calling ReviewManager from a page</h4>
-<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}ReviewManager{rdelim}</code>.  This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}ReviewManager action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
+<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}ReviewManager{rdelim}</code>.</p>
+<p>This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}ReviewManager action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
 
 <h4>Calling ReviewManager from news, or other modules</h4>
 <p>ReviewManager can be utilized within the news module to allow site visitors to enter comments on particular items in News or any module.  To do this, you would enter a tag such as: <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id{rdelim}</code> into the appropriate news detail template.   Similarly to display those comments, you would use a tag such as <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id action='summary'{rdelim}</code></p>
 <p>Similar techniques can be used to allow ReviewManager to interact with almost any other module in limitless ways.</p>
 <p>Additional parameters can be used to further customize the behaviour and output of the module.  You are encouraged to explore the parameters as described below, and try them.</p>
 <br>
+
+<h4>Hooks</h4>
+<p>The following hooks are provided to enable other modules to be called when various ReviewManager actions occur:</p>
+<ul>
+    <li><code>ReviewManager::UserNotify</code>
+        <p>Sent immediately before the user is notified that the review is now published.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+    <li><code>ReviewManager::BeforeDeleteComment</code>
+        <p>Sent immediately before a comment is deleted.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+    <li><code>ReviewManager::BeforeSaveComment</code>
+        <p>Sent immediately before the commnet is saved.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+</ul>
 EOT;
 
 
