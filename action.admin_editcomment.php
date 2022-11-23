@@ -113,7 +113,7 @@ else if( isset($params['submit']) && !empty($params['submit']) ) {
         if( !$res ) throw new \Exception($this->Lang('error_dberror'));
 
         if( $comment->status == REVIEWMANAGER_STATUS_PUBLISHED && $orig_status != REVIEWMANAGER_STATUS_PUBLISHED ) {
-            \CMSMS\HookManager::do_hook('REVIEWMANAGER::UserNotify',$comment);
+            \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
         }
 
         $this->SetMessage($this->Lang('msg_commentupdated'));

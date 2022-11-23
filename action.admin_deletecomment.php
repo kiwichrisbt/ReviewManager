@@ -58,7 +58,7 @@ if( !$cid ) {
     $this->RedirectToTab($id);
 }
 
-\CMSMS\HookManager::do_hook('CGFeedback::BeforeDeleteComment',$comment);
+\CMSMS\HookManager::do_hook('ReviewManager::BeforeDeleteComment',$comment);
 $this->_commentops->delete_by_id($cid);
 
 $this->SetMessage($this->Lang('msg_commentdeleted'));

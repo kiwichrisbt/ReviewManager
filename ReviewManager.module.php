@@ -69,7 +69,7 @@ final class ReviewManager extends CMSModule
         $db = $this->GetDb();
         $this->_commentops = new comment_operations($db);
 
-        \CMSMS\HookManager::add_hook( 'ReviewManager::UserNotify', function( \ReviewManager\comment $comment ){
+        \CMSMS\HookManager::add_hook( 'ReviewManager::UserNotify', function( \ReviewManager\comment $comment ) {
                 \ReviewManager\comment_notifier::email_notify_users( $comment );
             });
     }
