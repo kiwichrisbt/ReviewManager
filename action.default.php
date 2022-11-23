@@ -61,9 +61,9 @@ $commentrequired = (int) $this->GetPreference('commentrequired',1);
 $emailrequired = (int) $this->GetPreference('emailrequired',1);
 $namerequired = (int) $this->GetPreference('namerequired',1);
 $rating_options_str = "1,2,3,4,5";
-$feu = \cms_utils::get_module('FrontEndUsers');
-$feu_uid = null;
-if( $feu ) $feu_uid = $feu->LoggedInId();
+$mams = \cms_utils::get_module('FrontEndUsers');
+$mams_uid = null;
+if( $mams ) $mams_uid = $mams->LoggedInId();
 
 //
 // setup
@@ -79,9 +79,9 @@ if( \xt_param::exists($params,'key1') ) {
     $comment->key2 = xt_param::get_string($params,'key2');
     $comment->key3 = xt_param::get_string($params,'key3');
 }
-if( $feu_uid ) {
-    $comment->author_email = $feu->LoggedInEmail();
-    $comment->author_name = $feu->LoggedInName();
+if( $mams_uid ) {
+    $comment->author_email = $mams->LoggedInEmail();
+    $comment->author_name = $mams->LoggedInName();
 }
 //
 // Setup
@@ -147,7 +147,7 @@ if( isset($params['rm_submit']) ) {
 
         $comment->from_array($cleaned);
         $comment->author_ip = xt_utils::get_real_ip();
-        $comment->feu_uid = $feu_uid;
+        $comment->mams_uid = $mams_uid;
 
         if( isset($params['comment']) ) {
             if( $disable_html ) {
