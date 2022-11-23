@@ -67,16 +67,16 @@ $lang['friendlyname'] = 'Review Manager';
 #I
 $lang['id'] = 'Id';
 $lang['import_all_from_cgfeedback'] = 'Import All from CGFeedback';
-$lang['import_ReviewManager_alert'] =  <<<EOT
-ReviewManager module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace ReviewManager. Make sure you have a site backup first!
+$lang['import_cgfeedback_alert'] =  <<<EOT
+CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback. Make sure you have a site backup first!
 EOT;
-$lang['import_ReviewManager_text'] =  <<<EOT
-ReviewManager module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace ReviewManager.
+$lang['import_cgfeedback_text'] =  <<<EOT
+CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback.
 EOT;
 $lang['import_step_1'] = 'import all feedback, fields, templates and settings';
-$lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{ReviewManager\' tags and replace with \'{ReviewManager\'. All templates imported from ReviewManager have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
-$lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall ReviewManager.';
-$lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from ReviewManager module.';
+$lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{CGFeedback\' tags and replace with \'{ReviewManager\'. All templates imported from CGFeedback have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
+$lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall CGFeedback.';
+$lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from CGFeedback module.';
 
 $lang['info_allow_comment_html'] = '<strong>Note:</strong> Do not use this with the above wysiwyg setting';
 $lang['info_captcha_module'] = 'Select a module from the list to use for providing functionality to ensure that there is a human entering data into the form.';
@@ -298,7 +298,7 @@ $lang['prompt_field_name'] = 'Field Name';
 $lang['prompt_field_type'] = 'Field Type';
 $lang['prompt_friendlyname'] = 'Module Friendlyname';
 $lang['prompt_general_settings'] = 'General Settings';
-$lang['prompt_import_ReviewManager'] = 'Import ReviewManager Content';
+$lang['prompt_import_cgfeedback'] = 'Import CGFeedback Content';
 $lang['prompt_is_email_html'] = 'Send message in HTML format?';
 $lang['prompt_message_template'] = 'Message Template';
 $lang['prompt_moderate_comments'] = 'Moderate all comments';
