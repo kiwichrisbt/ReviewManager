@@ -61,10 +61,16 @@ $commentrequired = (int) $this->GetPreference('commentrequired',1);
 $emailrequired = (int) $this->GetPreference('emailrequired',1);
 $namerequired = (int) $this->GetPreference('namerequired',1);
 $rating_options_str = "1,2,3,4,5";
-$mams = \cms_utils::get_module('FrontEndUsers');
-$mams_uid = null;
-if( $mams ) $mams_uid = $mams->LoggedInId();
 
+$mams_uid = null;
+$feu = \cms_utils::get_module('FrontEndUsers');
+if( $feu->LoggedInId() ) {
+    $mams_uid = $feu->LoggedInId();
+}
+$mams = \cms_utils::get_module('MAMS');
+if( $mams->LoggedInId() ) {
+    $mams_uid = $mams->LoggedInId();
+}
 //
 // setup
 //
