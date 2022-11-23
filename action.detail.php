@@ -67,7 +67,7 @@ catch (LogicException $e) {
 # Give everything to smarty
 #
 $thetemplate = utils::find_layout_template($params,'detailtemplate','ReviewManager::Detail View');
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate));
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
 
 $config = $gCms->GetConfig();
 $path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
@@ -76,7 +76,6 @@ $tpl->assign('rating_imgs',$tmp);
 $tpl->assign('onecomment',$comment);
 $tpl->assign('message',$message);
 $tpl->assign('error',$error);
-$tpl->assign('mod',$this);
 #
 # Display the template
 #

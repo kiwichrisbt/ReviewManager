@@ -37,7 +37,7 @@ class comment_notifier
 
         $mod = \cms_utils::get_module('ReviewManager');
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Admin Notification');
-        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate));
+        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
         self::prepare_smarty_vars($comment,0,$smarty);
         $gid = $mod->GetPreference('notification_emails',-1);
         if( $gid == -1 ) return TRUE;
@@ -73,7 +73,7 @@ class comment_notifier
 
         $mod = \cms_utils::get_module('ReviewManager');
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::User Notification');
-        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate));
+        $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
         self::prepare_smarty_vars($comment,1,$smarty);
 
         $db = cmsms()->GetDb();
