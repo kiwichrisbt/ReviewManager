@@ -37,7 +37,7 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
+if( !defined('CMS_VERSION') ) exit;
 if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) return false;
 
 #
@@ -47,17 +47,17 @@ $this->SetCurrentTab('comments');
 
 if( !isset($params['selected_str']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 if( !isset($params['bulk_action']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
 $selected = explode(',',$params['selected_str']);
 if( !count($selected) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
 
@@ -102,8 +102,7 @@ if( $count ) {
 else {
     $this->SetError($this->Lang('error_bulk_operation_failed'));
 }
-$this->RedirectToTab($id);
-
+$this->RedirectToAdminTab();
 #
 # EOF
 #
