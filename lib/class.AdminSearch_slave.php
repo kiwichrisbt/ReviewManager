@@ -5,13 +5,13 @@ final class AdminSearch_slave extends \AdminSearch_slave
 {
     public function get_name()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         return $mod->Lang('lbl_adminsearch');
     }
 
     public function get_description()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         return $mod->Lang('desc_adminsearch');
     }
 
@@ -23,7 +23,7 @@ final class AdminSearch_slave extends \AdminSearch_slave
 
     public function get_matches()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         if( !is_object($mod) ) return;
         $db = cmsms()->GetDb();
         // need to get the fielddefs of type textbox or textarea

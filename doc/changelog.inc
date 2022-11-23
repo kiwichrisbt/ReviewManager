@@ -159,7 +159,7 @@
 	</li>
 
 <li>Version 2.0
-	<p class="warning"><strong>Note:</strong> This is a significant refactoring of the ReviewManager module.  Much has changed.  Though there should be no data loss, those doing upgrades
+	<p class="warning"><strong>Note:</strong> This is a significant refactoring of the CGFeedback module.  Much has changed.  Though there should be no data loss, those doing upgrades
 	will need to edit re-generate and re-style your templates, and to adjust the options and various calls to ReviewManager.</p>
 	<ul>
 	<li>Now require at least CMSMS 2.2-beta3</li>
@@ -190,4 +190,11 @@
 	<li>Now use CSRF protection as provided by CGExtensions.</li>
 	</ul>
 </li>
+
+<li>version 3.0 - November, 2022
+    <ul>
+      <li>Updated to work with new CMSMSExt.</li>
+    </ul>
+</li>
+
 </ul>

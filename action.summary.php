@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Author: Chris Taylor
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -53,13 +55,13 @@ $qparms = $cleaner->go( $params );
 
 // post-process params.
 $qparms['detailpage'] = $this->resolve_alias_or_id($qparms['detailpage'],$returnid);
-$qparms['key1'] = \cge_param::get_string($qparms,'key1','__page__');
-$qparms['key2'] = \cge_param::get_string($qparms,'key2',$returnid);
+$qparms['key1'] = \xt_param::get_string($qparms,'key1','__page__');
+$qparms['key2'] = \xt_param::get_string($qparms,'key2',$returnid);
 
 // setup the query
 $query = new comment_query($qparms);
-if( ($pagelimit = \cge_param::get_int($qparms,'pagelimit')) ) $query['limit'] = $pagelimit;
-if( ($pagenum = \cge_param::get_int($qparms,'pagenum') ) ) $query['offset'] = (int) ($pagenum - 1) * $query['limit'];
+if( ($pagelimit = \xt_param::get_int($qparms,'pagelimit')) ) $query['limit'] = $pagelimit;
+if( ($pagenum = \xt_param::get_int($qparms,'pagenum') ) ) $query['offset'] = (int) ($pagenum - 1) * $query['limit'];
 
 // todo: pagenum param to offset
 

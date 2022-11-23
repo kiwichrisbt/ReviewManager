@@ -1,7 +1,7 @@
 <?php
 namespace ReviewManager;
 
-class comment_paginator extends \CGExtensions\query\pagination
+class comment_paginator extends \CMSMSExt\query\pagination
 {
     private $_filter;
     private $_pageid;
@@ -23,7 +23,7 @@ class comment_paginator extends \CGExtensions\query\pagination
         $pagenumber = (int) $pagenumber;
         if( $pagenumber < 1 ) return;
 
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         $parms = ['pagenum' => $pagenumber ];
         $parms['pagelimit'] = $this->_filter['limit'];
         if( ($tmp = $this->_filter['detailtemplate']) ) $parms['detailtemplate'] = $tmp;

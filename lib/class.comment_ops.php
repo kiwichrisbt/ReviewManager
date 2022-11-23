@@ -25,7 +25,7 @@ class comment_ops
 
     public static function get_fielddefs()
     {
-        if( \cge_tmpdata::exists('cgfb_fielddefs') ) return \cge_tmpdata::get('cgfb_fielddefs');
+        if( \xt_tmpdata::exists('cgfb_fielddefs') ) return \xt_tmpdata::get('cgfb_fielddefs');
 
         $db = cmsms()->GetDb();
         $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' ORDER BY iorder';
@@ -37,8 +37,8 @@ class comment_ops
                     $tmp[$i]['attribs']['options'] = self::text_to_options($tmp[$i]['attribs']['options']);
                 }
             }
-            $tmp = \cge_array::to_hash($tmp,'id');
-            \cge_tmpdata::set('cgfb_fielddefs',$tmp);
+            $tmp = \xt_array::to_hash($tmp,'id');
+            \xt_tmpdata::set('cgfb_fielddefs',$tmp);
             return $tmp;
         }
     }

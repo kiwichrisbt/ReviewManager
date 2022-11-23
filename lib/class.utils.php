@@ -18,7 +18,7 @@ final class utils
     {
         $paramname = (string) $paramname;
         $typename = (string) $typename;
-        if ( !is_array($params) || !($thetemplate = \cge_param::get_string($params,$paramname)) ) {
+        if ( !is_array($params) || !($thetemplate = \xt_param::get_string($params,$paramname)) ) {
             $tpl = \CmsLayoutTemplate::load_dflt_by_type($typename);
             if ( !is_object($tpl) ) {
                 audit('', 'ReviewManager', 'No default '.$typename.' template found');
@@ -115,7 +115,7 @@ The following methods have all been ripped from CGE to remove the dependency:
 
 
     /**
-     * Dump an exception to the error log. (from CGExtensions)
+     * Dump an exception to the error log. (from CMSMSExt)
      *
      * @param Exception $e
      */
@@ -133,7 +133,7 @@ The following methods have all been ripped from CGE to remove the dependency:
 
 
     /**
-     * A convenience method to test if a key exists in the input array. (from CGExtensions)
+     * A convenience method to test if a key exists in the input array. (from CMSMSExt)
      *
      * @param array $params An associative array of input params
      * @param string $key The key to the associative array
@@ -149,7 +149,7 @@ The following methods have all been ripped from CGE to remove the dependency:
 
 
     /**
-     * Get a safe string from an input parameter. (from CGExtensions)
+     * Get a safe string from an input parameter. (from CMSMSExt)
      * The string is stripped of any html code, and high or low bytes.
      *
      * @param array $params An associative array of input params
@@ -170,7 +170,7 @@ The following methods have all been ripped from CGE to remove the dependency:
 
 
     /**
-     * Given an associative array, extract the value of one key, with a default. (from CGExtensions)
+     * Given an associative array, extract the value of one key, with a default. (from CMSMSExt)
      * If the key does not exist in the array
      *
      * @param hash $params The input associative array

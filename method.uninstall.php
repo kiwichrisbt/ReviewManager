@@ -47,7 +47,7 @@ try {
         }
     }
 } catch( \Exception $e ) {
-    \cge_utils::log_exception( $e );
+    \xt_utils::log_exception( $e );
     audit('',$this->GetName(),'Uninstall error: '.$e->GetMessage());
 }
 

@@ -1,7 +1,7 @@
 <?php
 namespace ReviewManager;
 
-final class comment_resultset extends \CGExtensions\query\resultset
+final class comment_resultset extends \CMSMSExt\query\resultset
 {
     private $_cached_field_data;
 
@@ -96,7 +96,7 @@ final class comment_resultset extends \CGExtensions\query\resultset
 
     public function &get_object()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         $row = $this->fields;
         $obj = new displayable_comment($mod,$this->_filter['detailpage'],$this->_filter['detailtemplate'],$this->_filter['inline']);
         $obj->from_array($row);

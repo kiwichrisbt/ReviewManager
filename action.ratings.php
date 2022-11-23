@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Author: Chris Taylor
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -55,9 +57,9 @@ $qparms = array();
 #
 # Setup
 #
-$key1 = \cge_param::get_string($params,'key1');
-$key2 = \cge_param::get_string($params,'key2');
-$key3 = \cge_param::get_string($params,'key3');
+$key1 = \xt_param::get_string($params,'key1');
+$key2 = \xt_param::get_string($params,'key2');
+$key3 = \xt_param::get_string($params,'key3');
 
 #
 # Build the query
@@ -80,7 +82,7 @@ if( !empty($key3) ) {
 }
 
 $since = null;
-$tmp = \cge_param::get_string($params,'since');
+$tmp = \xt_param::get_string($params,'since');
 if( $tmp ) {
     if( preg_match('/^\d.*/',$tmp) ) {
         $since = (int) $tmp;

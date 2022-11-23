@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Author: Chris Taylor
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.

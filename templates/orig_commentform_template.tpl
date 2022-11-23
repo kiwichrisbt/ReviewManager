@@ -1,15 +1,11 @@
 {* comment form template *}
-{if isset($message) && $message ne ''}
-  {if isset($error)}
-  <div class="danger">{$message}</div>
-  {else}
+{if isset($message) && !isset($error)}
   <div class="message">{$message}</div>
-  {/if}
-{/if}
+{else}
+  {if isset($error)}<div class="danger">{$message}</div>{/if}
   {* no message... display the form *}
   <div class="rm_addcomment">
-  {form_start action=default inline=$inline extraparms=$extraparms}
-  {*cge_form_csrf*}
+  {form_start action=default inline=$inline extraparms=$extraparms}{xt_form_csrf}
   {*
    * A simple honeypot captcha field.  This field needs to be a text field, but hidden with CSS
    * deleting this field from the template will have no effect on form behavior, but if this
@@ -125,5 +121,5 @@
   </fieldset>
   {form_end}
   </div>
-
-{include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
+    {include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
+{/if}

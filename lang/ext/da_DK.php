@@ -27,7 +27,7 @@ $lang['changelog'] = '<ul>
     </ul></li>
 <li>version 1.0.6 - March, 2010
     <ul>
-      <li>Updated to work with new CGExtensions.</li>
+      <li>Updated to work with new CMSMSExt.</li>
     </ul>
 </li>
 <li>version 1.1 - May, 2010

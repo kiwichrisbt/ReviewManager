@@ -85,7 +85,7 @@ final class ReviewManager extends CMSModule
     public function GetAdminDescription() { return $this->Lang('moddescription'); }
     public function GetFriendlyName() { return $this->GetPreference( 'friendlyname', $this->Lang('friendlyname') ); }
     public function MinimumCMSVersion() { return '2.2.1'; }
-    public function GetDependencies() { return ['CGExtensions'=>'1.60', 'CGSimpleSmarty'=>'1.9' ]; }
+    public function GetDependencies() { return ['CMSMSExt'=>'1.60', 'CMSMSExt' => '1.2.1', 'CGSimpleSmarty'=>'1.9' ]; }
     public function AllowAutoInstall() { return FALSE; }
     public function AllowAutoUpgrade() { return FALSE; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }
@@ -209,7 +209,7 @@ EOT;
         if( $inline ) return;
         if( !$returnid ) return;
         if( $action != 'detail' ) return;
-        $cid = \cge_param::get_int($params,'cid');
+        $cid = \xt_param::get_int($params,'cid');
         if( $cid < 1 ) return;
         $comment = $this->_commentops->load($cid);
         if( !$comment ) return;

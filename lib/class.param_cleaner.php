@@ -97,7 +97,7 @@ class param_cleaner
             return (float) $val;
 
         case self::TYPE_HTML:
-            return html_entity_decode(\cge_utils::clean_input_html($val));
+            return html_entity_decode(\xt_utils::clean_input_html($val));
 
         case self::TYPE_BOOL:
             return cms_to_bool($val);

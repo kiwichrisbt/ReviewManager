@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Author: Chris Taylor
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -51,7 +53,7 @@ use \ReviewManager\param_cleaner;
 // Initialization
 //
 $error = $message = null;
-$permalink = cge_url::current_url(); // todo - ability to change this?
+$permalink = xt_url::current_url(); // todo - ability to change this?
 $inline = $voteonce = true;
 $voteinterval = -1;
 $titlerequired = (int) $this->GetPreference('titlerequired',1);
@@ -71,11 +73,11 @@ $comment->rating = 5;
 $comment->key1 = '__page__';
 $comment->key2 = $returnid;
 $comment->key3 = null;
-$comment->origurl = cge_url::current_url();
-if( \cge_param::exists($params,'key1') ) {
-    $comment->key1 = cge_param::get_string($params,'key1');
-    $comment->key2 = cge_param::get_string($params,'key2');
-    $comment->key3 = cge_param::get_string($params,'key3');
+$comment->origurl = xt_url::current_url();
+if( \xt_param::exists($params,'key1') ) {
+    $comment->key1 = xt_param::get_string($params,'key1');
+    $comment->key2 = xt_param::get_string($params,'key2');
+    $comment->key3 = xt_param::get_string($params,'key3');
 }
 if( $feu_uid ) {
     $comment->author_email = $feu->LoggedInEmail();
@@ -97,25 +99,25 @@ if( $this->GetPreference('use_cookies',0) == 1 && isset($_COOKIE[REVIEWMANAGER_C
 //
 // Process parameters
 //
-$origparms = \cge_param::get_string($params,'rm_origparms');
+$origparms = \xt_param::get_string($params,'rm_origparms');
 if( $origparms ) {
     // we have some origparams... prolly means we're submitting the form
     // they're encoded, so lets get them back to normal.
     $tmp = [ '_d'=>$origparms ];
-    $params = array_merge($params,\cge_utils::decrypt_params($tmp));
+    $params = array_merge($params,\xt_utils::decrypt_params($tmp));
     unset($params['rm_origparms']);
 }
 
-$rating_options_str = cge_param::get_string($params,'ratingoptions',$rating_options_str);
+$rating_options_str = xt_param::get_string($params,'ratingoptions',$rating_options_str);
 $rating_options = comment_ops::text_to_options($rating_options_str);
 $rating_options_reversed = comment_ops::text_to_options_reversed($rating_options_str);
-$inline = cge_param::get_bool($params,'inline',$inline);
-$voteonce = cge_param::get_bool($params,'voteonce',$voteonce);
-$voteinterval = cge_param::get_int($params,'voteinterval',$voteinterval);
-$titlerequired = cge_param::get_bool($params,'titlerequired',$titlerequired);
-$commentrequired = cge_param::get_bool($params,'commentrequired',$commentrequired);
-$emailrequired = cge_param::get_bool($params,'emailrequired',$emailrequired);
-$namerequired = cge_param::get_bool($params,'namerequired',$namerequired);
+$inline = xt_param::get_bool($params,'inline',$inline);
+$voteonce = xt_param::get_bool($params,'voteonce',$voteonce);
+$voteinterval = xt_param::get_int($params,'voteinterval',$voteinterval);
+$titlerequired = xt_param::get_bool($params,'titlerequired',$titlerequired);
+$commentrequired = xt_param::get_bool($params,'commentrequired',$commentrequired);
+$emailrequired = xt_param::get_bool($params,'emailrequired',$emailrequired);
+$namerequired = xt_param::get_bool($params,'namerequired',$namerequired);
 
 //
 // Get custom field definitions
@@ -131,9 +133,6 @@ if( is_array($tfields) && count($tfields) ) {
 //
 if( isset($params['rm_submit']) ) {
 
-    $error = null;
-	$message = null;
-
     try {
 
         // Get data from the form
@@ -147,23 +146,23 @@ if( isset($params['rm_submit']) ) {
         $cleaned = $cleaner->go( $params );
 
         $comment->from_array($cleaned);
-        $comment->author_ip = cge_utils::get_real_ip();
+        $comment->author_ip = xt_utils::get_real_ip();
         $comment->feu_uid = $feu_uid;
 
         if( isset($params['comment']) ) {
             if( $disable_html ) {
-                $comment->data = \cge_param::get_string($params,'comment');
+                $comment->data = \xt_param::get_string($params,'comment');
                 $comment->data = strip_tags(cms_html_entity_decode($comment->data));
             } else {
-                $comment->data = \cge_param::get_html($params,'comment');
-                $comment->data = cge_utils::clean_input_html($comment->data);
+                $comment->data = \xt_param::get_html($params,'comment');
+                $comment->data = xt_utils::clean_input_html($comment->data);
             }
         }
         foreach( $params as $key => $value ) {
             if( startswith($key,'field_') ) {
                 $fid = (int)substr($key,6);
                 if( is_array($value) ) $value = implode(',',$value);
-                $value = $disable_html ? strip_tags($value) : cge_utils::clean_input_html($value);
+                $value = $disable_html ? strip_tags($value) : xt_utils::clean_input_html($value);
                 $comment->set_field_by_id($fid,$value);
             }
         }
@@ -171,7 +170,7 @@ if( isset($params['rm_submit']) ) {
         //
         // validate data
         //
-        //if( !\cge_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
+        //if( !\xt_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \RuntimeException($this->Lang('error_invalidrating'));
 
         if( $comment->title == '' && $titlerequired  ) throw new \RuntimeException($this->Lang('error_emptytitle'));
@@ -186,7 +185,7 @@ if( isset($params['rm_submit']) ) {
         if( $modname != -1 ) {
             $captchamod = $this->GetModuleInstance($modname);
             if( is_object($captchamod) ) {
-                $captchastr = \cge_param::get_string($params,'feedback_captcha');
+                $captchastr = \xt_param::get_string($params,'feedback_captcha');
                 if( !$captchamod->checkCaptcha($captchastr) ) {
                     // captcha failed
                     throw new \RuntimeException($this->Lang('error_captchafailed'));
@@ -231,7 +230,7 @@ if( isset($params['rm_submit']) ) {
 
         // do word limiting.
         $wl = $this->GetPreference('word_limit',0);
-        if( $disable_html && $wl > 0 ) $comment->data = cge_string::word_limiter($comment->data,$wl);
+        if( $disable_html && $wl > 0 ) $comment->data = xt_string::word_limiter($comment->data,$wl);
 
         if( $this->GetPreference('use_cookies',0) == 1 ) {
             // Set cookie information
@@ -265,57 +264,33 @@ if( isset($params['rm_submit']) ) {
             \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
         }
 
-        // success
+        // redirect out of here.
+        if( isset($params['destpage']) ) {
+            $page = $this->resolve_alias_or_id($params['destpage']);
+            if( $page ) $this->RedirectContent($page);
+        }
+        else if( isset($params['redirectextra']) ) {
+            // we can go back to the original url
+            $url = html_entity_decode($params['feedback_origurl']);
+            $url .= trim($params['redirectextra']);
+            redirect($url);
+        }
 
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Success Message');
         $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
-        $tpl->assign('author_name',$comment->author_name);
-        $tpl->assign('author_ip',$comment->author_ip);
-        $tpl->assign('author_notify',$comment->author_notify);
-        $tpl->assign('title',$comment->title);
         $tpl->assign('comment',$comment);
         $message = $tpl->fetch();
-        if( empty($message) ) $message = $this->Lang('msg_commentokay');
-
-        // store information in the session
-        // redirect back to originating url
-        // and display messages.
 
     }
     catch( \RuntimeException $e ) {
         $error = 1;	
 		$message = $e->getMessage();
     }
-
-    // redirect out of here.
-    if( ! \cge_param::get_bool($params,'noredirect') ) {
-        // we are allowed to redirect.
-        if( !$error && isset($params['destpage']) ) {
-            $this->session_clear();
-            $page = $this->resolve_alias_or_id($params['destpage']);
-            if( $page ) $this->RedirectContent($page);
-        }
-        else if( isset($params['feedback_origurl']) ) {
-            // we can go back to the original url
-            $url = html_entity_decode($params['feedback_origurl']);
-            if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
-            redirect($url);
-        }
-
-        // or just back to the original content page.
-        $this->RedirectContent($returnid);
-    }
-
-    
+ 
 } // submit
 
-
-//
-// Give everything to smarty, and get ready to render.
-//
-
-//$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource('orig_commentform_template_radio.tpl'),null,null,$smarty);
+$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
 
 $get_extraparms = function(array $inparms) {
     $list = 'key1,key2,key3,policy,inline,commenttemplate,noredirect,ratingoptions,voteonce,voteinterval,titlerequired,commentrequired,emailrequired,namerequired,redirectextra';
@@ -328,22 +303,15 @@ $get_extraparms = function(array $inparms) {
         if( !in_array($key,$list) ) continue;
         $out[$key] = $val;
     }
-    $out = \cge_utils::encrypt_params($out);
+    $out = \xt_utils::encrypt_params($out);
 
     $out = ['rm_origparms' => $out['_d'] ];
     return $out;
 };
 
-if( !isset($params['destpage']) && !isset($params['feedback_origurl']) ) $params['feedback_origurl'] = cge_url::current_url();
+if( !isset($params['destpage']) && !isset($params['feedback_origurl']) ) $params['feedback_origurl'] = xt_url::current_url();
 $extraparms = $get_extraparms($params);
 
-
-if( !empty($error) ) {
-    $tpl->assign('error',$error);
-}
-if( !empty($message) ) {
-    $tpl->assign('message',$message);
-}
 if( count($tfields) ) {
     $tmp = array_keys($tfields);
     foreach( $tmp as $fid ) {
@@ -377,6 +345,12 @@ $tpl->assign('comment_obj',$comment);
 $tpl->assign('inline',$inline);
 $tpl->assign('rating_options',$rating_options);
 $tpl->assign('rating_options_reversed',$rating_options_reversed);
+if( !empty($error) ) {
+    $tpl->assign('error',$error);
+}
+if( !empty($message) ) {
+    $tpl->assign('message',$message);
+}
 
 $modname = $this->GetPreference('captcha_module','-1');
 if( $modname != -1 ) {
