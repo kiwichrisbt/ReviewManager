@@ -32,7 +32,7 @@ class comment_notifier
         }
     }
 
-    public function notify_admins(comment& $comment,$smarty)
+    public static function notify_admins(comment& $comment,$smarty)
     {
 
         $mod = \cms_utils::get_module('ReviewManager');

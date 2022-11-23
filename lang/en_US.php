@@ -434,9 +434,9 @@ $lang['help_general'] = <<<EOT
 EOT;
 
 
-$lang['help_tab_import'] = 'ReviewManager Import';
+$lang['help_tab_import'] = 'CGFeedback Import';
 $lang['help_import'] = <<<EOT
-<p>Is ReviewManager is installed you will see an option to import all ReviewManager items, fields, settings and templates into ReviewManager.</p><br>
+<p>Is CGFeedback is installed you will see an option to import all CGFeedback items, fields, settings and templates into ReviewManager.</p><br>
 EOT;
 
 

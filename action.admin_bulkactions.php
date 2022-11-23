@@ -74,7 +74,7 @@ foreach( $selected as $one ) {
       if( $ret == TRUE ) {
           if( $comment->status != REVIEWMANAGER_STATUS_PUBLISHED ) {
               // previous status was not published, so we can notify users.
-              \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);
+              \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
           }
           $count++;
       }
