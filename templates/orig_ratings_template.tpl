@@ -1,4 +1,3 @@
-{* cgfeedback ratings template *}
 {strip}
 <div id="{$actionid}_feedback_ratings_report">
   <div class="feedback_ratings_item">
@@ -14,19 +13,13 @@
   </div>
 
   <div class="feedback_ratings_item">
-    {$mod->Lang('lbl_avg_rating')}:&nbsp;{$stats.avg}
+    {$mod->Lang('lbl_avg_rating')}:&nbsp;{$stats.avg|string_format:"%.1f"}
   </div>
 
   <div class="feedback_ratings_item">
-    {section name='rating' start=1 loop=6}
-    {if $smarty.section.rating.index <= $stats.int_avg}
-       <img src="{$rating_imgs.img_on}" alt=""/>
-    {/if}
-    {/section}
-    {if isset($stats.fraction)}
-       <img src="{$rating_imgs.img_half}" alt=""/>
-    {/if}
+  {if $stats.int_avg}<span class="star-rating-sprite star-rating-sprite-{$stats.int_avg|string_format:"%.1f" * 4}"></span>{/if}
   </div>
  
-{* feedback_ratings_report *}</div>
+</div>
+ {include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
 {/strip}

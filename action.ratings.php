@@ -37,8 +37,8 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-use \CGFeedback\utils;
+if( !defined('CMS_VERSION') ) exit;
+use \ReviewManager\utils;
 
 #
 # Initialization
@@ -121,10 +121,9 @@ if( $tmp > 0.04 ) {
 #
 # Give everything to smarty
 #
-$thetemplate = utils::find_layout_template($params,'ratingstemplate','CGFeedback::Ratings View');
-$tpl = $this->CreateSmartyTemplate($thetemplate);
-$path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
-$tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
+$thetemplate = utils::find_layout_template($params,'ratingstemplate','ReviewManager::Ratings View');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
+
 $tpl->assign('rating_imgs',$tmp);
 $tpl->assign('stats',$stats);
 $tpl->display();

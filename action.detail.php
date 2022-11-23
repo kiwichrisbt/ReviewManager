@@ -72,8 +72,6 @@ $thetemplate = utils::find_layout_template($params,'detailtemplate','ReviewManag
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
 
 $config = $gCms->GetConfig();
-$path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
-$tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
 $tpl->assign('rating_imgs',$tmp);
 $tpl->assign('onecomment',$comment);
 $tpl->assign('message',$message);

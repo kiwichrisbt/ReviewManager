@@ -11,19 +11,12 @@
       {$mod->Lang('lbl_title')}:&nbsp;{$onecomment->title}
     </div>
 
-    <div class="feedback_item_authorname">
-      {$mod->Lang('lbl_author_name')}:&nbsp;{$onecomment->created|cms_date_format}
+    <div class="feedback_item_created">
+      {$mod->Lang('lbl_created')}:&nbsp;{$onecomment->created|cms_date_format}
     </div>
 
     <div class="feedback_item_rating">
-      {$mod->Lang('lbl_rating')}:&nbsp;{$onecomment->rating}&nbsp;&nbsp;
-      {section name='rating' start=1 loop=6}
-        {if $smarty.section.rating.index <= $onecomment->rating}
-          <img src="{$rating_imgs.img_on}" alt=""/>
-        {else}
-          <img src="{$rating_imgs.img_off}" alt=""/>
-        {/if}
-      {/section}
+      {if $onecomment->rating}<span class="star-rating-sprite star-rating-sprite-{$onecomment->rating * 4}"></span>{/if}
     </div>
 
     {if $onecomment->author_name}
@@ -38,22 +31,19 @@
     </div>
     {/if}
 
-    {if $onecomment->author_ip}
-    <div class="feedback_item_authorip">
-      {$mod->Lang('lbl_author_ip')}:&nbsp;{$onecomment->author_ip}
-    </div>
-    {/if}
-
     <div class="feedback_item_data">
       {$onecomment->data}
     </div>
 
     {foreach $onecomment->fields as $name => $value}
+    {if $value}
       <div class="feedback_item_field">
         {$name}:&nbsp;{$value}
       </div>
+    {/if}
     {/foreach}
 
     <br/><br/>
   </div>
+  {include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
 {/if}
