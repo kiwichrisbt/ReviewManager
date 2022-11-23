@@ -292,6 +292,20 @@ class comment_ops
         }
         return $out;
     }
+
+    public static function text_to_options_reversed($text)
+    {
+        $text = trim($text);
+        if( !$text ) return;
+
+        $out = [];
+        $tmp = array_reverse(explode (",", $text));
+        foreach( $tmp as $value ) {
+            $out[$value] = $value;
+        }
+        return $out;
+    }
+
 } // end of class
 
 ?>

@@ -81,7 +81,6 @@ if( $feu_uid ) {
     $comment->author_email = $feu->LoggedInEmail();
     $comment->author_name = $feu->LoggedInName();
 }
-
 //
 // Setup
 //
@@ -107,10 +106,9 @@ if( $origparms ) {
     unset($params['rm_origparms']);
 }
 
-
-
 $rating_options_str = cge_param::get_string($params,'ratingoptions',$rating_options_str);
 $rating_options = comment_ops::text_to_options($rating_options_str);
+$rating_options_reversed = comment_ops::text_to_options_reversed($rating_options_str);
 $inline = cge_param::get_bool($params,'inline',$inline);
 $voteonce = cge_param::get_bool($params,'voteonce',$voteonce);
 $voteinterval = cge_param::get_int($params,'voteinterval',$voteinterval);
@@ -118,10 +116,6 @@ $titlerequired = cge_param::get_bool($params,'titlerequired',$titlerequired);
 $commentrequired = cge_param::get_bool($params,'commentrequired',$commentrequired);
 $emailrequired = cge_param::get_bool($params,'emailrequired',$emailrequired);
 $namerequired = cge_param::get_bool($params,'namerequired',$namerequired);
-
-// try to get some info from the session...
-$tmp = $this->session_get('rm_comment');
-if( $tmp ) $comment = unserialize($tmp);
 
 //
 // Get custom field definitions
@@ -177,7 +171,7 @@ if( isset($params['rm_submit']) ) {
         //
         // validate data
         //
-        if( !\cge_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
+        //if( !\cge_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \RuntimeException($this->Lang('error_invalidrating'));
 
         if( $comment->title == '' && $titlerequired  ) throw new \RuntimeException($this->Lang('error_emptytitle'));
@@ -321,8 +315,7 @@ if( isset($params['rm_submit']) ) {
 //
 
 //$thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource('orig_commentform_template_radio.tpl'));
-$tpl->assign('mod',$this);
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('orig_commentform_template_radio.tpl'),null,null,$smarty);
 
 $get_extraparms = function(array $inparms) {
     $list = 'key1,key2,key3,policy,inline,commenttemplate,noredirect,ratingoptions,voteonce,voteinterval,titlerequired,commentrequired,emailrequired,namerequired,redirectextra';
@@ -383,6 +376,7 @@ $tpl->assign('wysiwyg',$wysiwyg);
 $tpl->assign('comment_obj',$comment);
 $tpl->assign('inline',$inline);
 $tpl->assign('rating_options',$rating_options);
+$tpl->assign('rating_options_reversed',$rating_options_reversed);
 
 $modname = $this->GetPreference('captcha_module','-1');
 if( $modname != -1 ) {

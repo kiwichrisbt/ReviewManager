@@ -11,8 +11,11 @@
   .rm_addcomment input:not([type='checkbox'],[type='radio']), .rm_addcomment select, .rm_addcomment textarea  {
     width: 100%;
   }
+  .stars-container {
+    clear:both;
+  }
 .rate {
-    float: left;
+    float:left;
     height: 46px;
 }
 .rate:not(:checked) > input {

@@ -8,8 +8,7 @@
 {/if}
   {* no message... display the form *}
   <div class="rm_addcomment">
-  {form_start action=default inline=$inline extraparms=$extraparms}
-  {*cge_form_csrf*}
+  {form_start action=default inline=$inline extraparms=$extraparms}{*cge_form_csrf*}
   {*
    * A simple honeypot captcha field.  This field needs to be a text field, but hidden with CSS
    * deleting this field from the template will have no effect on form behavior, but if this
@@ -57,12 +56,14 @@
     <div class="four-col text-right">
        <label>{$mod->Lang('prompt_your_rating')}:</label>
     </div>
-    <div class="eight-col ">
-    <div class="rate">
-      {foreach $rating_options as $option}
-         <input type="radio" name="{$actionid}rating" value="{$option}" id="start{$option}"/>
-         <label for="start{$option}">{$option}&nbsp;</label>
-      {/foreach}
+    <div class="eight-col">
+      <div class="stars-container">
+      <div class="rate">
+        {foreach $rating_options_reversed as $option}
+          <input type="radio" name="{$actionid}rating" value="{$option}" id="start{$option}"/>
+          <label for="start{$option}">{$option}&nbsp;</label>
+        {/foreach}
+      </div>
       </div>
     </div>
   </div>

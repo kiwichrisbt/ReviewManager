@@ -13,7 +13,7 @@ final class comment_resultset extends \CGExtensions\query\resultset
     protected function _query()
     {
         if( $this->_rs ) return; // only do this once.
-        $db = \cge_utils::get_db();
+        $db = \cms_utils::get_db();
         $query = 'SELECT SQL_CALC_FOUND_ROWS com.* FROM '.REVIEWMANAGER_TABLE_COMMENTS.' com';
         $joins = $where = $qparms = [];
 
@@ -75,7 +75,7 @@ final class comment_resultset extends \CGExtensions\query\resultset
         $idlist = array_unique($idlist);
         if( !count($idlist) ) return; // nothing to do.
 
-        $db = \cge_utils::get_db();
+        $db = \cms_utils::get_db();
         $sql = 'SELECT comment_id,field_id,value FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id IN ('.implode(',',$idlist).') ORDER BY comment_id,field_id';
         $field_vals = $db->GetArray($sql);
         if( !count($field_vals) ) return;
