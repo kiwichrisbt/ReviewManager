@@ -17,28 +17,28 @@
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}title">{$mod->Lang('prompt_title')}:</label>
+       <label for="{$actionid}title">{if $comment_obj->title_required}*{/if}{$mod->Lang('prompt_title')}:</label>
     </div>
     <div class="eight-col">
-      <input type="text" id="{$actionid}title" name="{$actionid}title" maxlength="255" value="{$comment_obj->title}"/>
+      <input type="text" id="{$actionid}title" name="{$actionid}title" maxlength="255" value="{$comment_obj->title}"{if $comment_obj->title_required} required{/if}/>
     </div>
   </div>
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}author_name">*{$mod->Lang('prompt_your_name')}:</label>
+       <label for="{$actionid}author_name">{if $comment_obj->name_required}*{/if}{$mod->Lang('prompt_your_name')}:</label>
     </div>
     <div class="eight-col">
-      <input type="text" id="{$actionid}author_name" name="{$actionid}author_name" maxlength="255" value="{$comment_obj->author_name}" required/>
+      <input type="text" id="{$actionid}author_name" name="{$actionid}author_name" maxlength="255" value="{$comment_obj->author_name}"{if $comment_obj->name_required} required{/if}/>
     </div>
   </div>
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}author_email">{$mod->Lang('prompt_your_email')}:</label>
+       <label for="{$actionid}author_email">{if $comment_obj->email_required}*{/if}{$mod->Lang('prompt_your_email')}:</label>
     </div>
     <div class="eight-col">
-      <input type="email" id="{$actionid}author_email" name="{$actionid}author_email" maxlength="255" value="{$comment_obj->author_email}"/>
+      <input type="email" id="{$actionid}author_email" name="{$actionid}author_email" maxlength="255" value="{$comment_obj->author_email}"{if $comment_obj->email_required} required{/if}/>
     </div>
   </div>
 
@@ -57,7 +57,7 @@
       <div class="stars-container">
       <div class="rate">
         {foreach $rating_options_reversed as $option}
-          <input type="radio" name="{$actionid}rating" value="{$option}" id="start{$option}"/>
+          <input type="radio" name="{$actionid}rating" value="{$option}" id="start{$option}"{if $comment_obj->rating == $option} checked{/if} />
           <label for="start{$option}">{$option}&nbsp;</label>
         {/foreach}
       </div>
@@ -67,7 +67,7 @@
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}comment">{$mod->Lang('prompt_comment')}:</label>
+       <label for="{$actionid}comment">{if $comment_obj->comment_required}*{/if}{$mod->Lang('prompt_comment')}:</label>
     </div>
     <div class="eight-col">
       {cms_textarea name="{$actionid}comment" id="{$actionid}comment" rows=3 value=$comment_obj->data enablewysiwyg=$wysiwyg}
@@ -128,5 +128,4 @@
   </div>
 
 {include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
-
 {/if}

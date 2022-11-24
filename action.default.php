@@ -64,13 +64,9 @@ $rating_options_str = "1,2,3,4,5";
 
 $mams_uid = null;
 $feu = \cms_utils::get_module('FrontEndUsers');
-if( $feu->LoggedInId() ) {
-    $mams_uid = $feu->LoggedInId();
-}
+if( $feu ) $mams_uid = $feu->LoggedInId();
 $mams = \cms_utils::get_module('MAMS');
-if( $mams->LoggedInId() ) {
-    $mams_uid = $mams->LoggedInId();
-}
+if( $mams ) $mams_uid = $mams->LoggedInId();
 //
 // setup
 //
@@ -89,6 +85,12 @@ if( $mams_uid ) {
     $comment->author_email = $mams->LoggedInEmail();
     $comment->author_name = $mams->LoggedInName();
 }
+
+$comment->title_required = $titlerequired;
+$comment->name_required = $namerequired;
+$comment->email_required = $emailrequired;
+$comment->comment_required = $commentrequired;
+
 //
 // Setup
 //
@@ -176,9 +178,10 @@ if( isset($params['rm_submit']) ) {
         //
         // validate data
         //
-        //if( !\xt_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
+        if( !\xt_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \RuntimeException($this->Lang('error_invalidrating'));
 
+        //if( $titlerequired ) $comment->title_required = true;
         if( $comment->title == '' && $titlerequired  ) throw new \RuntimeException($this->Lang('error_emptytitle'));
         if( $comment->author_name == '' && $namerequired ) throw new \RuntimeException($this->Lang('error_emptyname'));
         if( $comment->author_email == '' && $emailrequired ) throw new \RuntimeException($this->Lang('error_emptyemail'));
@@ -340,14 +343,15 @@ if( count($tfields) ) {
 
 $tpl->assign('comment_word_limit',$this->GetPreference('word_limit'));
 $config = $gCms->GetConfig();
-$path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
-$tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
-$tpl->assign('rating_imgs',$tmp);
 if( is_array($tfields) && count($tfields) ) $tpl->assign('fields',$tfields);
 $tpl->assign('extraparms',$extraparms);
 $wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
 $tpl->assign('wysiwyg',$wysiwyg);
 $tpl->assign('comment_obj',$comment);
+
+if($titlerequired == 1) $tpl->assign('title_required',true);
+if($namerequired == 1) $tpl->assign('author_name_required',true);
+
 $tpl->assign('inline',$inline);
 $tpl->assign('rating_options',$rating_options);
 $tpl->assign('rating_options_reversed',$rating_options_reversed);

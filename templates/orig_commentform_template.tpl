@@ -17,28 +17,28 @@
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}title">{$mod->Lang('prompt_title')}:</label>
+       <label for="{$actionid}title">{if $comment_obj->title_required}*{/if}{$mod->Lang('prompt_title')}:</label>
     </div>
     <div class="eight-col">
-      <input type="text" id="{$actionid}title" name="{$actionid}title" maxlength="255" value="{$comment_obj->title}"/>
+      <input type="text" id="{$actionid}title" name="{$actionid}title" maxlength="255" value="{$comment_obj->title}"{if $comment_obj->title_required} required{/if}/>
     </div>
   </div>
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}author_name">*{$mod->Lang('prompt_your_name')}:</label>
+       <label for="{$actionid}author_name">{if $comment_obj->name_required}*{/if}{$mod->Lang('prompt_your_name')}:</label>
     </div>
     <div class="eight-col">
-      <input type="text" id="{$actionid}author_name" name="{$actionid}author_name" maxlength="255" value="{$comment_obj->author_name}" required/>
+      <input type="text" id="{$actionid}author_name" name="{$actionid}author_name" maxlength="255" value="{$comment_obj->author_name}"{if $comment_obj->name_required} required{/if}/>
     </div>
   </div>
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}author_email">{$mod->Lang('prompt_your_email')}:</label>
+       <label for="{$actionid}author_email">{if $comment_obj->email_required}*{/if}{$mod->Lang('prompt_your_email')}:</label>
     </div>
     <div class="eight-col">
-      <input type="email" id="{$actionid}author_email" name="{$actionid}author_email" maxlength="255" value="{$comment_obj->author_email}"/>
+      <input type="email" id="{$actionid}author_email" name="{$actionid}author_email" maxlength="255" value="{$comment_obj->author_email}"{if $comment_obj->email_required} required{/if}/>
     </div>
   </div>
 
@@ -51,18 +51,22 @@
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}rating">{$mod->Lang('prompt_your_rating')}:</label>
+       <label>{$mod->Lang('prompt_your_rating')}:</label>
     </div>
     <div class="eight-col">
+      <div class="stars-container">
+      <div class="rate">
       <select id="{$actionid}rating" name="{$actionid}rating">
         {html_options options=$rating_options selected=$comment_obj->rating}
       </select>
+      </div>
+      </div>
     </div>
   </div>
 
   <div class="row">
     <div class="four-col text-right">
-       <label for="{$actionid}comment">{$mod->Lang('prompt_comment')}:</label>
+       <label for="{$actionid}comment">{if $comment_obj->comment_required}*{/if}{$mod->Lang('prompt_comment')}:</label>
     </div>
     <div class="eight-col">
       {cms_textarea name="{$actionid}comment" id="{$actionid}comment" rows=3 value=$comment_obj->data enablewysiwyg=$wysiwyg}
@@ -121,5 +125,6 @@
   </fieldset>
   {form_end}
   </div>
-    {include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
+
+{include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
 {/if}
