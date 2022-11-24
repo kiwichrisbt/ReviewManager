@@ -96,9 +96,6 @@ else if( isset($params['submit']) && !empty($params['submit']) ) {
                 $comment->set_field_by_id($fid,$value);
             }
         }
-		
-		print_r($comment);
-
         // data validation
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \Exception($this->Lang('error_invalidrating'));
         if( $comment->data == '' )	throw new \Exception( $this->Lang('error_emptycomment') );

@@ -28,6 +28,13 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('lbl_created')}:</p>
+  <p class="pageinput">
+    <input type="date" name="{$actionid}created" value="{$comment->created|date_format:'%Y-%m-%d'}"/>
+  </p>
+</div>
+
+<div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('prompt_title')}:</p>
   <p class="pageinput"><input type="text" name="{$actionid}title" size="80" maxlength="255" value="{$comment->title}"/></p>
 </div>
@@ -89,5 +96,4 @@
 </div>
 {/foreach}
 {/if}
-
 {form_end}

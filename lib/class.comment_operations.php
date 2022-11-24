@@ -186,11 +186,11 @@ final class comment_operations
         $now = $db->DbTimeStamp(time());
         $query = 'UPDATE '.REVIEWMANAGER_TABLE_COMMENTS." set key1 = ?, key2 = ?, key3 = ?, rating = ?, title = ?, data = ?,
                status = ?, author_name = ?, author_email = ?, author_ip = ?, author_notify = ?, admin_notes = ?,
-               notified = ?, origurl = ?, extra = ?, modified = $now WHERE id = ?";
+               notified = ?, origurl = ?, extra = ?, created = ?, modified = $now WHERE id = ?";
         $dbr = $db->Execute($query,
                             array($obj->key1,$obj->key2,$obj->key3,$obj->rating,$obj->title,$obj->data,
                                   $obj->status,$obj->author_name,$obj->author_email,$obj->author_ip,$obj->author_notify,
-                                  $obj->admin_notes,$obj->notified,$obj->origurl,serialize($obj->get_extra()),$obj->id));
+                                  $obj->admin_notes,$obj->notified,$obj->origurl,serialize($obj->get_extra()),$obj->created,$obj->id));
         if( !$dbr ) {
             throw new Exception('SQL ERROR: '.$db->sql.' -- '.$db->ErrorMsg());
             return FALSE;
