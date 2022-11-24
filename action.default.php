@@ -181,7 +181,6 @@ if( isset($params['rm_submit']) ) {
         if( !\xt_utils::valid_form_csrf() ) throw new \RuntimeException( $this->Lang('error_security') );
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \RuntimeException($this->Lang('error_invalidrating'));
 
-        //if( $titlerequired ) $comment->title_required = true;
         if( $comment->title == '' && $titlerequired  ) throw new \RuntimeException($this->Lang('error_emptytitle'));
         if( $comment->author_name == '' && $namerequired ) throw new \RuntimeException($this->Lang('error_emptyname'));
         if( $comment->author_email == '' && $emailrequired ) throw new \RuntimeException($this->Lang('error_emptyemail'));
@@ -348,9 +347,6 @@ $tpl->assign('extraparms',$extraparms);
 $wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
 $tpl->assign('wysiwyg',$wysiwyg);
 $tpl->assign('comment_obj',$comment);
-
-if($titlerequired == 1) $tpl->assign('title_required',true);
-if($namerequired == 1) $tpl->assign('author_name_required',true);
 
 $tpl->assign('inline',$inline);
 $tpl->assign('rating_options',$rating_options);
