@@ -94,6 +94,8 @@
             <select multiple="multiple" size="4" name="{$actionid}field_{$fieldid}[]">
               {html_options options=$field.attrib.options selected="{$field.value}"}
             </select>
+          {elseif $field.type == 5}
+          <input type="file" name="{$actionid}field_{$fieldid}">
   	  {elseif isset($field.input)}
             {$field.input}
           {/if}

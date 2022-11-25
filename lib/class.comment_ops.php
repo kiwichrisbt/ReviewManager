@@ -1,5 +1,6 @@
 <?php
 namespace ReviewManager;
+use Exception;
 
 class comment_ops
 {
@@ -154,6 +155,23 @@ class comment_ops
         return TRUE;
     }
 
+    public static function delete_file($comment,$fid)
+    {
+        if( !$comment->id) return FALSE;
+        $config = cmsms()->GetConfig();
+        $db = \cms_utils::get_db();
+        $filename = $comment->get_field_by_id($fid);
+        $dir = $comment->GetOptionValue($fid,'dir');
+        $destfile = cms_join_path($config['uploads_path'],$dir,$filename);
+        if(is_file($destfile)){
+            @unlink($destfile);
+        }
+        // DELETE ANY FIELDS FOR THIS RECORD
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ? AND field_id = ?';
+        $dbr = $db->Execute($query,array($cid,$fid));
+        return TRUE;
+    }
+
     public static function get_fielddef_id_by_name($name)
     {
         $data = self::get_fielddefs();
@@ -304,6 +322,67 @@ class comment_ops
             $out[$value] = $value;
         }
         return $out;
+    }
+
+    public static function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public static function handle_upload($comment,$fid,$fieldname,&$error)
+    {
+        $config = cmsms()->GetConfig();
+
+        $mod = \cms_utils::get_module('ReviewManager');
+        $dir = $comment->GetOptionValue($fid,'dir');
+        $allowed = $comment->GetOptionValue($fid,'allowed');
+
+        $p = cms_join_path($config['uploads_path'],$dir);
+        if (!is_dir($p)) {
+            $res = @mkdir($p);
+            if( $res === FALSE ) {
+                $error = $mod->Lang('error_mkdir',$p);
+                return FALSE;
+            }
+        }
+
+        $p = cms_join_path($config['uploads_path'],$dir);
+        if (!is_dir($p)) {
+            if( @mkdir($p) === FALSE ) {
+                $error = $mod->Lang('error_mkdir',$p);
+                return FALSE;
+            }
+        }
+
+        if( $_FILES[$fieldname]['size'] > $config['max_upload_size'] ) {
+            $error = $mod->Lang('error_filesize');
+            return FALSE;
+        }
+
+        $filename = basename($_FILES[$fieldname]['name']);
+         // Get the files extension
+        $ext = substr(strrchr($filename, '.'), 1);
+        $newname = self::generateRandomString(30).'.'.$ext;
+        $dest = cms_join_path($config['uploads_path'],$dir,$newname);
+
+        // compare it against the 'allowed extentions'
+        $exts = explode(',',$allowed);
+        if( !in_array( $ext, $exts ) )  {
+            $error = $mod->Lang('error_invalidfiletype').'('.$ext.')';
+            return FALSE;
+        }
+
+        if( @cms_move_uploaded_file($_FILES[$fieldname]['tmp_name'], $dest) === FALSE ) {
+            $error = $mod->Lang('error_movefile',$dest);
+            return FALSE;
+        }
+
+        return $newname;
     }
 
 } // end of class

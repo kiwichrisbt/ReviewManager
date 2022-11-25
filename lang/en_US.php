@@ -9,7 +9,7 @@ $lang['ask_really_uninstall'] = 'Are you sure you want to do this?  Continuing w
 $lang['auto'] = 'Auto';
 $lang['automatic'] = 'Automatic';
 $lang['always'] = 'Always';
-
+$lang['allowed'] = 'Allowed';
 #B
 
 
@@ -25,6 +25,7 @@ $lang['delete_this_field'] = 'Delete this field definition';
 $lang['desc_adminsearch'] = 'Search all comments (regardless of status or expiry)';
 $lang['disabled'] = 'Disabled';
 $lang['draft'] = 'Draft';
+$lang['dir'] = 'Directory';
 
 #E
 $lang['edit'] = 'Edit';
@@ -48,6 +49,8 @@ $lang['error_missingvalue'] = 'A required value is missing: %s';
 $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_security'] = 'Hmmm. We have encountered a security related problem';
 $lang['error_spam'] = 'This message has been identified as spam!';
+$lang['error_invalidfiletype'] = 'Cannot upload this type of file';
+$lang['error_movefile'] = 'Could not create file: %s';
 
 #F
 $lang['fieldtype_0'] = 'Text';
@@ -55,8 +58,31 @@ $lang['fieldtype_1'] = 'Email Address';
 $lang['fieldtype_2'] = 'Text Area';
 $lang['fieldtype_3'] = 'Dropdown';
 $lang['fieldtype_4'] = 'Multiselect';
+$lang['fieldtype_5'] = 'File Upload';
 $lang['friendlyname'] = 'Review Manager';
+$lang['fielddef_image'] = 'Expected to be image';
 
+$lang['fielddef_allow_help'] = 'Specify a comma separated list of file extensions that are allowed. For example: pdf,gif,jpeg,jpg (keep lowercase)';
+$lang['fielddef_dir_help'] = 'Directory path that will be appended to $config[\'uploads_url\'] . No slash at the end. {$item_id} and {$field_id} will be replaced.';
+$lang['fielddef_exclude_prefix_help'] = 'Specify a comma separated list of prefixes to exclude files that start with those prefixes. For example: thumb_, foo_';
+$lang['fielddef_multioptions_help'] = 'Options separated by line breaks. Values can be separated from text with a = character. For example: Banana=banana';
+$lang['fielddef_separator_help'] = 'Can be empty, single character or HTML entity.';
+$lang['fielddef_size_help'] = 'Specify size of input field. For example: 20';
+$lang['fielddef_max_length_help'] = 'Specify maximum length of the field. For example: 255';
+$lang['fielddef_date_format_help'] = 'Specify date format used by jQuery Datepicker. Try <em>googling<\em> \'jquery formatDate\'. For example: dd-mm-yy';
+$lang['fielddef_format_type_help'] = 'Specify output format for this field.';
+$lang['fielddef_show_seconds_help'] = 'Specify whether the seconds scroller should be shown. NOTICE, second scroller has no effect if time format is wrong. Try HH:mm:ss';
+$lang['fielddef_time_format_help'] = 'Specify date format used by jQuery timepicker. Try googling \'jquery formatTime\'. For example: HH:mm';
+$lang['fielddef_wysiwyg_help'] = 'If checked, a WYSIWYG Editor will be enabled for this field.';
+$lang['fielddef_min_value_help'] = 'Specify minimum value for this field.';
+$lang['fielddef_max_value_help'] = 'Specify maximum value for this field.';
+$lang['fielddef_increment_by_help'] = 'Increment slider values , commonly a dividend of the slider\'s maximum value. The default increment is 1.';
+$lang['fielddef_width_help'] = 'Specify width of element. Can be a percentage or pixel value. This is used as the CSS value.';
+$lang['fielddef_subtype_help'] = 'Select Sub Type for this field to determine its behavior.';
+$lang['fielddef_showall_help'] = 'Show all, regardless of system permissions.';
+$lang['fielddef_columns_help'] = 'Number of columns. Divide this field into multiple columns for a better user experience.';
+$lang['fielddef_media_type_help'] = 'Allows you to specify images as media type to be displayed. By default all files will be shown.';
+$lang['fielddef_enable_jqui_help'] = 'Enhances standard form elements to themeable buttons with appropriate hover and active styles.';
 
 #G
 
@@ -195,6 +221,7 @@ $lang['no_fields_defined'] = '--- No fields defined ---';
 
 
 #O
+$lang['options'] = 'Options';
 
 #P
 $lang['page'] = 'Page';
@@ -340,7 +367,7 @@ $lang['save_settings'] = 'Save settings';
 $lang['spam'] = 'Spam';
 $lang['statistics'] = 'Statistics';
 $lang['submit'] = 'Submit';
-
+$lang['size'] = 'Size';
 
 #T
 $lang['title_add_field'] = 'Add Field';

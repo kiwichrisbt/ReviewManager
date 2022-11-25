@@ -1,6 +1,6 @@
 <h3>{$mod->Lang('title_add_field')}</h3>
 
-{form_start}
+{form_start fid=$fld.id}
 <div class="pageoverflow">
   <p class="pageinput">
     <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
@@ -59,6 +59,28 @@
   <p class="pagetext">{$mod->Lang('prompt_dropdown_options')}:</p>
   <p class="pagetext"><textarea id="options" name="{$actionid}attrib_options" rows="5">{$fld.attrib.options|default:''}</textarea></p>
 </div>
+
+{elseif $fld.type == 5}
+  {* dropdown or multiselect *}
+<fieldset>
+  <legend>{$mod->Lang('options')}</legend>
+  <div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('allowed')}:</p>
+    <p class="pageinput">
+	  <input type="text" name="{$actionid}attrib_allowed" value="{$fld.attrib.allowed|default:'pdf,gif,jpeg,jpg'}" />
+  </p>
+  <p class="pagetext"><div class="information">{$mod->Lang('fielddef_allow_help')}</div></p>
+  </div>
+  <hr> 
+  <div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('dir')}:</p>
+    <p class="pageinput">
+	  <input type="text" name="{$actionid}attrib_dir" value="{$fld.attrib.dir|default:'reviews'}" />
+  </p>
+  <p class="pagetext"><div class="information">{$mod->Lang('fielddef_dir_help')}</div></p>
+  </div>
+  <hr> 
+</fieldset>
 {/if}
 
 {form_end}

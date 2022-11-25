@@ -21,7 +21,7 @@
         {cycle values="row1,row2" assign='rowclass'}
         <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
             <td>{$onefield.id}</td>
-            <td><a href="{$onefield.edit_url}" title="{$mod->Lang('edit_this_field')}">{$onefield.name}</a></td>
+            <td><a href="{$edit_url}" title="{$mod->Lang('edit_this_field')}">{$onefield.name}</a></td>
             <td>{$fieldtypes[$onefield.type]}</td>
             <td>
             {if isset($onefield.movedown_url)}

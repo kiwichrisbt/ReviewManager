@@ -53,7 +53,8 @@ $types = array(REVIEWMANAGER_TYPE_TEXT=>$this->Lang('fieldtype_'.REVIEWMANAGER_T
 	       REVIEWMANAGER_TYPE_EMAIL=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_EMAIL),
 	       REVIEWMANAGER_TYPE_TEXTAREA=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_TEXTAREA),
 	       REVIEWMANAGER_TYPE_DROPDOWN=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_DROPDOWN),
-	       REVIEWMANAGER_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_MULTISELECT));
+	       REVIEWMANAGER_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_MULTISELECT),
+           REVIEWMANAGER_TYPE_FILEUPLOAD=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_FILEUPLOAD));
 
 #
 # Setup
@@ -111,6 +112,11 @@ if( isset($params['submit']) ) {
                     if( !empty($x) ) $count++;
                 }
                 if( $count == 0 ) $status = $this->Lang('error_missingvalue','options');
+            }
+            break;
+        case REVIEWMANAGER_TYPE_FILEUPLOAD:
+            if( !isset($field['attrib']['dir']) ) {
+                $status = $this->Lang('error_missingvalue','directory');
             }
             break;
         }

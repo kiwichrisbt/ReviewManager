@@ -77,6 +77,12 @@ class comment
         if( is_array($this->_fields) && isset($this->_fields[(int)$fid]) ) return $this->_fields[(int)$fid];
     }
 
+    public function GetOptionValue($fid,$key, $default = '')
+    {
+        $tfields = comment_ops::get_fielddef($fid);
+        return isset($tfields['attribs'][$key]) ? $tfields['attribs'][$key] : $default;
+    }
+
     public function set_field_by_id($fid,$value)
     {
         if( !is_array($this->_fields) ) $this->_fields = array();

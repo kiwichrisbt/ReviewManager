@@ -54,8 +54,7 @@
     <input type="text" name="{$actionid}origurl" size="80" maxlength="255" value="{$comment->origurl}"/>
 	</p>
 </div>
-<div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
+<div class="pageoverflow p_top_10">
   <p class="pageinput"><input type="checkbox" name="{$actionid}author_notify" value="1" {if $comment->author_notify == 1}checked="checked"{/if}/>
   {$mod->Lang('prompt_author_notify')}</p>
 </div>
@@ -91,9 +90,23 @@
     <select multiple="multiple" size="4" name="{$actionid}field_{$fieldid}[]">
       {html_options options=$field.attribs.options selected=$field.value}
     </select>
+  {elseif $field.type == 5}
+		{if $field.value}<em>Value: {$field.value}</em><br />{/if}
+    {xt_file_link in="uploads/`$field.attribs.dir`/`$field.value`"}
+		{*if $fielddef->GetOptionValue('image')}{$fielddef->RenderForAdminListing($actionid, $returnid)}{/if*}
+    <input type="hidden" name="{$actionid}field_{$fieldid}" value="{$field.value}" />
+		<input type="file" name="{$actionid}field_{$fieldid}">
+    {if $field.value}<input type="checkbox" name="{$actionid}delete_field_{$fieldid}" value="delete" title="{$mod->Lang('delete')}" />{/if}
   {/if}
   </div>
 </div>
 {/foreach}
 {/if}
+<div class="pageoverflow"><hr></div>
+<div class="pageoverflow m_bottom_30">
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+  </p>
+</div>
 {form_end}

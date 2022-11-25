@@ -70,6 +70,7 @@ $lang['fieldtype_1'] = 'Email Adresse';
 $lang['fieldtype_2'] = 'Tekst omr&aring;de';
 $lang['fieldtype_3'] = 'Dropdown';
 $lang['fieldtype_4'] = 'Multiselect';
+$lang['fieldtype_5'] = 'File Upload';
 $lang['friendlyname'] = 'Calguys Feedback Module';
 $lang['help'] = '<h3>What Does This Do?</h3>
 

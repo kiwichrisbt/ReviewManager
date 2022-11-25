@@ -139,6 +139,7 @@ if( is_array($tfields) && count($tfields) ) {
 //
 // Process form data
 //
+
 if( isset($params['rm_submit']) ) {
 
     try {
@@ -174,6 +175,21 @@ if( isset($params['rm_submit']) ) {
                 $comment->set_field_by_id($fid,$value);
             }
         }
+
+        //FILES
+        $tfields = comment_ops::get_fielddefs();
+        foreach( $tfields as $onefield ) {
+            $elem = $id.'field_'.$onefield['id'];
+            if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
+                if( $_FILES[$elem]['error'] == 0 && $_FILES[$elem]['tmp_name'] != '' ) {
+                    $error = '';
+                    $value = comment_ops::handle_upload($comment,$onefield['id'],$elem,$error);
+                    if( $value === FALSE ) throw new CmsException($error);
+                    $comment->set_field_by_id($onefield['id'],$value);
+                }
+            }
+        }
+        //FILES
 
         //
         // validate data
@@ -248,8 +264,6 @@ if( isset($params['rm_submit']) ) {
             if( !empty($comment->author_notify) ) $cookie['author_notify'] = $comment->author_notify;
             setcookie(REVIEWMANAGER_COOKIE,serialize($cookie),time()+30*24*60*60); // thirty days
         }
-
-
 
         if( $this->GetPreference('use_cookies',0) == 1 ) {
             // Set cookie information

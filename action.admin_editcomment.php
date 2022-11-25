@@ -62,24 +62,7 @@ if( isset($cid) && $cid > 1) {
 #
 # Get the data
 #
-
-$tfields = comment_ops::get_fielddefs();
-$allow_wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
-foreach( $tfields as $fid => &$tfield ) {
-    $tfield['value'] = $comment->get_field_by_id($tfield['id']);
-    switch($tfield['type']) {
-    case 2:
-        $tfield['input'] =
-            $this->CreateTextArea(isset($tfield['attribs']['usewysiwyg']) && $tfield['attribs']['usewysiwyg'] == 1 && $allow_wysiwyg,
-                                  $id, $tfield['value'],'field_'.$tfield['id']);
-        break;
-    }
-}
 $orig_status = $comment->status;
-
-#
-# Process form data
-#
 
 if( (isset($params['delete_spam']) && !empty($params['delete_spam'])) ||
     (isset($params['delete']) && !empty($params['delete'])) ) {
@@ -88,14 +71,37 @@ if( (isset($params['delete_spam']) && !empty($params['delete_spam'])) ||
 else if( isset($params['submit']) && !empty($params['submit']) ) {
     // Get values from params
     try {
+
         $comment->from_array($params);
         foreach( $params as $key => $value ) {
             if( startswith($key,'field_') ) {
                 $fid = (int)substr($key,6);
                 if( is_array($value) ) $value = implode(',',$value);
+
+                if ( comment_ops::get_fielddef_type($fid) == 5 ) {
+                    if (isset($params['delete_field_'.$fid])) {
+                        //delete upload
+                        comment_ops::delete_file($comment,$fid);
+                        $value = null;
+                    } else {
+                        //upload
+                        $elem = $id.'field_'.$fid;
+                        if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
+                            if( $_FILES[$elem]['error'] == 0 && $_FILES[$elem]['tmp_name'] != '' ) {
+                                $error = '';
+                                $value = comment_ops::handle_upload($comment,$fid,$elem,$error);
+                                if( $value === FALSE ) throw new CmsException($error);
+                            }
+                        }
+                    }
+
+                }
+
                 $comment->set_field_by_id($fid,$value);
+
             }
         }
+
         // data validation
         if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \Exception($this->Lang('error_invalidrating'));
         if( $comment->data == '' )	throw new \Exception( $this->Lang('error_emptycomment') );
@@ -104,7 +110,7 @@ else if( isset($params['submit']) && !empty($params['submit']) ) {
 			$comment->author_name = $login_ops->get_loggedin_username();
 		}
         if( $comment->author_name == '') throw new \Exception($this->Lang('error_emptyname'));
-		
+
         \CMSMS\HookManager::do_hook('ReviewManager::BeforeSaveComment',$comment);
         $res = $this->_commentops->save( $comment );
         if( !$res ) throw new \Exception($this->Lang('error_dberror'));
@@ -118,6 +124,19 @@ else if( isset($params['submit']) && !empty($params['submit']) ) {
     }
     catch( \Exception $e ) {
         echo $this->ShowErrors($this->Lang('error_comment_update_failed').': '.$e->GetMessage());
+    }
+}
+
+$tfields = comment_ops::get_fielddefs();
+$allow_wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
+foreach( $tfields as $fid => &$tfield ) {
+    $tfield['value'] = $comment->get_field_by_id($tfield['id']);
+    switch($tfield['type']) {
+    case 2:
+        $tfield['input'] =
+            $this->CreateTextArea(isset($tfield['attribs']['usewysiwyg']) && $tfield['attribs']['usewysiwyg'] == 1 && $allow_wysiwyg,
+                                  $id, $tfield['value'],'field_'.$tfield['id']);
+        break;
     }
 }
 

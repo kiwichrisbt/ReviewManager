@@ -36,6 +36,7 @@ $lang['fieldtype_1'] = 'Indirizzo Email';
 $lang['fieldtype_2'] = 'Area di Testo';
 $lang['fieldtype_3'] = 'Dropdown';
 $lang['fieldtype_4'] = 'Multiselect';
+$lang['fieldtype_5'] = 'File Upload';
 $lang['friendlyname'] = 'Calguys Feedback Module';
 $lang['id'] = 'Id';
 $lang['info_allow_comment_html'] = '<strong>Nota:</strong> Non utilizzare con l&#039;impostazione wysiwyg qui sopra';
