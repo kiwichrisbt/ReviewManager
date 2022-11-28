@@ -47,7 +47,8 @@
 </div>
 
 <p class="pageoverflow">
-    <a href="{cms_action_url action=admin_add_field pid=$page->id}">{admin_icon icon='newobject.gif'} {$mod->Lang('prompt_add_field')}</a>
+    {*cms_action_url action=admin_add_field pid=$page->id*}
+    <a href="{cms_action_url action=admin_add_field}">{admin_icon icon='newobject.gif'} {$mod->Lang('prompt_add_field')}</a>
 </p>
 
 {*
