@@ -53,10 +53,10 @@ $comment = new comment();
 # Setup
 #
 if( isset($params['cancel']) ) {
- $this->RedirectToAdminTab();
+    $this->RedirectToAdminTab();
 }
 $cid = (int) \xt_param::get_int($params,'cid');
-if( isset($cid) && $cid > 1) {
+if( isset($cid) && $cid > 0) {
 	$comment = $this->_commentops->load($cid);
 }
 #

@@ -10,7 +10,8 @@ class comment_query extends \CMSMSExt\query\query
     {
         foreach( $params as $key => $val ) {
             if( !array_key_exists($key,$this->_data) ) continue;
-            $this[$key] = $val;
+            // $this[$key] = $val;
+            $this->_data[$key] = $val;
         }
     }
 

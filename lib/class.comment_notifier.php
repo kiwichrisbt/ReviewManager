@@ -68,10 +68,11 @@ class comment_notifier
 
     }
 
-    public function email_notify_users(comment $comment,$smarty)
+    public static function email_notify_users(comment $comment)
     {
-
         $mod = \cms_utils::get_module('ReviewManager');
+        $smarty = \CmsApp::get_instance()->GetSmarty();
+        $params = [];
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::User Notification');
         $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
         self::prepare_smarty_vars($comment,1,$smarty);
@@ -81,7 +82,7 @@ class comment_notifier
                   WHERE key1 = ? AND key2 = ? AND key3 = ? AND status = ?
                   AND author_notify = 1 AND author_email != ?';
         $users = $db->GetArray($query,array($comment->key1,$comment->key2,$comment->key3,REVIEWMANAGER_STATUS_PUBLISHED,$comment->author_email));
-        if( !is_array($users) ) return TRUE;
+        if( !is_array($users) || empty($users) ) return TRUE;
 
         $mailer = new \cms_mailer();
         $mailer->reset();
