@@ -10,10 +10,23 @@
 </div>
 
 <div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('prompt_key1')}:</p>
+    <p class="pageinput"><input type="text" name="{$actionid}key1" size="20" maxlength="255" value="{$comment->key1}"/></p>
+</div>
+<div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('prompt_key2')}:</p>
+    <p class="pageinput"><input type="text" name="{$actionid}key2" size="20" maxlength="255" value="{$comment->key2}"/></p>
+</div>
+<div class="pageoverflow">
+    <p class="pagetext">{$mod->Lang('prompt_key3')}:</p>
+    <p class="pageinput"><input type="text" name="{$actionid}key3" size="20" maxlength="255" value="{$comment->key3}"/></p>
+</div>
+
+<div class="pageoverflow">
     <p class="pagetext">{$mod->Lang('prompt_status')}:</p>
 	<p class="pageinput">
 		<select name="{$actionid}status">
-			 {html_options options=$status_options selected=$comment->status}
+			{html_options options=$status_options selected=$comment->status}
 		</select>
 	</p>
  </div>
