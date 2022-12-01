@@ -52,7 +52,7 @@
   <p class="pageinput"><input type="text" name="{$actionid}title" size="80" maxlength="255" value="{$comment->title}"/></p>
 </div>
 
-{if $comment->id}
+{*if $comment->id*}
 <div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('prompt_author_name')}:</p>
   <p class="pageinput"><input type="text" name="{$actionid}author_name" size="80" maxlength="255" value="{$comment->author_name}"/></p>
@@ -71,7 +71,7 @@
   <p class="pageinput"><input type="checkbox" name="{$actionid}author_notify" value="1" {if $comment->author_notify == 1}checked="checked"{/if}/>
   {$mod->Lang('prompt_author_notify')}</p>
 </div>
-{/if}
+{*/if*}
 
 
 <div class="pageoverflow">

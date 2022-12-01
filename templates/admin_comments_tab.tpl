@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
   <div style="float: left;">
 	<a href="{cms_action_url action=admin_editcomment}">{admin_icon icon='newobject.gif'}
 	 {$mod->Lang('lbl_add_comment')}
-	 </a>
+	 </a>&nbsp;&nbsp;
 	<a id="toggle_filter" href="">{admin_icon icon='reorder.gif'}
 	{if $have_filter}{$mod->Lang('view_filter_applied')}{else}{$mod->Lang('view_filter')}{/if}
 	</a>
@@ -180,7 +180,7 @@ jQuery(document).ready(function($) {
 	<th>{$mod->Lang('lbl_author_name')}</th>
 	<th>{$mod->Lang('lbl_status')}</th>
 	<th>{$mod->Lang('lbl_created')}</th>
-	<th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* edit *}
+	<th class="pageicon {literal}{sortList: false}{/literal}">&nbsp;</th>{* edit *}
 	<th class="pageicon {literal}{sorter: false}{/literal}">&nbsp;</th>{* delete *}
 	<th class="pageicon {literal}{sorter: false}{/literal}"><input type="checkbox" id="selectall" onclick="select_all();"/></th>
  </tr>
@@ -214,7 +214,7 @@ jQuery(document).ready(function($) {
       <td><a href="{$edit_url}" title="{$onecomment.title}" class="tooltip" rel="#{$tooltipid}" >{$onecomment.title|truncate:50}</a></td>
       <td>{$onecomment.author_name}</td>
       <td><span {$status_style}>{$mod->Lang($onecomment.status)}</span></td>
-      <td>{$onecomment.created|cms_date_format}</td>
+      <td>{$onecomment.created|date_format:'%d/%m/%y %T'}</td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit')}">{admin_icon icon='edit.gif'}</a></td>
       <td><a href="{$delete_url}" title="{$mod->Lang('delete')}" onclick="return confirm('{$mod->Lang('confirm_delete_comment')}');">{admin_icon icon='delete.gif'}</a></td>
       <td><input type="checkbox" name="{$actionid}selected[]" value="{$onecomment.id}"/></td>
