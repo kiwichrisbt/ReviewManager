@@ -217,6 +217,7 @@ $smarty->assign('input_agelimit', $agelimit);
 $smarty->assign('formstart', $this->CreateFormStart($id, 'defaultadmin', $returnid));
 $smarty->assign('formend', $this->CreateformEnd());
 $smarty->assign('have_filter', $have_filter);
+$smarty->assign('allow_add_comments', $this->GetPreference('allow_add_comments', 0));
 
 if ( is_array($data) && count($data) > 0 ) $smarty->assign('comments', $data);
 $tmp = array();

@@ -48,9 +48,11 @@ jQuery(document).ready(function($) {
 
 <div class="pageoverflow">
   <div style="float: left;">
+    {if $allow_add_comments}
 	<a href="{cms_action_url action=admin_editcomment}">{admin_icon icon='newobject.gif'}
 	 {$mod->Lang('lbl_add_comment')}
 	 </a>&nbsp;&nbsp;
+    {/if}
 	<a id="toggle_filter" href="">{admin_icon icon='reorder.gif'}
 	{if $have_filter}{$mod->Lang('view_filter_applied')}{else}{$mod->Lang('view_filter')}{/if}
 	</a>

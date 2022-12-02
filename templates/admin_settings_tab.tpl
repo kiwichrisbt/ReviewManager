@@ -111,15 +111,25 @@
    </p>
   </div>
 
-  <div class="c_full cf m_bottom_10">
-    <label for="use_cookies" class="grid_3">{$mod->Lang('prompt_use_cookies')}</label>
-    <p class="grid_8">
-      <select id="use_cookies" name="{$actionid}use_cookies" class="c_full">
-      {cms_yesno selected=$prefs.use_cookies}
-      </select>
-      <br/>{$mod->Lang('info_use_cookies')}
-    </p>
-  </div>
+    <div class="c_full cf m_bottom_10">
+        <label for="use_cookies" class="grid_3">{$mod->Lang('prompt_use_cookies')}</label>
+        <p class="grid_8">
+        <select id="use_cookies" name="{$actionid}use_cookies" class="c_full">
+        {cms_yesno selected=$prefs.use_cookies}
+        </select>
+        <br/>{$mod->Lang('info_use_cookies')}
+        </p>
+    </div>
+
+    <div class="c_full cf m_bottom_10">
+        <label for="allow_add_comments" class="grid_3">{$mod->Lang('prompt_allow_add_comments')}</label>
+        <p class="grid_8">
+        <select id="allow_add_comments" name="{$actionid}allow_add_comments" class="c_full">
+        {cms_yesno selected=$prefs.allow_add_comments}
+        </select>
+        <br/>{$mod->Lang('info_allow_add_comments')}
+        </p>
+    </div>
 
   <div class="c_full cf m_bottom_10">
     <label for="friendlyname" class="grid_3">{$mod->Lang('prompt_friendlyname')}</label>
