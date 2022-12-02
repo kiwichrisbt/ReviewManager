@@ -60,7 +60,9 @@ class comment
         foreach( self::$_keys as $one ) {
             if( isset($data[$one]) ) $this->_data[$one] = $data[$one];
         }
-        if( isset($data['extra']) && $data['extra'] ) $this->_data['extra'] = unserialize($data['extra']);
+        if ( isset($data['extra']) && $data['extra'] ) {
+            $this->_data['extra'] = unserialize($data['extra']);
+        }
     }
 
     /**
@@ -116,7 +118,7 @@ class comment
         $out = [];
         foreach( $fielddefs as $fid => $rec ) {
             $name = $rec['name'];
-            $out[$name] = $this->_fields[$fid];
+            $out[$name] = !empty($this->_fields[$fid]) ? $this->_fields[$fid] : '';
         }
         return $out;
     }

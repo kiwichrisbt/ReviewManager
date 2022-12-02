@@ -36,6 +36,7 @@ class comment_notifier
     {
 
         $mod = \cms_utils::get_module('ReviewManager');
+        $params = [];
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Admin Notification');
         $smarty = $smarty->CreateTemplate($mod->GetTemplateResource($thetemplate),null,null,$smarty);
         self::prepare_smarty_vars($comment,0,$smarty);

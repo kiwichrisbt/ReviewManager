@@ -99,7 +99,7 @@ EOT;
 $lang['import_cgfeedback_text'] =  <<<EOT
 CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback.
 EOT;
-$lang['import_step_1'] = 'import all feedback, fields, templates and settings';
+$lang['import_step_1'] = 'import all feedback, fields, templates and settings. Comment Forms with automatically have {cge_form_csrf} tags replaced with {xt_form_csrf}';
 $lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{CGFeedback\' tags and replace with \'{ReviewManager\'. All templates imported from CGFeedback have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
 $lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall CGFeedback.';
 $lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from CGFeedback module.';

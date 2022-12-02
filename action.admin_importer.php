@@ -70,8 +70,13 @@ foreach ($template_types as $type_name) {
     $templates_of_type = \CmsLayoutTemplate::load_all_by_type($tpl_from_type);
     if (!empty($templates_of_type)) {
         foreach ($templates_of_type as $template) {
-            utils::create_template_of_type( $tpl_to_type, 'ReviewManager_'.$template->get_name(), 
-                $template->get_content(), $template->get_type_dflt() );
+            $template_content = $template->get_content();
+            // convert some CGBF content to RM content 
+            if ($type_name=='Comment Form') {
+                $template_content = str_replace('{cge_form_csrf}', '{xt_form_csrf}', $template_content);
+                $template_content = str_replace('cgfb_submit', 'rm_submit', $template_content);
+            }
+            utils::create_template_of_type( $tpl_to_type, 'ReviewManager_'.$template->get_name(), $template_content, $template->get_type_dflt() );
         }
     }
 }

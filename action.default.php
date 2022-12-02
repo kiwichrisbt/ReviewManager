@@ -141,7 +141,6 @@ if( is_array($tfields) && count($tfields) ) {
 //
 
 if( isset($params['rm_submit']) ) {
-
     try {
 
         // Get data from the form
@@ -301,6 +300,14 @@ if( isset($params['rm_submit']) ) {
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Success Message');
         $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
         $tpl->assign('comment',$comment);
+        // $tpl->assign('subject',???);
+                // $this->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT);
+                // $this->GetPreference(REVIEWMANAGER_PREF_USERNOTIFICATION_SUBJECT);
+        $tpl->assign('author_name', $comment->author_name);
+        $tpl->assign('author_email', $comment->author_email);
+        $tpl->assign('title', $comment->title);
+        $tpl->assign('rating', $comment->rating);
+        $tpl->assign('fields', $comment->get_field_hash());
         $message = $tpl->fetch();
 
     }

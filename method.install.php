@@ -46,9 +46,9 @@ $flds = "
     admin_notes   X,
     notified      I1,
     origurl       C(255),
-    extra         X2,
     created      ".CMS_ADODB_DT.",
-    modified     ".CMS_ADODB_DT;
+    modified     ".CMS_ADODB_DT.",
+    extra         X2";
 $sqlarray = $dict->CreateTableSQL(REVIEWMANAGER_TABLE_COMMENTS, $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
