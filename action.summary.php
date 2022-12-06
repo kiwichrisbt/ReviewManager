@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: ReviewManager (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -35,10 +37,10 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-use \CGFeedback\utils;
-use \CGFeedback\comment_query;
-use \CGFeedback\param_cleaner;
+if( !defined('CMS_VERSION') ) exit;
+use \ReviewManager\utils;
+use \ReviewManager\comment_query;
+use \ReviewManager\param_cleaner;
 
 #
 # Initialization
@@ -52,14 +54,28 @@ $cleaner->set_dflt('detailpage',$returnid);
 $qparms = $cleaner->go( $params );
 
 // post-process params.
-$qparms['detailpage'] = $this->resolve_alias_or_id($qparms['detailpage'],$returnid);
-$qparms['key1'] = \cge_param::get_string($qparms,'key1','__page__');
-$qparms['key2'] = \cge_param::get_string($qparms,'key2',$returnid);
+if( isset($qparms['detailpage']) && is_numeric($qparms['detailpage']) )
+{
+  $detailpage = $qparms['detailpage'];
+}
+else
+{
+    $detailpage = \cms_utils::get_current_pageid();
+  
+    if( detailpage < 1 )
+    {
+        $detailpage = \CmsApp::get_instance()->GetContentOperations()->GetDefaultContent();
+    }
+}
+
+$qparms['detailpage'] = $detailpage;
+$qparms['key1'] = \xt_param::get_string($qparms,'key1','__page__');
+$qparms['key2'] = \xt_param::get_string($qparms,'key2',$returnid);
 
 // setup the query
 $query = new comment_query($qparms);
-if( ($pagelimit = \cge_param::get_int($qparms,'pagelimit')) ) $query['limit'] = $pagelimit;
-if( ($pagenum = \cge_param::get_int($qparms,'pagenum') ) ) $query['offset'] = (int) ($pagenum - 1) * $query['limit'];
+if( ($pagelimit = \xt_param::get_int($qparms,'pagelimit')) ) $query['limit'] = $pagelimit;
+if( ($pagenum = \xt_param::get_int($qparms,'pagenum') ) ) $query['offset'] = (int) ($pagenum - 1) * $query['limit'];
 
 // todo: pagenum param to offset
 
@@ -71,12 +87,9 @@ $pagination->set_pageid($returnid);
 #
 # Give everything to smarty
 #
-$thetemplate = utils::find_layout_template($qparms,'summarytemplate','CGFeedback::Summary View');
-$tpl = $this->CreateSmartyTemplate($thetemplate);
+$thetemplate = utils::find_layout_template($qparms,'summarytemplate','ReviewManager::Summary View');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
 
-$path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
-$tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
-$tpl->assign('rating_imgs',$tmp);
 $tpl->assign('total_matches',$rs->TotalMatches());
 $tpl->assign('comments',$data);
 $tpl->assign('pagination',$pagination);

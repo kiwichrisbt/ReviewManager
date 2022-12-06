@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -36,10 +38,10 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission(CGFEEDBACK_PERM_FEEDBACK) ) exit;
-use \CGFeedback\comment;
-use \CGFeedback\comment_notifier;
-use \CGFeedback\comment_ops AS cgfb_comment_ops;
+if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) exit;
+use \ReviewManager\comment;
+use \ReviewManager\comment_notifier;
+use \ReviewManager\comment_ops;
 
 #
 # Initialization
@@ -50,18 +52,82 @@ $comment = new comment();
 #
 # Setup
 #
-if( isset($params['cancel']) ) $this->RedirectToTab($id);
-$cid = (int) \cge_param::get_int($params,'cid');
-if( !$cid ) {
-    $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+if( isset($params['cancel']) ) {
+    $this->RedirectToAdminTab();
 }
-
+$cid = (int) \xt_param::get_int($params,'cid');
+if( isset($cid) && $cid > 0) {
+	$comment = $this->_commentops->load($cid);
+}
 #
 # Get the data
 #
-$comment = $this->_commentops->load($cid);
-$tfields = cgfb_comment_ops::get_fielddefs();
+$orig_status = $comment->status;
+
+if( (isset($params['delete_spam']) && !empty($params['delete_spam'])) ||
+    (isset($params['delete']) && !empty($params['delete'])) ) {
+    $this->Redirect($id,'admin_deletecomment',$returnid,array('cid'=>$cid));
+}
+else if( isset($params['submit']) && !empty($params['submit']) ) {
+    // Get values from params
+    try {
+
+        $comment->from_array($params);
+        foreach( $params as $key => $value ) {
+            if( startswith($key,'field_') ) {
+                $fid = (int)substr($key,6);
+                if( is_array($value) ) $value = implode(',',$value);
+
+                if ( comment_ops::get_fielddef_type($fid) == 5 ) {
+                    if (isset($params['delete_field_'.$fid])) {
+                        //delete upload
+                        comment_ops::delete_file($comment,$fid);
+                        $value = null;
+                    } else {
+                        //upload
+                        $elem = $id.'field_'.$fid;
+                        if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
+                            if( $_FILES[$elem]['error'] == 0 && $_FILES[$elem]['tmp_name'] != '' ) {
+                                $error = '';
+                                $value = comment_ops::handle_upload($comment,$fid,$elem,$error);
+                                if( $value === FALSE ) throw new CmsException($error);
+                            }
+                        }
+                    }
+
+                }
+
+                $comment->set_field_by_id($fid,$value);
+
+            }
+        }
+
+        // data validation
+        if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \Exception($this->Lang('error_invalidrating'));
+        if( $comment->data == '' )	throw new \Exception( $this->Lang('error_emptycomment') );
+		if( !$comment->id ) {
+			$login_ops = \CMSMS\LoginOperations::get_instance();
+			$comment->author_name = $login_ops->get_loggedin_username();
+		}
+        if( $comment->author_name == '') throw new \Exception($this->Lang('error_emptyname'));
+
+        \CMSMS\HookManager::do_hook('ReviewManager::BeforeSaveComment',$comment);
+        $res = $this->_commentops->save( $comment );
+        if( !$res ) throw new \Exception($this->Lang('error_dberror'));
+
+        if( $comment->status == REVIEWMANAGER_STATUS_PUBLISHED && $orig_status != REVIEWMANAGER_STATUS_PUBLISHED ) {
+            \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
+        }
+
+        $this->SetMessage($this->Lang('msg_commentupdated'));
+		$this->RedirectToAdminTab();
+    }
+    catch( \Exception $e ) {
+        echo $this->ShowErrors($this->Lang('error_comment_update_failed').': '.$e->GetMessage());
+    }
+}
+
+$tfields = comment_ops::get_fielddefs();
 $allow_wysiwyg = $this->GetPreference('allow_comment_wysiwyg',0);
 foreach( $tfields as $fid => &$tfield ) {
     $tfield['value'] = $comment->get_field_by_id($tfield['id']);
@@ -73,56 +139,14 @@ foreach( $tfields as $fid => &$tfield ) {
         break;
     }
 }
-$orig_status = $comment->status;
-
-#
-# Process form data
-#
-
-if( (isset($params['delete_spam']) && !empty($params['delete_spam'])) ||
-    (isset($params['delete']) && !empty($params['delete'])) ) {
-    $this->Redirect($id,'admin_deletecomment',$returnid,array('cid'=>$cid));
-}
-else if( isset($params['submit']) && !empty($params['submit']) ) {
-    // Get values from params
-    try {
-        $comment->from_array($params);
-        foreach( $params as $key => $value ) {
-            if( startswith($key,'field_') ) {
-                $fid = (int)substr($key,6);
-                if( is_array($value) ) $value = implode(',',$value);
-                $comment->set_field_by_id($fid,$value);
-            }
-        }
-
-        // data validation
-        if( ($comment->rating < 0) || ($comment->rating > 10) ) throw new \Exception($this->Lang('error_invalidrating'));
-        if( $comment->data == '' )	throw new \Exception( $this->Lang('error_emptycomment') );
-        if( $comment->author_name == '') throw new \Exception($this->Lang('error_emptyname'));
-
-        \CMSMS\HookManager::do_hook('CGFeedback::BeforeSaveComment',$comment);
-        $res = $this->_commentops->save( $comment );
-        if( !$res ) throw new \Exception($this->Lang('error_dberror'));
-
-        if( $comment->status == CGFEEDBACK_STATUS_PUBLISHED && $orig_status != CGFEEDBACK_STATUS_PUBLISHED ) {
-            \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);
-        }
-
-        $this->SetMessage($this->Lang('msg_commentupdated'));
-        $this->RedirectToTab($id);
-    }
-    catch( \Exception $e ) {
-        echo $this->ShowErrors($this->Lang('error_comment_update_failed').': '.$e->GetMessage());
-    }
-}
 
 #
 # Give everything to smarty
 #
 $status_options = array();
-$status_options[CGFEEDBACK_STATUS_DRAFT]     = $this->Lang(CGFEEDBACK_STATUS_DRAFT);
-$status_options[CGFEEDBACK_STATUS_PUBLISHED] = $this->Lang(CGFEEDBACK_STATUS_PUBLISHED);
-$status_options[CGFEEDBACK_STATUS_SPAM]      = $this->Lang(CGFEEDBACK_STATUS_SPAM);
+$status_options[REVIEWMANAGER_STATUS_DRAFT]     = $this->Lang(REVIEWMANAGER_STATUS_DRAFT);
+$status_options[REVIEWMANAGER_STATUS_PUBLISHED] = $this->Lang(REVIEWMANAGER_STATUS_PUBLISHED);
+$status_options[REVIEWMANAGER_STATUS_SPAM]      = $this->Lang(REVIEWMANAGER_STATUS_SPAM);
 $rating_options = array();
 for( $i = 0; $i < 5; $i++ ) {
     $rating_options[$i+1] = sprintf('&nbsp;%d&nbsp;',$i+1);
@@ -130,8 +154,6 @@ for( $i = 0; $i < 5; $i++ ) {
 $smarty->assign('status_options',$status_options);
 $smarty->assign('rating_options',$rating_options);
 $smarty->assign('allow_wysiwyg',$allow_wysiwyg);
-$smarty->assign('formstart',$this->CGCreateFormStart($id,'admin_editcomment',$returnid,$params));
-$smarty->assign('formend',$this->CreateFormEnd());
 $smarty->assign('comment',$comment);
 if( count($tfields) ) $smarty->assign('fields',$tfields);
 

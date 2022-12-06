@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -48,7 +50,7 @@ final class comment_operations
 
     public function mark_comment_spam($id)
     {
-        return $this->change_comment_status($id,CGFEEDBACK_STATUS_SPAM);
+        return $this->change_comment_status($id,REVIEWMANAGER_STATUS_SPAM);
     }
 
     public function change_comment_status($id,$status)
@@ -56,16 +58,16 @@ final class comment_operations
         $db = $this->_db;
 
         switch($status) {
-        case CGFEEDBACK_STATUS_PUBLISHED:
+        case REVIEWMANAGER_STATUS_PUBLISHED:
             break;
-        case CGFEEDBACK_STATUS_DRAFT:
-        case CGFEEDBACK_STATUS_SPAM:
+        case REVIEWMANAGER_STATUS_DRAFT:
+        case REVIEWMANAGER_STATUS_SPAM:
             break;
         default:
             return FALSE;
         }
 
-        $query = 'UPDATE '.CGFEEDBACK_TABLE_COMMENTS." SET status = ?, modified = NOW()
+        $query = 'UPDATE '.REVIEWMANAGER_TABLE_COMMENTS." SET status = ?, modified = NOW()
               WHERE id = ?";
         $db->Execute($query,array($status,$id));
         return TRUE;
@@ -75,15 +77,15 @@ final class comment_operations
     {
         $db = $this->_db;
 
-        $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ?';
+        $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ?';
         $row = $db->GetRow($query,array((int)$comment_id));
 
         if( is_array($row) ) {
-            $mod = \cge_utils::get_module(MOD_CGFEEDBACK);
+            $mod = \cms_utils::get_module('ReviewManager');
             $obj = new displayable_comment($mod);
             $obj->from_array($row);
 
-            $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+            $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
             $tmp = $db->GetArray($query,array((int)$comment_id));
 
             if( is_array($tmp) ) $obj->load_fields_from_array($tmp);
@@ -95,14 +97,14 @@ final class comment_operations
     {
         $db = $this->_db;
 
-        $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ?';
+        $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ?';
         $row = $db->GetRow($query,array((int)$comment_id));
 
         if( is_array($row) ) {
             $obj = new comment;
             $obj->from_array($row);
 
-            $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+            $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
             $tmp = $db->GetArray($query,array((int)$comment_id));
 
             if( is_array($tmp) ) $obj->load_fields_from_array($tmp);
@@ -113,10 +115,10 @@ final class comment_operations
     public function delete_by_id($comment_id)
     {
         $db = $this->_db;
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
         $dbr = $db->Execute($query,array((int)$comment_id));
 
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_COMMENTS.' WHERE id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_COMMENTS.' WHERE id = ?';
         $dbr = $db->Execute($query,array((int)$comment_id));
 
         return TRUE;
@@ -138,7 +140,7 @@ final class comment_operations
 
         $db = $this->_db;
         $now = $db->DbTimeStamp(time());
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_COMMENTS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_COMMENTS."
               (key1,key2,key3,rating,title,data,status,author_name,author_email,author_ip,author_notify,admin_notes,notified,origurl,extra,created,modified)
               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,$now,$now)";
         $dbr = $db->Execute($query,array($obj->key1,$obj->key2,$obj->key3,$obj->rating,$obj->title,$obj->data,$obj->status,
@@ -153,7 +155,7 @@ final class comment_operations
         $obj->modified = $now;
 
         // insert fields.
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_FIELDVALS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_FIELDVALS."
               (comment_id,field_id,value) VALUES (?,?,?)";
         $flds = $obj->get_fields();
         if( is_array($flds) ) {
@@ -182,13 +184,13 @@ final class comment_operations
 
         $db = $this->_db;
         $now = $db->DbTimeStamp(time());
-        $query = 'UPDATE '.CGFEEDBACK_TABLE_COMMENTS." set key1 = ?, key2 = ?, key3 = ?, rating = ?, title = ?, data = ?,
+        $query = 'UPDATE '.REVIEWMANAGER_TABLE_COMMENTS." set key1 = ?, key2 = ?, key3 = ?, rating = ?, title = ?, data = ?,
                status = ?, author_name = ?, author_email = ?, author_ip = ?, author_notify = ?, admin_notes = ?,
-               notified = ?, origurl = ?, extra = ?, modified = $now WHERE id = ?";
+               notified = ?, origurl = ?, extra = ?, created = ?, modified = $now WHERE id = ?";
         $dbr = $db->Execute($query,
                             array($obj->key1,$obj->key2,$obj->key3,$obj->rating,$obj->title,$obj->data,
                                   $obj->status,$obj->author_name,$obj->author_email,$obj->author_ip,$obj->author_notify,
-                                  $obj->admin_notes,$obj->notified,$obj->origurl,serialize($obj->get_extra()),$obj->id));
+                                  $obj->admin_notes,$obj->notified,$obj->origurl,serialize($obj->get_extra()),$obj->created,$obj->id));
         if( !$dbr ) {
             throw new Exception('SQL ERROR: '.$db->sql.' -- '.$db->ErrorMsg());
             return FALSE;
@@ -196,11 +198,11 @@ final class comment_operations
         $obj->modifed = $now;
 
         // DELETE ANY FIELDS FOR THIS RECORD
-        $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id = ?';
+        $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id = ?';
         $dbr = $db->Execute($query,array($obj->id));
 
         // INSERT NEW FIELDS FOR THIS RECORD
-        $query = 'INSERT INTO '.CGFEEDBACK_TABLE_FIELDVALS."
+        $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_FIELDVALS."
               (comment_id,field_id,value) VALUES (?,?,?)";
         $flds = $obj->get_fields();
         if( is_array($flds) ) {

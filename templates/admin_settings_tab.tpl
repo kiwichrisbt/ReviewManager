@@ -1,6 +1,5 @@
 {* admin_settings_tab.tpl *}
 
-
 {if $CGFeedback_installed}
 <fieldset>
     <legend>{$mod->Lang('prompt_import_cgfeedback')} </legend>
@@ -36,7 +35,7 @@
     <p class="grid_3"><label for="titlerequired">{$mod->Lang('prompt_titlerequired')}</label>:</p>
     <p class="grid_8">
       <select id="titlerequired" name="{$actionid}titlerequired" class="c_full">
-      {cge_yesno_options selected=$prefs.titlerequired}
+      {cms_yesno selected=$prefs.titlerequired}
       </select>
       <br/>{$mod->Lang('info_titlerequired')}
     </p>
@@ -46,7 +45,7 @@
     <p class="grid_3"><label for="commentrequired">{$mod->Lang('prompt_commentrequired')}</label>:</p>
     <p class="grid_8">
       <select id="commentrequired" name="{$actionid}commentrequired" class="c_full">
-      {cge_yesno_options selected=$prefs.commentrequired}
+      {cms_yesno selected=$prefs.commentrequired}
       </select>
       <br/>{$mod->Lang('info_commentrequired')}
     </p>
@@ -56,7 +55,7 @@
     <p class="grid_3"><label for="emailrequired">{$mod->Lang('prompt_emailrequired')}</label>:</p>
     <p class="grid_8">
       <select id="emailrequired" name="{$actionid}emailrequired" class="c_full">
-      {cge_yesno_options selected=$prefs.emailrequired}
+      {cms_yesno selected=$prefs.emailrequired}
       </select>
       <br/>{$mod->Lang('info_emailrequired')}
     </p>
@@ -66,7 +65,7 @@
     <p class="grid_3"><label for="namerequired">{$mod->Lang('prompt_namerequired')}</label>:</p>
     <p class="grid_8">
       <select id="namerequired" name="{$actionid}namerequired" class="c_full">
-      {cge_yesno_options selected=$prefs.namerequired}
+      {cms_yesno selected=$prefs.namerequired}
       </select>
       <br/>{$mod->Lang('info_namerequired')}
     </p>
@@ -76,7 +75,7 @@
     <label for="allow_comment_wysieyg" class="grid_3">{$mod->Lang('prompt_allow_comment_wysiwyg')}</label>
     <p class="grid_8">
       <select id="allow_comment_wysiwyg" name="{$actionid}allow_comment_wysiwyg" class="c_full">
-      {cge_yesno_options selected=$prefs.allow_comment_wysiwyg}
+      {cms_yesno selected=$prefs.allow_comment_wysiwyg}
       </select>
       <br/>{$mod->Lang('info_use_wysiwyg')}
     </p>
@@ -86,7 +85,7 @@
     <label for="allow_comment_html" class="grid_3">{$mod->Lang('prompt_allow_comment_html')}</label>
     <p class="grid_8">
       <select id="allow_comment_html" name="{$actionid}allow_comment_html" class="c_full">
-      {cge_yesno_options selected=$prefs.allow_comment_html}
+      {cms_yesno selected=$prefs.allow_comment_html}
       </select>
       <br/>{$mod->Lang('info_allow_comment_html')}
     </p>
@@ -112,15 +111,25 @@
    </p>
   </div>
 
-  <div class="c_full cf m_bottom_10">
-    <label for="use_cookies" class="grid_3">{$mod->Lang('prompt_use_cookies')}</label>
-    <p class="grid_8">
-      <select id="use_cookies" name="{$actionid}use_cookies" class="c_full">
-      {cge_yesno_options selected=$prefs.use_cookies}
-      </select>
-      <br/>{$mod->Lang('info_use_cookies')}
-    </p>
-  </div>
+    <div class="c_full cf m_bottom_10">
+        <label for="use_cookies" class="grid_3">{$mod->Lang('prompt_use_cookies')}</label>
+        <p class="grid_8">
+        <select id="use_cookies" name="{$actionid}use_cookies" class="c_full">
+        {cms_yesno selected=$prefs.use_cookies}
+        </select>
+        <br/>{$mod->Lang('info_use_cookies')}
+        </p>
+    </div>
+
+    <div class="c_full cf m_bottom_10">
+        <label for="allow_add_comments" class="grid_3">{$mod->Lang('prompt_allow_add_comments')}</label>
+        <p class="grid_8">
+        <select id="allow_add_comments" name="{$actionid}allow_add_comments" class="c_full">
+        {cms_yesno selected=$prefs.allow_add_comments}
+        </select>
+        <br/>{$mod->Lang('info_allow_add_comments')}
+        </p>
+    </div>
 
   <div class="c_full cf m_bottom_10">
     <label for="friendlyname" class="grid_3">{$mod->Lang('prompt_friendlyname')}</label>

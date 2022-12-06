@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -35,8 +37,8 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-if( !$this->CheckPermission(CGFEEDBACK_PERM_FEEDBACK) ) return false;
+if( !defined('CMS_VERSION') ) exit;
+if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) return false;
 
 #
 # Initialization
@@ -45,17 +47,17 @@ $this->SetCurrentTab('comments');
 
 if( !isset($params['selected_str']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 if( !isset($params['bulk_action']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
 $selected = explode(',',$params['selected_str']);
 if( !count($selected) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
 
@@ -70,23 +72,23 @@ foreach( $selected as $one ) {
 
   case 'published':
       $comment = $this->_commentops->load($one);
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_PUBLISHED);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_PUBLISHED);
       if( $ret == TRUE ) {
-          if( $comment->status != CGFEEDBACK_STATUS_PUBLISHED ) {
+          if( $comment->status != REVIEWMANAGER_STATUS_PUBLISHED ) {
               // previous status was not published, so we can notify users.
-              \CMSMS\HookManager::do_hook('CGFeedback::UserNotify',$comment);
+              \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
           }
           $count++;
       }
       break;
 
     case 'draft':
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_DRAFT);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_DRAFT);
       if( $ret == TRUE ) $count++;
       break;
 
     case 'spam':
-      $ret = $this->_commentops->change_comment_status($one,CGFEEDBACK_STATUS_SPAM);
+      $ret = $this->_commentops->change_comment_status($one,REVIEWMANAGER_STATUS_SPAM);
       if( $ret == TRUE ) {
           $count++;
       }
@@ -100,8 +102,7 @@ if( $count ) {
 else {
     $this->SetError($this->Lang('error_bulk_operation_failed'));
 }
-$this->RedirectToTab($id);
-
+$this->RedirectToAdminTab();
 #
 # EOF
 #

@@ -9,7 +9,7 @@ $lang['ask_really_uninstall'] = 'Are you sure you want to do this?  Continuing w
 $lang['auto'] = 'Auto';
 $lang['automatic'] = 'Automatic';
 $lang['always'] = 'Always';
-
+$lang['allowed'] = 'Allowed';
 #B
 
 
@@ -25,6 +25,7 @@ $lang['delete_this_field'] = 'Delete this field definition';
 $lang['desc_adminsearch'] = 'Search all comments (regardless of status or expiry)';
 $lang['disabled'] = 'Disabled';
 $lang['draft'] = 'Draft';
+$lang['dir'] = 'Directory';
 
 #E
 $lang['edit'] = 'Edit';
@@ -41,11 +42,15 @@ $lang['error_emptycomment'] = 'You must provide a comment';
 $lang['error_emptyname'] = 'You must provide your name';
 $lang['error_emptytitle'] = 'You must provide a title for your post';
 $lang['error_invalidrating'] = 'Invalid Rating';
+$lang['error_invalidcomment'] = 'Invalid comment id';
+$lang['error_comment_uknown'] = 'Comment %s not found, or otherwise unavailable';
 $lang['error_nameexists'] = 'An item by that name already exists';
 $lang['error_missingvalue'] = 'A required value is missing: %s';
 $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_security'] = 'Hmmm. We have encountered a security related problem';
 $lang['error_spam'] = 'This message has been identified as spam!';
+$lang['error_invalidfiletype'] = 'Cannot upload this type of file';
+$lang['error_movefile'] = 'Could not create file: %s';
 
 #F
 $lang['fieldtype_0'] = 'Text';
@@ -53,8 +58,31 @@ $lang['fieldtype_1'] = 'Email Address';
 $lang['fieldtype_2'] = 'Text Area';
 $lang['fieldtype_3'] = 'Dropdown';
 $lang['fieldtype_4'] = 'Multiselect';
+$lang['fieldtype_5'] = 'File Upload';
 $lang['friendlyname'] = 'Review Manager';
+$lang['fielddef_image'] = 'Expected to be image';
 
+$lang['fielddef_allow_help'] = 'Specify a comma separated list of file extensions that are allowed. For example: pdf,gif,jpeg,jpg (keep lowercase)';
+$lang['fielddef_dir_help'] = 'Directory path that will be appended to $config[\'uploads_url\'] . No slash at the end. {$item_id} and {$field_id} will be replaced.';
+$lang['fielddef_exclude_prefix_help'] = 'Specify a comma separated list of prefixes to exclude files that start with those prefixes. For example: thumb_, foo_';
+$lang['fielddef_multioptions_help'] = 'Options separated by line breaks. Values can be separated from text with a = character. For example: Banana=banana';
+$lang['fielddef_separator_help'] = 'Can be empty, single character or HTML entity.';
+$lang['fielddef_size_help'] = 'Specify size of input field. For example: 20';
+$lang['fielddef_max_length_help'] = 'Specify maximum length of the field. For example: 255';
+$lang['fielddef_date_format_help'] = 'Specify date format used by jQuery Datepicker. Try <em>googling<\em> \'jquery formatDate\'. For example: dd-mm-yy';
+$lang['fielddef_format_type_help'] = 'Specify output format for this field.';
+$lang['fielddef_show_seconds_help'] = 'Specify whether the seconds scroller should be shown. NOTICE, second scroller has no effect if time format is wrong. Try HH:mm:ss';
+$lang['fielddef_time_format_help'] = 'Specify date format used by jQuery timepicker. Try googling \'jquery formatTime\'. For example: HH:mm';
+$lang['fielddef_wysiwyg_help'] = 'If checked, a WYSIWYG Editor will be enabled for this field.';
+$lang['fielddef_min_value_help'] = 'Specify minimum value for this field.';
+$lang['fielddef_max_value_help'] = 'Specify maximum value for this field.';
+$lang['fielddef_increment_by_help'] = 'Increment slider values , commonly a dividend of the slider\'s maximum value. The default increment is 1.';
+$lang['fielddef_width_help'] = 'Specify width of element. Can be a percentage or pixel value. This is used as the CSS value.';
+$lang['fielddef_subtype_help'] = 'Select Sub Type for this field to determine its behavior.';
+$lang['fielddef_showall_help'] = 'Show all, regardless of system permissions.';
+$lang['fielddef_columns_help'] = 'Number of columns. Divide this field into multiple columns for a better user experience.';
+$lang['fielddef_media_type_help'] = 'Allows you to specify images as media type to be displayed. By default all files will be shown.';
+$lang['fielddef_enable_jqui_help'] = 'Enhances standard form elements to themeable buttons with appropriate hover and active styles.';
 
 #G
 
@@ -66,12 +94,12 @@ $lang['friendlyname'] = 'Review Manager';
 $lang['id'] = 'Id';
 $lang['import_all_from_cgfeedback'] = 'Import All from CGFeedback';
 $lang['import_cgfeedback_alert'] =  <<<EOT
-CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback. Make sure you have a site backup first!
+CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from ReviewManager will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback. Make sure you have a site backup first!
 EOT;
 $lang['import_cgfeedback_text'] =  <<<EOT
 CGFeedback module is installed. All Feedback, fields, templates and settings can be imported into Review Manager. Importing from CGFeedback will replace all Review Manager data and settings. The steps below will enable Review Manager to fully replace CGFeedback.
 EOT;
-$lang['import_step_1'] = 'import all feedback, fields, templates and settings';
+$lang['import_step_1'] = 'import all feedback, fields, templates and settings. Comment Forms with automatically have {cge_form_csrf} tags replaced with {xt_form_csrf}';
 $lang['import_step_2'] = 'Use Extensions > Admin Search to find all \'{CGFeedback\' tags and replace with \'{ReviewManager\'. All templates imported from CGFeedback have been prefixed with \'ReviewManager_\'. Rename the templates and/or update the template parameters.';
 $lang['import_step_3'] = 'Check that all Feedback is now showing as Reviews across the website. Then you can uninstall CGFeedback.';
 $lang['import_success_msg'] = 'Successfully imported all reviews, settings & templates from CGFeedback module.';
@@ -107,6 +135,7 @@ $lang['info_commentrequired'] = 'This field specifies whether the comment field 
 $lang['info_emailrequired'] = 'This field specifies whether the email field should be required to be filled in when emails are submitted.  This value can be overridden with the emailrequired parameter.';
 $lang['info_namerequired'] = 'This field specifies whether the name field should be required to be filled in when names are submitted.  This value can be overridden with the namerequired parameter.';
 $lang['info_use_cookies'] = 'Author name and email address will be stored in a cookie for later use';
+$lang['info_allow_add_comments'] = 'Enables editors with \'Manage Reviews\' permission to add new reviews within the admin page';
 $lang['info_use_wysiwyg'] = 'Note: this will override the wysiwyg setting on all custom fields as well as on the comment field';
 $lang['info_word_limit'] = 'Specify the maximum number of words in the user supplied comment.  This option has no effect if any of the above options are on.  Specify 0 for no limit';
 $lang['info_notification_messages'] = 'The <strong>Notification</strong> and <strong>Message</strong> templates are now stored in the Design Manager. See \'Admin Notification\', \'User Notification\' and \'Success Message\' template types.';
@@ -138,11 +167,12 @@ $lang['lbl_created'] = 'Created';
 $lang['lbl_defaulttemplates'] = 'Prototype Templates';
 $lang['lbl_delete_spam'] = 'Delete this Spam';
 $lang['lbl_detailtemplates'] = 'Detail Templates';
+$lang['lbl_add_comment'] = 'Add new Comment';
 $lang['lbl_edit_comment'] = 'Edit Comment';
 $lang['lbl_filter'] = 'Filter';
 $lang['lbl_fields'] = 'Fields';
 $lang['lbl_id'] = 'ID';
-$lang['lbl_importer'] = 'CGFeedback Importer';
+$lang['lbl_importer'] = 'ReviewManager Importer';
 $lang['lbl_key1'] = 'Key 1';
 $lang['lbl_key2'] = 'Key 2';
 $lang['lbl_key3'] = 'Key 3';
@@ -192,6 +222,7 @@ $lang['no_fields_defined'] = '--- No fields defined ---';
 
 
 #O
+$lang['options'] = 'Options';
 
 #P
 $lang['page'] = 'Page';
@@ -297,6 +328,9 @@ $lang['prompt_friendlyname'] = 'Module Friendlyname';
 $lang['prompt_general_settings'] = 'General Settings';
 $lang['prompt_import_cgfeedback'] = 'Import CGFeedback Content';
 $lang['prompt_is_email_html'] = 'Send message in HTML format?';
+$lang['prompt_key1'] = 'Key 1';
+$lang['prompt_key2'] = 'Key 2';
+$lang['prompt_key3'] = 'Key 3';
 $lang['prompt_message_template'] = 'Message Template';
 $lang['prompt_moderate_comments'] = 'Moderate all comments';
 $lang['prompt_moderation_iplist'] = 'Moderate Matching IP Addresses';
@@ -319,6 +353,7 @@ $lang['prompt_namerequired'] = 'Is the Name field required by default';
 $lang['prompt_titlerequired'] = 'Is the Title field required by default';
 $lang['prompt_user_notification_subject'] = 'User Notification Email Subject';
 $lang['prompt_use_cookies'] = 'Save user details in a cookie';
+$lang['prompt_allow_add_comments'] = 'Allow adding of new reviews';
 $lang['prompt_use_wysiwyg'] = 'Allow use of wysiwyg for this field';
 $lang['prompt_word_limit'] = 'Comment Word Limit';
 $lang['prompt_your_email'] = 'Your Email Address';
@@ -337,7 +372,7 @@ $lang['save_settings'] = 'Save settings';
 $lang['spam'] = 'Spam';
 $lang['statistics'] = 'Statistics';
 $lang['submit'] = 'Submit';
-
+$lang['size'] = 'Size';
 
 #T
 $lang['title_add_field'] = 'Add Field';
@@ -442,14 +477,41 @@ $lang['help_usage'] = <<<EOT
 
 <h3>How do I use it</h3>
 
-<h4>Calling CGFeedback from a page</h4>
-<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}CGFeedback{rdelim}</code>.  This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}CGFeedback action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
+<h4>Calling ReviewManager from a page</h4>
+<p>The simplest way to utilize this module, is to include the following tag in the bottom of your page content: <code>{ldelim}ReviewManager{rdelim}</code>.</p>
+<p>This will create a comment form to allow visitors to enter comments and ratings about that particular page.   To display those comments, you would add a tag like: {ldelim}ReviewManager action='summary'{rdelim} below the tag specified above.  Tags can optionally be placed in page templates, or in module templates.</p>
 
-<h4>Calling CGFeedback from news, or other modules</h4>
-<p>CGFeedback can be utilized within the news module to allow site visitors to enter comments on particular items in News or any module.  To do this, you would enter a tag such as: <code>{ldelim}CGFeedback key1=&quot;News&quot; key2=\$entry->id{rdelim}</code> into the appropriate news detail template.   Similarly to display those comments, you would use a tag such as <code>{ldelim}CGFeedback key1=&quot;News&quot; key2=\$entry->id action='summary'{rdelim}</code></p>
-<p>Similar techniques can be used to allow CGFeedback to interact with almost any other module in limitless ways.</p>
+<h4>Calling ReviewManager from news, or other modules</h4>
+<p>ReviewManager can be utilized within the news module to allow site visitors to enter comments on particular items in News or any module.  To do this, you would enter a tag such as: <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id{rdelim}</code> into the appropriate news detail template.   Similarly to display those comments, you would use a tag such as <code>{ldelim}ReviewManager key1=&quot;News&quot; key2=\$entry->id action='summary'{rdelim}</code></p>
+<p>Similar techniques can be used to allow ReviewManager to interact with almost any other module in limitless ways.</p>
 <p>Additional parameters can be used to further customize the behaviour and output of the module.  You are encouraged to explore the parameters as described below, and try them.</p>
 <br>
+
+<h4>Hooks</h4>
+<p>The following hooks are provided to enable other modules to be called when various ReviewManager actions occur:</p>
+<ul>
+    <li><code>ReviewManager::UserNotify</code>
+        <p>Sent immediately before the user is notified that the review is now published.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+    <li><code>ReviewManager::BeforeDeleteComment</code>
+        <p>Sent immediately before a comment is deleted.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+    <li><code>ReviewManager::BeforeSaveComment</code>
+        <p>Sent immediately before the commnet is saved.</p>
+        <p>Parameters:</p>
+        <ul>
+            <li><code>comment</code> : object - comment details</li>
+        </ul>
+    </li>
+</ul>
 EOT;
 
 
@@ -469,7 +531,7 @@ The module author is not obligated to provide support for this code. However you
 
 <h3>Copyright &amp; Licence</h3>
 <p>Copyright © 2020, Chris Taylor {mailto address='chris@binnovative.co.uk' encode=javascript}. All Rights Are Reserved.<br>
-This module is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)</p><br>
+This module is a fork of: ReviewManager (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)</p><br>
 
 <p>This module has been released under the GNU Public License v3. However, as a special exception to the GPL, this software is distributed as an addon module to CMS Made Simple. You may only use this software when there is a clear and obvious indication in the admin section that the site was built with CMS Made Simple!</p><br>
 

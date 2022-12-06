@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -35,8 +37,8 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-use \CGFeedback\utils;
+if( !defined('CMS_VERSION') ) exit;
+use \ReviewManager\utils;
 
 #
 # Initialization
@@ -46,7 +48,7 @@ $key1 = '__page__';
 $key2 = $returnid;
 $key3 = '';
 $query = 'SELECT COUNT(rating) as count, MIN(rating) as min, MAX(rating) as max, AVG(rating) as avg
-             FROM '.CGFEEDBACK_TABLE_COMMENTS;
+             FROM '.REVIEWMANAGER_TABLE_COMMENTS;
 $where = array();
 $qparms = array();
 //s where key1 = '__page__' and key2 = '135';
@@ -55,16 +57,16 @@ $qparms = array();
 #
 # Setup
 #
-$key1 = \cge_param::get_string($params,'key1');
-$key2 = \cge_param::get_string($params,'key2');
-$key3 = \cge_param::get_string($params,'key3');
+$key1 = \xt_param::get_string($params,'key1');
+$key2 = \xt_param::get_string($params,'key2');
+$key3 = \xt_param::get_string($params,'key3');
 
 #
 # Build the query
 #
 if( !$showall ) {
   $where[] = 'status = ?';
-  $qparms[] = CGFEEDBACK_STATUS_PUBLISHED;
+  $qparms[] = REVIEWMANAGER_STATUS_PUBLISHED;
 }
 if( !empty($key1) ) {
   $where[] = 'key1 = ?';
@@ -80,7 +82,7 @@ if( !empty($key3) ) {
 }
 
 $since = null;
-$tmp = \cge_param::get_string($params,'since');
+$tmp = \xt_param::get_string($params,'since');
 if( $tmp ) {
     if( preg_match('/^\d.*/',$tmp) ) {
         $since = (int) $tmp;
@@ -119,10 +121,9 @@ if( $tmp > 0.04 ) {
 #
 # Give everything to smarty
 #
-$thetemplate = utils::find_layout_template($params,'ratingstemplate','CGFeedback::Ratings View');
-$tpl = $this->CreateSmartyTemplate($thetemplate);
-$path = $config['root_url'].'/modules/'.$this->GetName().'/images/';
-$tmp = array('img_on'=>$path.'star.gif','img_off'=>$path.'starOff.gif','img_half'=>$path.'starHalf.gif');
+$thetemplate = utils::find_layout_template($params,'ratingstemplate','ReviewManager::Ratings View');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
+
 $tpl->assign('rating_imgs',$tmp);
 $tpl->assign('stats',$stats);
 $tpl->display();

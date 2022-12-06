@@ -5,29 +5,29 @@ final class AdminSearch_slave extends \AdminSearch_slave
 {
     public function get_name()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         return $mod->Lang('lbl_adminsearch');
     }
 
     public function get_description()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         return $mod->Lang('desc_adminsearch');
     }
 
     public function check_permission()
     {
         $userid = get_userid();
-        return check_permission($userid,CGFEEDBACK_PERM_FEEDBACK);
+        return check_permission($userid,REVIEWMANAGER_PERM_FEEDBACK);
     }
 
     public function get_matches()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         if( !is_object($mod) ) return;
         $db = cmsms()->GetDb();
         // need to get the fielddefs of type textbox or textarea
-        $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE type IN (?,?,0)';
+        $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE type IN (?,?,0)';
         $fdlist = $db->GetCol($query,[ 0, 1, 2 ]);
 
         $fields = ['N.*' ];
@@ -41,13 +41,13 @@ final class AdminSearch_slave extends \AdminSearch_slave
             $tmp = 'FV'.$i;
             $fdid = $fdlist[$i];
             $fields[] = "$tmp.value";
-            $joins[] = 'LEFT JOIN '.CGFEEDBACK_TABLE_FIELDVALS." $tmp ON N.news_id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
+            $joins[] = 'LEFT JOIN '.REVIEWMANAGER_TABLE_FIELDVALS." $tmp ON N.news_id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
             $where[] = "$tmp.value LIKE ?";
             $parms[] = $str;
         }
 
         // build the query.
-        $query = 'SELECT '.implode(',',$fields).' FROM '.CGFEEDBACK_TABLE_COMMENTS.' N';
+        $query = 'SELECT '.implode(',',$fields).' FROM '.REVIEWMANAGER_TABLE_COMMENTS.' N';
         if( count($joins) ) $query .= ' ' . implode(' ',$joines);
         if( count($where) ) $query .= ' WHERE '.implode(' OR ',$where);
         $query .= ' ORDER BY N.modified DESC';

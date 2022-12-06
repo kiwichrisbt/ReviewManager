@@ -1,7 +1,7 @@
 <?php
 namespace ReviewManager;
 
-final class comment_resultset extends \CGExtensions\query\resultset
+final class comment_resultset extends \CMSMSExt\query\resultset
 {
     private $_cached_field_data;
 
@@ -13,8 +13,8 @@ final class comment_resultset extends \CGExtensions\query\resultset
     protected function _query()
     {
         if( $this->_rs ) return; // only do this once.
-        $db = \cge_utils::get_db();
-        $query = 'SELECT SQL_CALC_FOUND_ROWS com.* FROM '.CGFEEDBACK_TABLE_COMMENTS.' com';
+        $db = \cms_utils::get_db();
+        $query = 'SELECT SQL_CALC_FOUND_ROWS com.* FROM '.REVIEWMANAGER_TABLE_COMMENTS.' com';
         $joins = $where = $qparms = [];
 
         $filter = $this->_filter;
@@ -44,7 +44,7 @@ final class comment_resultset extends \CGExtensions\query\resultset
         $sortby = $filter['sortby'];
         if( startswith($sortby,'f:') ) {
             $fid = (int) substr($sortby,2);
-            $joins[] = 'LEFT JOIN '.CGFEEDBACK_TABLE_FIELDVALS.' fv ON fv.comment_id = com.id';
+            $joins[] = 'LEFT JOIN '.REVIEWMANAGER_TABLE_FIELDVALS.' fv ON fv.comment_id = com.id';
             $where[] = 'fv.field_id = ?';
             $qparms[] = $fid;
             $sortby = 'fv.value';
@@ -75,8 +75,8 @@ final class comment_resultset extends \CGExtensions\query\resultset
         $idlist = array_unique($idlist);
         if( !count($idlist) ) return; // nothing to do.
 
-        $db = \cge_utils::get_db();
-        $sql = 'SELECT comment_id,field_id,value FROM '.CGFEEDBACK_TABLE_FIELDVALS.' WHERE comment_id IN ('.implode(',',$idlist).') ORDER BY comment_id,field_id';
+        $db = \cms_utils::get_db();
+        $sql = 'SELECT comment_id,field_id,value FROM '.REVIEWMANAGER_TABLE_FIELDVALS.' WHERE comment_id IN ('.implode(',',$idlist).') ORDER BY comment_id,field_id';
         $field_vals = $db->GetArray($sql);
         if( !count($field_vals) ) return;
 
@@ -96,7 +96,7 @@ final class comment_resultset extends \CGExtensions\query\resultset
 
     public function &get_object()
     {
-        $mod = \cms_utils::get_module(MOD_CGFEEDBACK);
+        $mod = \cms_utils::get_module('ReviewManager');
         $row = $this->fields;
         $obj = new displayable_comment($mod,$this->_filter['detailpage'],$this->_filter['detailtemplate'],$this->_filter['inline']);
         $obj->from_array($row);

@@ -1,7 +1,7 @@
 <?php
 #---------------------------------------------------------------------------------------------------
 # Module: ReviewManager
-# Author: Chris Taylor
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
@@ -42,6 +42,7 @@ define('REVIEWMANAGER_TYPE_EMAIL', 1);
 define('REVIEWMANAGER_TYPE_TEXTAREA', 2); 
 define('REVIEWMANAGER_TYPE_DROPDOWN', 3); 
 define('REVIEWMANAGER_TYPE_MULTISELECT', 4);  
+define('REVIEWMANAGER_TYPE_FILEUPLOAD', 5);  
 
 define('REVIEWMANAGER_TABLE_FIELDVALS', CMS_DB_PREFIX.'module_reviewmanager_fieldvals'); 
 define('REVIEWMANAGER_TABLE_FIELDDEFS', CMS_DB_PREFIX.'module_reviewmanager_fielddefs'); 
@@ -69,14 +70,14 @@ final class ReviewManager extends CMSModule
         $db = $this->GetDb();
         $this->_commentops = new comment_operations($db);
 
-        \CMSMS\HookManager::add_hook( 'ReviewManager::UserNotify', function( \ReviewManager\comment $comment ){
+        \CMSMS\HookManager::add_hook( 'ReviewManager::UserNotify', function( \ReviewManager\comment $comment ) {
                 \ReviewManager\comment_notifier::email_notify_users( $comment );
             });
     }
 
     public function LazyLoadAdmin() { return TRUE; }
     public function GetName() { return 'ReviewManager'; }
-    public function GetVersion() { return '0.9.2'; }
+    public function GetVersion() { return '1.0'; }
     public function GetAuthor() { return 'Chris Taylor'; }
     public function GetAuthorEmail() { return 'chris@binnovative.co.uk'; }
     public function IsPluginModule() { return TRUE; }
@@ -85,7 +86,7 @@ final class ReviewManager extends CMSModule
     public function GetAdminDescription() { return $this->Lang('moddescription'); }
     public function GetFriendlyName() { return $this->GetPreference( 'friendlyname', $this->Lang('friendlyname') ); }
     public function MinimumCMSVersion() { return '2.2.1'; }
-    public function GetDependencies() { return ['CGExtensions'=>'1.60', 'CGSimpleSmarty'=>'1.9' ]; }
+    public function GetDependencies() { return ['CMSMSExt' => '1.2.1']; }
     public function AllowAutoInstall() { return FALSE; }
     public function AllowAutoUpgrade() { return FALSE; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }
@@ -120,7 +121,7 @@ final class ReviewManager extends CMSModule
         $this->CreateParameter('commentrequired',1,$this->Lang('param_commentrequired'));
         $this->CreateParameter('emailrequired',1,$this->Lang('param_emailrequired'));
         $this->CreateParameter('namerequired',1,$this->Lang('param_namerequired'));
-        $this->CreateParameter('rationgoptions','1,2,3,4,5',$this->Lang('param_ratingoptions'));
+        $this->CreateParameter('ratingoptions','1,2,3,4,5',$this->Lang('param_ratingoptions'));
         $this->CreateParameter('redirectextra','',$this->Lang('param_redirectextra'));
         $this->CreateParameter('pagelimit',10000,$this->Lang('param_pagelimit'));
         $this->CreateParameter('since','',$this->Lang('param_since'));
@@ -209,7 +210,7 @@ EOT;
         if( $inline ) return;
         if( !$returnid ) return;
         if( $action != 'detail' ) return;
-        $cid = \cge_param::get_int($params,'cid');
+        $cid = \xt_param::get_int($params,'cid');
         if( $cid < 1 ) return;
         $comment = $this->_commentops->load($cid);
         if( !$comment ) return;

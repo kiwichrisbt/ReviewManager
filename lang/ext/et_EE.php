@@ -50,6 +50,7 @@ $lang['fieldtype_1'] = 'Email Address';
 $lang['fieldtype_2'] = 'Text Area';
 $lang['fieldtype_3'] = 'Dropdown';
 $lang['fieldtype_4'] = 'Multiselect';
+$lang['fieldtype_5'] = 'File Upload';
 $lang['friendlyname'] = 'Calguys Feedback Module';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module provides a complete mechanism for users to be able to provide feedback to individual pages, or infact to individual news articles, products, or other items on your website.  It includes the ability for visitors to make commments, and to optionally provide a rating on the particular item.</p>

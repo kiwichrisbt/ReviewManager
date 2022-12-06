@@ -15,45 +15,45 @@
   {/if}{* pagecount *}
 
   {foreach $comments as $one}
-    <div class="cgfeedback_summary_item">
+    <div class="rm_addcomment">
       <div class="row">
-         <div class="col-sm-3">{$mod->Lang('lbl_title')}:</div>
-         <div class="col-sm-9">
-            <a href="{$one->detail_url}" title="{$one->title}">{$one->title}</a>
-            {section name='rating' start=1 loop=6}
-              {if $smarty.section.rating.index <= $one->rating}
-                <img src="{$rating_imgs.img_on}" alt=""/>
-              {else}
-                <img src="{$rating_imgs.img_off}" alt=""/>
-              {/if}
-            {/section}
+         <div class="three-col">{$mod->Lang('lbl_title')}:</div>
+         <div class="nine-col">
+            <a href="{$one->detail_url}" title="{$one->title}">{$one->title}</a><br>
+            {if $one->rating}<span class="star-rating-sprite star-rating-sprite-{$one->rating * 4}"></span>{/if}
           </div>
         </div>
 
         <div class="row">
-          <div class="col-sm-3">{$mod->Lang('lbl_created')}:</div>
-          <div class="col-sm-9">{$one->created|date_format:'%x'}</div>
+          <div class="three-col">{$mod->Lang('lbl_created')}:</div>
+          <div class="nine-col">{$one->created|date_format:'%x'}</div>
         </div>
 
        {if $one->author_name}
          <div class="row">
-           <div class="col-sm-3">{$mod->Lang('lbl_author_name')}:</div>
-           <div class="col-sm-9">{$one->author_name}</div>
+           <div class="three-col">{$mod->Lang('lbl_author_name')}:</div>
+           <div class="nine-col">{$one->author_name}</div>
          </div>
        {/if}
 
        <div class="row">
-         {$one->data|cms_html_entity_decode}
+       <div class="row">
+           <div class="three-col">{$mod->Lang('lbl_comment')}:</div>
+           <div class="nine-col">{$one->data|cms_html_entity_decode}</div>
+         </div>
        </div>
 
        {$fields=$one->get_field_hash()}
        {foreach $fields as $name => $value}
+       {if $value}
            <div class="row">
-             <div class="col-sm-3">{$name}:</div>
-             <div class="col-sm-9">{$value|htmlspecialchars}</div>
+             <div class="three-col">{$name}:</div>
+             <div class="nine-col">{$value|htmlspecialchars}</div>
            </div>
+        {/if}
        {/foreach}
      </div>
    {/foreach}{* comments *}
 {/strip}
-</div>{* .cgfeedback_summary_report *}
+{include file='module_file_tpl:ReviewManager;default_stylesheet.tpl'}
+</div>

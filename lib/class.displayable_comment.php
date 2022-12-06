@@ -1,13 +1,13 @@
 <?php
 namespace ReviewManager;
-use \CGFeedback\comment_ops AS cgfb_comment_ops;
+use \ReviewManager\comment_ops;
 
 class displayable_comment extends comment
 {
     private $_mod;
     private $_data = ['detailpage'=>null, 'detailtemplate'=>null, 'inline'=>false ];
 
-    public function __construct(\CGFeedback $mod, $detailpage = null, $detailtemplate = null, $inline = null)
+    public function __construct(\ReviewManager $mod, $detailpage = null, $detailtemplate = null, $inline = null)
     {
         $this->_mod = $mod;
         $this->__set('detailpage',$detailpage);

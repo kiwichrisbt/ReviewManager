@@ -1,7 +1,7 @@
 <?php
 namespace ReviewManager;
 
-class comment_query extends \CGExtensions\query\query
+class comment_query extends \CMSMSExt\query\query
 {
     private $_data = [ 'key1'=>null, 'key2'=>null, 'key3'=>null, 'showall'=>false, 'since'=>null, 'sortby'=>'created', 'sortorder'=>'DESC', 'limit'=>10000, 'offset'=>0,
                        'status'=>'published',  'detailpage'=>null, 'detailtemplate'=>null, 'inline'=>false ];
@@ -10,7 +10,8 @@ class comment_query extends \CGExtensions\query\query
     {
         foreach( $params as $key => $val ) {
             if( !array_key_exists($key,$this->_data) ) continue;
-            $this[$key] = $val;
+            // $this[$key] = $val;
+            $this->_data[$key] = $val;
         }
     }
 

@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -44,14 +46,15 @@ if( !$this->CheckPermission('Modify Site Preferences') ) return;
 $status = '';
 $msg = '';
 $this->SetCurrentTab('fields');
-$field = array('name'=>'','type'=>CGFEEDBACK_TYPE_TEXT,'attribs'=>'','iorder'=>1);
+$field = array('name'=>'','type'=>REVIEWMANAGER_TYPE_TEXT,'attribs'=>'','iorder'=>1);
 $field['attrib'] = array();
 $yesno = array(1=>$this->Lang('yes'),0=>$this->Lang('no'));
-$types = array(CGFEEDBACK_TYPE_TEXT=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_TEXT),
-	       CGFEEDBACK_TYPE_EMAIL=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_EMAIL),
-	       CGFEEDBACK_TYPE_TEXTAREA=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_TEXTAREA),
-	       CGFEEDBACK_TYPE_DROPDOWN=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_DROPDOWN),
-	       CGFEEDBACK_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_MULTISELECT));
+$types = array(REVIEWMANAGER_TYPE_TEXT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_TEXT),
+	       REVIEWMANAGER_TYPE_EMAIL=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_EMAIL),
+	       REVIEWMANAGER_TYPE_TEXTAREA=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_TEXTAREA),
+	       REVIEWMANAGER_TYPE_DROPDOWN=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_DROPDOWN),
+	       REVIEWMANAGER_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_MULTISELECT),
+           REVIEWMANAGER_TYPE_FILEUPLOAD=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_FILEUPLOAD));
 
 #
 # Setup
@@ -61,7 +64,7 @@ $types = array(CGFEEDBACK_TYPE_TEXT=>$this->Lang('fieldtype_'.CGFEEDBACK_TYPE_TE
 # Get the data
 #
 if( isset($params['fid']) ) {
-    $query = 'SELECT * FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE id = ?';
+    $query = 'SELECT * FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE id = ?';
     $tmp = $db->GetRow($query,array((int)$params['fid']));
     if( $tmp ) {
         $field = $tmp;
@@ -72,7 +75,7 @@ if( isset($params['fid']) ) {
 #
 # Process form values
 #
-if( isset($params['cancel']) ) $this->RedirectToTab($id);
+if( isset($params['cancel']) ) $this->RedirectToAdminTab();
 if( isset($params['name']) ) $field['name'] = trim($params['name']);
 if( isset($params['type']) ) $field['type'] = (int)$params['type'];
 foreach( $params as $key => $value ) {
@@ -87,8 +90,8 @@ if( isset($params['submit']) ) {
 
     if( empty($status) ) {
         switch( $field['type'] ) {
-        case CGFEEDBACK_TYPE_TEXT:
-        case CGFEEDBACK_TYPE_EMAIL:
+        case REVIEWMANAGER_TYPE_TEXT:
+        case REVIEWMANAGER_TYPE_EMAIL:
             if( !isset($field['attrib']['length']) || $field['attrib']['length'] <= 0 ) {
                 $status = $this->Lang('error_missingvalue','length');
             }
@@ -96,8 +99,8 @@ if( isset($params['submit']) ) {
                 $status = $this->Lang('error_missingvalue','maxlength');
             }
             break;
-        case CGFEEDBACK_TYPE_DROPDOWN:
-        case CGFEEDBACK_TYPE_MULTISELECT:
+        case REVIEWMANAGER_TYPE_DROPDOWN:
+        case REVIEWMANAGER_TYPE_MULTISELECT:
             if( !isset($field['attrib']['options']) ) {
                 $status = $this->Lang('error_missingvalue','options');
             }
@@ -111,18 +114,23 @@ if( isset($params['submit']) ) {
                 if( $count == 0 ) $status = $this->Lang('error_missingvalue','options');
             }
             break;
+        case REVIEWMANAGER_TYPE_FILEUPLOAD:
+            if( !isset($field['attrib']['dir']) ) {
+                $status = $this->Lang('error_missingvalue','directory');
+            }
+            break;
         }
     }
 
     if( empty($status) ) {
         // double check a field by this name doesn't already exist
         if( isset($field['id']) && $field['id'] > 0 ) {
-            $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE name = ? AND id != ?';
+            $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE name = ? AND id != ?';
             $tmp = $db->GetOne($query,array($field['name'],$field['id']));
             if( $tmp ) $status = $this->Lang('error_nameexists');
         }
         else {
-            $query = 'SELECT id FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE name = ?';
+            $query = 'SELECT id FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE name = ?';
             $tmp = $db->GetOne($query,array($field['name']));
             if( $tmp ) $status = $this->Lang('error_nameexists');
         }
@@ -137,18 +145,18 @@ if( isset($params['submit']) ) {
         if( isset($field['id']) && $field['id'] > 0 ) {
             // it's an update
             $msg = $this->Lang('msg_field_updated');
-            $query = 'UPDATE '.CGFEEDBACK_TABLE_FIELDDEFS.' SET name = ?, type = ?, attribs = ?
+            $query = 'UPDATE '.REVIEWMANAGER_TABLE_FIELDDEFS.' SET name = ?, type = ?, attribs = ?
                       WHERE id = ?';
             $dbr = $db->Execute($query,array($field['name'],$field['type'],$field['attribs'],$field['id']));
         }
         else {
             $msg = $this->Lang('msg_field_added');
-            $query = 'SELECT MAX(iorder) FROM '.CGFEEDBACK_TABLE_FIELDDEFS;
+            $query = 'SELECT MAX(iorder) FROM '.REVIEWMANAGER_TABLE_FIELDDEFS;
             $tmp = $db->GetOne($query);
             $field['iorder'] = ($tmp > 0)?$tmp+1:1;
 
             // it's an insert
-            $query = 'INSERT INTO '.CGFEEDBACK_TABLE_FIELDDEFS.'  (name,type,attribs,iorder)
+            $query = 'INSERT INTO '.REVIEWMANAGER_TABLE_FIELDDEFS.'  (name,type,attribs,iorder)
                       VALUES (?,?,?,?)';
             $dbr = $db->Execute($query,array($field['name'],$field['type'],$field['attribs'],$field['iorder']));
         }
@@ -159,15 +167,13 @@ if( isset($params['submit']) ) {
     if( empty($status) ) {
         // all done
         $this->SetMessage($msg);
-        $this->RedirectToTab($id);
+        $this->RedirectToAdminTab();
     }
 }
 
 #
 # Give everything to smarty
 #
-$smarty->assign('formstart',$this->CGCreateFormStart($id,'admin_add_field',$returnid,$params));
-$smarty->assign('formend',$this->CreateFormEnd());
 $smarty->assign('yesno',$yesno);
 $smarty->assign('fldtypes',$types);
 $smarty->assign('fld',$field);

@@ -1,7 +1,7 @@
 <?php
 #---------------------------------------------------------------------------------------------------
 # Module: ReviewManager
-# Author: Chris Taylor
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
@@ -25,6 +25,7 @@ if ( utils::exists($params, 'submit') ) {
     $this->SetPreference('word_limit', (int)$params['word_limit']);
     $this->SetPreference('validate_email', trim($params['validate_email']));
     $this->SetPreference('use_cookies', (int)$params['use_cookies']);
+    $this->SetPreference('allow_add_comments', (int)$params['allow_add_comments']);
     $this->SetPreference('friendlyname', trim($params['friendlyname']));
     $this->SetPreference('notification_emails', trim($params['notification_emails']));
     $this->SetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT, trim($params['admin_notification_subject']));
@@ -71,12 +72,11 @@ $prefs['allow_comment_html'] = $this->GetPreference('allow_comment_html', 0);
 $prefs['word_limit'] = $this->GetPreference('word_limit', 0);
 $prefs['validate_email'] = $this->GetPrefernce('validate_email');
 $prefs['use_cookies'] = $this->GetPreference('use_cookies');
+$prefs['allow_add_comments'] = $this->GetPreference('allow_add_comments', 0);
 $prefs['friendlyname'] = $this->GetPreference('friendlyname');
-
 $prefs['notification_emails'] = $this->GetPreference('notification_emails');
 $prefs['admin_notification_subject'] = $this->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT);
 $prefs['user_notification_subject'] = $this->GetPreference(REVIEWMANAGER_PREF_USERNOTIFICATION_SUBJECT);
-
 $prefs['moderate_comments'] = $this->GetPreference('moderate_comments');
 $prefs['moderation_patterns'] = $this->GetPreference('moderation_patterns');
 $prefs['moderation_iplist'] = $this->GetPreference('moderation_iplist');

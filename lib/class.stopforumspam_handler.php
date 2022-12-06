@@ -19,15 +19,15 @@ class stopforumspam_handler extends spam_handler
 
         $response_str = \cge_http::post(self::TEST_URL,$parms);
         if( !$response_str ) {
-            @trigger_error('CGFeedback - No response from StopForumSpam');
-            audit('','CGFeedback','StopForumSpam returned  no response');
+            @trigger_error('ReviewManager - No response from StopForumSpam');
+            audit('','ReviewManager','StopForumSpam returned  no response');
             return FALSE;
         }
 
         $data = json_decode($response_str);
         if( !$data->success ) {
-            @trigger_error('CGFeedback - Unsuccessful query to StopForumSpam');
-            audit('','CGFeedback','Unsuccessful query to StopForumSpam');
+            @trigger_error('ReviewManager - Unsuccessful query to StopForumSpam');
+            audit('','ReviewManager','Unsuccessful query to StopForumSpam');
             return FALSE;
         }
 

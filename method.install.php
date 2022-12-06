@@ -1,7 +1,7 @@
 <?php
 #---------------------------------------------------------------------------------------------------
 # Module: ReviewManager
-# Author: Chris Taylor
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
@@ -46,9 +46,9 @@ $flds = "
     admin_notes   X,
     notified      I1,
     origurl       C(255),
-    extra         X2,
     created      ".CMS_ADODB_DT.",
-    modified     ".CMS_ADODB_DT;
+    modified     ".CMS_ADODB_DT.",
+    extra         X2";
 $sqlarray = $dict->CreateTableSQL(REVIEWMANAGER_TABLE_COMMENTS, $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 

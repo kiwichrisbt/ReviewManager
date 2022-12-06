@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -36,7 +38,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission(CGFEEDBACK_PERM_FEEDBACK) ) return false;
+if( !$this->CheckPermission(REVIEWMANAGER_PERM_FEEDBACK) ) return false;
 
 #
 # Initialization
@@ -56,7 +58,7 @@ if( !$cid ) {
     $this->RedirectToTab($id);
 }
 
-\CMSMS\HookManager::do_hook('CGFeedback::BeforeDeleteComment',$comment);
+\CMSMS\HookManager::do_hook('ReviewManager::BeforeDeleteComment',$comment);
 $this->_commentops->delete_by_id($cid);
 
 $this->SetMessage($this->Lang('msg_commentdeleted'));

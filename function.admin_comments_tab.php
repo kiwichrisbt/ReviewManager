@@ -1,7 +1,7 @@
 <?php
 #---------------------------------------------------------------------------------------------------
 # Module: ReviewManager
-# Author: Chris Taylor
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
@@ -217,6 +217,7 @@ $smarty->assign('input_agelimit', $agelimit);
 $smarty->assign('formstart', $this->CreateFormStart($id, 'defaultadmin', $returnid));
 $smarty->assign('formend', $this->CreateformEnd());
 $smarty->assign('have_filter', $have_filter);
+$smarty->assign('allow_add_comments', $this->GetPreference('allow_add_comments', 0));
 
 if ( is_array($data) && count($data) > 0 ) $smarty->assign('comments', $data);
 $tmp = array();

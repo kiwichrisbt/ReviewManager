@@ -46,7 +46,7 @@ $lang['fieldtype_1'] = 'Endere&ccedil;o de E-mail';
 $lang['fieldtype_2'] = 'Text Area ';
 $lang['fieldtype_3'] = 'Dropdown ';
 $lang['fieldtype_4'] = 'Multiselect ';
-$lang['friendlyname'] = 'CGFeedback';
+$lang['friendlyname'] = 'ReviewManager';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module provides a complete mechanism for users to be able to provide feedback to individual pages, or infact to individual news articles, products, or other items on your website.  It includes the ability for visitors to make commments, and to optionally provide a rating on the particular item.</p>
 <h3>Features</h3>

@@ -1,8 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CGUFeedback (c) 2009 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
+# Module: ReviewManager
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
+# Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
+#            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to provide the ability to rate
 #  and comment on specific pages or specific items in a module.
 #  Includes numerous seo friendly, and designer friendly capabilities.
@@ -37,29 +39,27 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
-
-
 #
 # Setup
 #
 $this->SetCurrentTab('fields');
 if( !isset($params['fid']) ) {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToTab($id);
+    $this->RedirectToAdminTab();
 }
 
-$query = 'SELECT iorder FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE id = ?';
+$query = 'SELECT iorder FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE id = ?';
 $iorder = $db->GetOne($query,array((int)$params['fid']));
 if( $iorder ) {
-    $query = 'DELETE FROM '.CGFEEDBACK_TABLE_FIELDDEFS.' WHERE id = ?';
+    $query = 'DELETE FROM '.REVIEWMANAGER_TABLE_FIELDDEFS.' WHERE id = ?';
     $db->Execute($query,array((int)$params['fid']));
 
-    $query = 'UPDATE '.CGFEEDBACK_TABLE_FIELDDEFS.' SET iorder=iorder-1 WHERE iorder > ?';
+    $query = 'UPDATE '.REVIEWMANAGER_TABLE_FIELDDEFS.' SET iorder=iorder-1 WHERE iorder > ?';
     $db->Execute($query,array($iorder));
 }
 
 $this->SetMessage($this->Lang('msg_field_deleted'));
-$this->RedirectToTab($id);
+$this->RedirectToAdminTab();
 
 #
 # EOF

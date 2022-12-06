@@ -38,16 +38,16 @@ class comment
         if( !isset($this->_data['status']) ) {
             $text = $this->data .' '.$this->title.' '.$this->author_name;
             if( is_array($this->_fields) ) {
-                $tfields = cgfb_comment_ops::get_fielddefs();
+                $tfields = comment_ops::get_fielddefs();
                 foreach( $this->_fields as $fid => $value ) {
                     if( !isset($tfields[$fid]) ) continue;
-                    if( $tfields[$fid]['type'] != CGFEEDBACK_TYPE_TEXT && $tfields[$fid]['type'] != CGFEEDBACK_TYPE_TEXTAREA )
+                    if( $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXT && $tfields[$fid]['type'] != REVIEWMANAGER_TYPE_TEXTAREA )
                         continue;
 
                     $text .= ' '.$value;
                 }
             }
-            $this->status = (cgfb_comment_ops::text_needs_moderation($text)) ? CGFEEDBACK_STATUS_DRAFT : CGFEEDBACK_STATUS_PUBLISHED;
+            $this->status = (comment_ops::text_needs_moderation($text)) ? REVIEWMANAGER_STATUS_DRAFT : REVIEWMANAGER_STATUS_PUBLISHED;
         }
 
         return TRUE;
@@ -60,7 +60,9 @@ class comment
         foreach( self::$_keys as $one ) {
             if( isset($data[$one]) ) $this->_data[$one] = $data[$one];
         }
-        if( isset($data['extra']) && $data['extra'] ) $this->_data['extra'] = unserialize($data['extra']);
+        if ( isset($data['extra']) && $data['extra'] ) {
+            $this->_data['extra'] = unserialize($data['extra']);
+        }
     }
 
     /**
@@ -77,6 +79,12 @@ class comment
         if( is_array($this->_fields) && isset($this->_fields[(int)$fid]) ) return $this->_fields[(int)$fid];
     }
 
+    public function GetOptionValue($fid,$key, $default = '')
+    {
+        $tfields = comment_ops::get_fielddef($fid);
+        return isset($tfields['attribs'][$key]) ? $tfields['attribs'][$key] : $default;
+    }
+
     public function set_field_by_id($fid,$value)
     {
         if( !is_array($this->_fields) ) $this->_fields = array();
@@ -90,7 +98,7 @@ class comment
                 $r = $data[$a];
                 if( is_array($r) && isset($r['value']) && isset($r['field_id']) && isset($r['comment_id']) && $r['comment_id'] == $this->id ) {
                     $v = $r['value'];
-                    if( cgfb_comment_ops::get_fielddef_type($r['field_id']) == 4 ) $v = explode(',',$v);
+                    if( comment_ops::get_fielddef_type($r['field_id']) == 4 ) $v = explode(',',$v);
                     $this->set_field_by_id($r['field_id'],$v);
                 }
             }
@@ -106,11 +114,11 @@ class comment
     {
         if( !is_array($this->_fields) ) return;
 
-        $fielddefs = cgfb_comment_ops::get_fielddefs();
+        $fielddefs = comment_ops::get_fielddefs();
         $out = [];
         foreach( $fielddefs as $fid => $rec ) {
             $name = $rec['name'];
-            $out[$name] = $this->_fields[$fid];
+            $out[$name] = !empty($this->_fields[$fid]) ? $this->_fields[$fid] : '';
         }
         return $out;
     }

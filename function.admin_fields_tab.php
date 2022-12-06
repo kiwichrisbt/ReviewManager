@@ -1,7 +1,7 @@
 <?php
 #---------------------------------------------------------------------------------------------------
 # Module: ReviewManager
-# Author: Chris Taylor
+# Authors: Chris Taylor, Magal, with CMS Made Simple Foundation able to assign new administrators.
 # Copyright: (C) 2021 Chris Taylor, chris@binnovative.co.uk
 #            is a fork of: CGFeedback (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)
 # Licence: GNU General Public License version 3
@@ -17,7 +17,8 @@ $types = array(REVIEWMANAGER_TYPE_TEXT=>$this->Lang('fieldtype_'.REVIEWMANAGER_T
     REVIEWMANAGER_TYPE_EMAIL=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_EMAIL),
     REVIEWMANAGER_TYPE_TEXTAREA=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_TEXTAREA),
     REVIEWMANAGER_TYPE_DROPDOWN=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_DROPDOWN),
-    REVIEWMANAGER_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_MULTISELECT));
+    REVIEWMANAGER_TYPE_MULTISELECT=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_MULTISELECT),
+	REVIEWMANAGER_TYPE_FILEUPLOAD=>$this->Lang('fieldtype_'.REVIEWMANAGER_TYPE_FILEUPLOAD));
 
 #
 # Get the data
