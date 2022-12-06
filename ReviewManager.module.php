@@ -87,6 +87,7 @@ final class ReviewManager extends CMSModule
     public function GetFriendlyName() { return $this->GetPreference( 'friendlyname', $this->Lang('friendlyname') ); }
     public function MinimumCMSVersion() { return '2.2.1'; }
     public function GetDependencies() { return ['CMSMSExt' => '1.2.1']; }
+    public function GetChangeLog() { return $this->Lang('changelog'); }
     public function AllowAutoInstall() { return FALSE; }
     public function AllowAutoUpgrade() { return FALSE; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }

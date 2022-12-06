@@ -522,15 +522,16 @@ $lang['help_about'] = <<<EOT
 <p>As per the GPL licence, this software is provided as is. Please read the text of the license for the full disclaimer.
 The module author is not obligated to provide support for this code. However you might get support through the following:</p>
 <ul>
-   <li>For support, first <strong>search</strong> the <a href="//forum.cmsmadesimple.org" target="_blank">CMS Made Simple Forum</a>, for issues with the module similar to those you are finding. Open a <strong>new forum topic</strong> to request help, with a thorough description of your issue, and steps to reproduce it.</li>
+   <li>For support, first <strong>search</strong> the <a href="//forum.cmsmadesimple.org" target="_blank">CMS Made Simple Forum</a>, for issues with the module similar to those you are finding.</li>
+   <li>Or add a post to the forum <a href="//forum.cmsmadesimple.org/viewtopic.php?f=7&t=83434&p=349185#p349185"  target="_blank">ReviewManager Support Page</a> forum topic to request help, with a thorough description of your issue, and steps to reproduce it.</li>
    <li>Or, try the <a href="//cms-made-simple.slack.com" target="_blank">CMS Made Simple Slack channel</a>, you can <a href="//www.cmsmadesimple.org/support/documentation/chat/" target="_blank">join here</a>.</li>
-   <li>If you find a bug you can <a href="http://dev.cmsmadesimple.org/bug/list/???"  target="_blank">submit a Bug Report</a>.</li>
-   <li>For any good ideas you can <a href="http://dev.cmsmadesimple.org/feature_request/list/???"  target="_blank">submit a Feature Request</a>.</li>
+   <li>If you find a bug you can <a href="//dev.cmsmadesimple.org/bug/list/1460"  target="_blank">submit a Bug Report</a>.</li>
+   <li>For any good ideas you can <a href="//dev.cmsmadesimple.org/feature_request/list/1460"  target="_blank">submit a Feature Request</a>.</li>
    <li>If you found the Module useful - shout out to me on Twitter <a href="//twitter.com/KiwiChrisBT">@KiwiChrisBT</a></li>
 </ul><br>
 
 <h3>Copyright &amp; Licence</h3>
-<p>Copyright © 2020, Chris Taylor {mailto address='chris@binnovative.co.uk' encode=javascript}. All Rights Are Reserved.<br>
+<p>Copyright © 2020, Chris Taylor {mailto address='chris@binnovative.co.uk' encode=javascript} & Magal. All Rights Are Reserved.<br>
 This module is a fork of: ReviewManager (c) 2009 by Robert Campbell (calguy1000@cmsmadesimple.org)</p><br>
 
 <p>This module has been released under the GNU Public License v3. However, as a special exception to the GPL, this software is distributed as an addon module to CMS Made Simple. You may only use this software when there is a clear and obvious indication in the admin section that the site was built with CMS Made Simple!</p><br>
@@ -563,9 +564,14 @@ EOT;
 
 $lang['changelog'] = <<<'EOD'
 
-<h3>Version 0.1 - 28Aug20</h3>
+<h3>Version 1.0 - 06Dec22</h3>
 <ul>
-   <li>??? list changes here...</li>
+   <li>First release of module, that is a fork of CGFeedback.</li>
+   <li>Upgraded to work with PHP8, and CMSMSExt module (replacing CGExtensions)</li>
+   <li>Full import of all CGFeedback reviews, settings & templates.</li>
+   <li>'ReviewManager Radio Comment Form' uses stars for rating selection</li>
+   <li>New reviews can be added directly in the admin pages (optionally)</li>
+   <li>Review dates can be added in the admin pages.</li>
 </ul>
 <br>
 
