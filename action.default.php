@@ -54,13 +54,14 @@ use \ReviewManager\param_cleaner;
 //
 $error = $message = null;
 $permalink = xt_url::current_url(); // todo - ability to change this?
-$inline = $voteonce = true;
+$inline = $voteonce = false;
 $voteinterval = -1;
 $titlerequired = (int) $this->GetPreference('titlerequired',1);
 $commentrequired = (int) $this->GetPreference('commentrequired',1);
 $emailrequired = (int) $this->GetPreference('emailrequired',1);
 $namerequired = (int) $this->GetPreference('namerequired',1);
 $rating_options_str = "1,2,3,4,5";
+$sess = new xt_session(__FILE__);
 
 $mams_uid = null;
 $feu = \cms_utils::get_module('FrontEndUsers');
@@ -113,7 +114,7 @@ if( $origparms ) {
     // they're encoded, so lets get them back to normal.
     $tmp = [ '_d'=>$origparms ];
     $params = array_merge($params,\xt_utils::decrypt_params($tmp));
-    unset($params['rm_origparms']);
+    unset($params['rm_origparms']); 
 }
 
 $rating_options_str = xt_param::get_string($params,'ratingoptions',$rating_options_str);
@@ -126,6 +127,10 @@ $titlerequired = xt_param::get_bool($params,'titlerequired',$titlerequired);
 $commentrequired = xt_param::get_bool($params,'commentrequired',$commentrequired);
 $emailrequired = xt_param::get_bool($params,'emailrequired',$emailrequired);
 $namerequired = xt_param::get_bool($params,'namerequired',$namerequired);
+
+// try to get some info from the session...
+$tmp = $sess->get('rm_comment');
+if( $tmp ) $comment = unserialize($tmp);
 
 //
 // Get custom field definitions
@@ -143,6 +148,8 @@ if( is_array($tfields) && count($tfields) ) {
 if( isset($params['rm_submit']) ) {
     try {
 
+        //print_r($params);
+        //exit();
         // Get data from the form
         $disable_html = ($this->GetPreference('allow_comment_html',0) == 0);
         $cleaner = new param_cleaner();
@@ -285,38 +292,57 @@ if( isset($params['rm_submit']) ) {
             \CMSMS\HookManager::do_hook('ReviewManager::UserNotify',$comment);
         }
 
-        // redirect out of here.
-        if( isset($params['destpage']) ) {
-            $page = $this->resolve_alias_or_id($params['destpage']);
-            if( $page ) $this->RedirectContent($page);
-        }
-        else if( isset($params['redirectextra']) ) {
-            // we can go back to the original url
-            $url = html_entity_decode($params['feedback_origurl']);
-            $url .= trim($params['redirectextra']);
-            redirect($url);
-        }
-
+        // success
         $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Success Message');
         $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
-        $tpl->assign('comment',$comment);
-        // $tpl->assign('subject',???);
-                // $this->GetPreference(REVIEWMANAGER_PREF_NOTIFICATION_SUBJECT);
-                // $this->GetPreference(REVIEWMANAGER_PREF_USERNOTIFICATION_SUBJECT);
         $tpl->assign('author_name', $comment->author_name);
         $tpl->assign('author_email', $comment->author_email);
         $tpl->assign('title', $comment->title);
+        $tpl->assign('comment',$comment);
         $tpl->assign('rating', $comment->rating);
         $tpl->assign('fields', $comment->get_field_hash());
         $message = $tpl->fetch();
-
+        if( empty($message) ) $message = $this->Lang('msg_commentokay');
+        
+        // store information in the session
+        // redirect back to originating url
+        // and display messages.
+        $sess->put('message',$message);
     }
-    catch( \RuntimeException $e ) {
-        $error = 1;	
-		$message = $e->getMessage();
+    catch( \Exception $e ) {
+        $error = $e->GetMessage();
+        $sess->put('error',$error);
+        $sess->put('rm_comment',serialize($comment));
+    }
+
+    // redirect out of here.
+    if( ! \xt_param::get_bool($params,'noredirect') ) {
+        // we are allowed to redirect.
+        if( !$error && isset($params['destpage']) ) {
+            $sess->clear();
+            $page = $this->resolve_alias_or_id($params['destpage']);
+            if( $page ) $this->RedirectContent($page);
+        }
+        else if( isset($params['feedback_origurl']) ) {
+            // we can go back to the original url
+            $url = html_entity_decode($params['feedback_origurl']);
+            if( isset($params['redirectextra']) ) $url .= trim($params['redirectextra']);
+            redirect($url);
+        }
+
+        // or just back to the original content page.
+        $this->RedirectContent($returnid);
     }
  
 } // submit
+
+//
+// Give everything to smarty, and get ready to render.
+//
+$error = $sess->get('error',$error);
+$message = $sess->get('message',$message);
+$sess->clear();
+$sess->put('rm_comment',serialize($comment));
 
 $thetemplate = utils::find_layout_template($params,'commenttemplate','ReviewManager::Comment Form');
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
@@ -340,6 +366,13 @@ $get_extraparms = function(array $inparms) {
 
 if( !isset($params['destpage']) && !isset($params['feedback_origurl']) ) $params['feedback_origurl'] = xt_url::current_url();
 $extraparms = $get_extraparms($params);
+
+if( !empty($error) ) {
+    $tpl->assign('error',$error);
+}
+else if( !empty($message) ) {
+    $tpl->assign('message',$message);
+}
 
 if( count($tfields) ) {
     $tmp = array_keys($tfields);
@@ -372,12 +405,6 @@ $tpl->assign('comment_obj',$comment);
 $tpl->assign('inline',$inline);
 $tpl->assign('rating_options',$rating_options);
 $tpl->assign('rating_options_reversed',$rating_options_reversed);
-if( !empty($error) ) {
-    $tpl->assign('error',$error);
-}
-if( !empty($message) ) {
-    $tpl->assign('message',$message);
-}
 
 $modname = $this->GetPreference('captcha_module','-1');
 if( $modname != -1 ) {

@@ -5,7 +5,7 @@
   {if isset($error)}<div class="danger">{$message}</div>{/if}
   {* no message... display the form *}
   <div class="rm_addcomment">
-  {form_start action=default inline=$inline extraparms=$extraparms}{xt_form_csrf}
+  {form_start action=default extraparms=$extraparms}{xt_form_csrf}
   {*
    * A simple honeypot captcha field.  This field needs to be a text field, but hidden with CSS
    * deleting this field from the template will have no effect on form behavior, but if this

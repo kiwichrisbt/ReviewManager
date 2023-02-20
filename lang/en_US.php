@@ -564,6 +564,11 @@ EOT;
 
 $lang['changelog'] = <<<'EOD'
 
+<h3>Version 1.1 - 20Feb23</h3>
+<ul>
+   <li>Bug Fixes.</li>
+   <li>Review submission within other modules fix</li>
+</ul>
 <h3>Version 1.0 - 06Dec22</h3>
 <ul>
    <li>First release of module, that is a fork of CGFeedback.</li>
@@ -573,8 +578,6 @@ $lang['changelog'] = <<<'EOD'
    <li>New reviews can be added directly in the admin pages (optionally)</li>
    <li>Review dates can be added in the admin pages.</li>
 </ul>
-<br>
-
 
 EOD;
 
