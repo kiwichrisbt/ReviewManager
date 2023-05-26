@@ -77,7 +77,7 @@ final class ReviewManager extends CMSModule
 
     public function LazyLoadAdmin() { return TRUE; }
     public function GetName() { return 'ReviewManager'; }
-    public function GetVersion() { return '1.1'; }
+    public function GetVersion() { return '1.1.1'; }
     public function GetAuthor() { return 'Chris Taylor'; }
     public function GetAuthorEmail() { return 'chris@binnovative.co.uk'; }
     public function IsPluginModule() { return TRUE; }
