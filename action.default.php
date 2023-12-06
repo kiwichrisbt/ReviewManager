@@ -297,6 +297,7 @@ if( isset($params['rm_submit']) ) {
         $tpl = $smarty->CreateTemplate($this->GetTemplateResource($thetemplate),null,null,$smarty);
         $tpl->assign('author_name', $comment->author_name);
         $tpl->assign('author_email', $comment->author_email);
+        $tpl->assign('author_ip', $comment->author_ip);
         $tpl->assign('title', $comment->title);
         $tpl->assign('comment',$comment);
         $tpl->assign('rating', $comment->rating);
