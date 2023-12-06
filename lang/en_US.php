@@ -564,6 +564,12 @@ EOT;
 
 $lang['changelog'] = <<<'EOD'
 
+<h3>Version 1.1.2 - 06Dec23</h3>
+<ul>
+   <li>Bug Fix - when adding comment - query may fail.</li>
+   <li>Minor bug fix - author_ip not available in success message - fixed</li>
+</ul><br>
+
 <h3>Version 1.1.1 - 26May23</h3>
 <ul>
    <li>Bug Fix - import from CGFeedback.</li>

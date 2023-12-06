@@ -143,7 +143,7 @@ class comment_ops
                 $dbr = $db->Execute($query,array($obj->id,$fid,$obj->get_field_by_id($fid)));
                 if( !$dbr ) {
                     // undo the stuff we just did
-                    self::delete_by_id($this->id);
+                    self::delete_by_id($obj->id);
 
                     // throw an exception.
                     throw new Exception('SQL ERROR: '.$db->sql.' -- '.$db->ErrorMsg());
