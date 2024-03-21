@@ -62,7 +62,7 @@ else
 {
     $detailpage = \cms_utils::get_current_pageid();
   
-    if( detailpage < 1 )
+    if( $detailpage < 1 )
     {
         $detailpage = \CmsApp::get_instance()->GetContentOperations()->GetDefaultContent();
     }
