@@ -77,7 +77,7 @@ final class ReviewManager extends CMSModule
 
     public function LazyLoadAdmin() { return TRUE; }
     public function GetName() { return 'ReviewManager'; }
-    public function GetVersion() { return '1.1.2'; }
+    public function GetVersion() { return '1.1.3'; }
     public function GetAuthor() { return 'Chris Taylor'; }
     public function GetAuthorEmail() { return 'chris@binnovative.co.uk'; }
     public function IsPluginModule() { return TRUE; }
@@ -87,7 +87,8 @@ final class ReviewManager extends CMSModule
     public function GetFriendlyName() { return $this->GetPreference( 'friendlyname', $this->Lang('friendlyname') ); }
     public function MinimumCMSVersion() { return '2.2.1'; }
     public function GetDependencies() { return ['CMSMSExt' => '1.2.1']; }
-    public function GetChangeLog() { return $this->Lang('changelog'); }
+    // public function GetChangeLog() { return $this->Lang('changelog'); }
+    public function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/doc/changelog.inc'); }
     public function AllowAutoInstall() { return FALSE; }
     public function AllowAutoUpgrade() { return FALSE; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }

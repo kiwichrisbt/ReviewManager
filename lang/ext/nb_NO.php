@@ -160,6 +160,7 @@ $lang['param_sortby'] = 'Gyldig kun for <em>summary</em> handlingen. Denne param
   <li>author_ip</li>
   <li>created <em>(standard)</em></li>
   <li>modified</li>
+<li>random</li>
   <li>Custom Field <strong>F:<em>fieldname</em></strong>
   <p>-- Det er mulig &aring; sortere p&aring; egendefinerte felt ved &aring; spesifisere &quot;F:navnet&quot; som sorter etter verdi.</p>
   </li>

@@ -49,7 +49,13 @@ final class comment_resultset extends \CMSMSExt\query\resultset
             $qparms[] = $fid;
             $sortby = 'fv.value';
         }
+        
         $sortorder = $filter['sortorder'];
+
+        if($filter['sortby'] == 'random') {
+            $sortby = "RAND()";
+            $sortorder = '';
+        }
 
         // query assembly
         if( count($joins) ) $query .= implode(' ',$joins);

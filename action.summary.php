@@ -62,7 +62,7 @@ else
 {
     $detailpage = \cms_utils::get_current_pageid();
   
-    if( detailpage < 1 )
+    if( $detailpage < 1 )
     {
         $detailpage = \CmsApp::get_instance()->GetContentOperations()->GetDefaultContent();
     }
@@ -70,7 +70,7 @@ else
 
 $qparms['detailpage'] = $detailpage;
 $qparms['key1'] = \xt_param::get_string($qparms,'key1','__page__');
-$qparms['key2'] = \xt_param::get_string($qparms,'key2',$returnid);
+$qparms['key2'] = \xt_param::get_string($qparms,'key2');
 
 // setup the query
 $query = new comment_query($qparms);

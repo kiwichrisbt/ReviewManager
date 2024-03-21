@@ -158,6 +158,7 @@ $lang['param_sortby'] = 'Applicable only in the <em>summary</em> action, this pa
   <li>author_ip</li>
   <li>created <em>(default)</em></li>
   <li>modified</li>
+<li>random</li>
   <li>Custom Field <strong>F:<em>fieldname</em></strong>
   <p>-- It is possible to sort by custom fields, by specifying &quot;F:thename&quot; as the sortby value.</p>
   </li>

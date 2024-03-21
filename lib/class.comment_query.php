@@ -82,6 +82,7 @@ class comment_query extends \CMSMSExt\query\query
             case 'author_ip':
             case 'created':
             case 'modified':
+            case 'random':
                 $this->_data[$key] = $val;
                 break;
             default:

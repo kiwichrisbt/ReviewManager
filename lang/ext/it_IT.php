@@ -167,6 +167,7 @@ $lang['param_sortby'] = 'Applicabile solo all&#039;azione <em>summary</em>, ques
   <li>author_ip</li>
   <li>created <em>(predefinito)</em></li>
   <li>modified</li>
+<li>random</li>
   <li>Custom Field <strong>F:<em>fieldname</em></strong>
   <p>-- &Egrave; possibile ordinare in base ai campi personalizzati, specificando &quot;F:thename&quot; come valore di ordinamento.</p>
   </li>

@@ -258,6 +258,7 @@ Applicable only in the <em>summary</em> action, this parameter specifies the sor
   <li>author_ip</li>
   <li>created <em>(default)</em></li>
   <li>modified</li>
+  <li>random</li>
   <li>Custom Field <strong>F:<em>fieldname</em></strong>
   <p>-- It is possible to sort by custom fields, by specifying &quot;F:thename&quot; as the sortby value.</p>
   </li>
@@ -562,38 +563,6 @@ EOT;
 #########  ###    ###  ###    ###  ###    ###  #########  ########  ######### #########  #########
 #########  ###    ###  ###    ###  ###    ###  #########  ########  ######### #########  #########
 
-$lang['changelog'] = <<<'EOD'
-
-<h3>Version 1.1.2 - 06Dec23</h3>
-<ul>
-   <li>Bug Fix - when adding comment - query may fail.</li>
-   <li>Minor bug fix - author_ip not available in success message - fixed</li>
-</ul><br>
-
-<h3>Version 1.1.1 - 26May23</h3>
-<ul>
-   <li>Bug Fix - import from CGFeedback.</li>
-   <li>Review submission within other modules fix</li>
-</ul><br>
-
-
-<h3>Version 1.1 - 20Feb23</h3>
-<ul>
-   <li>Bug Fixes.</li>
-   <li>Review submission within other modules fix</li>
-</ul><br>
-
-
-<h3>Version 1.0 - 06Dec22</h3>
-<ul>
-   <li>First release of module, that is a fork of CGFeedback.</li>
-   <li>Upgraded to work with PHP8, and CMSMSExt module (replacing CGExtensions)</li>
-   <li>Full import of all CGFeedback reviews, settings & templates.</li>
-   <li>'ReviewManager Radio Comment Form' uses stars for rating selection</li>
-   <li>New reviews can be added directly in the admin pages (optionally)</li>
-   <li>Review dates can be added in the admin pages.</li>
-</ul>
-
-EOD;
+// moved into /doc/changelog.inc
 
 
